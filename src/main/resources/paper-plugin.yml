@@ -1,0 +1,12 @@
+name: SMP
+version: '1.0'
+main: de.eztxm.smp.SMP
+api-version: '1.21'
+authors: [ ezTxmMC ]
+
+dependencies:
+  bootstrap:
+    LuckPerms:
+      load: BEFORE
+      required: true
+      join-classpath: true
