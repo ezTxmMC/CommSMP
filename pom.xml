@@ -59,7 +59,7 @@
         </repository>
         <repository>
             <id>eztxm-repo</id>
-            <url>https://repo.eztxm.de/maven/</url>
+            <url>https://repo.eztxm.de/maven/snapshots/</url>
         </repository>
     </repositories>
 
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>de.eztxm</groupId>
             <artifactId>ezlib-config-json</artifactId>
-            <version>1.0-ALPHA11</version>
+            <version>1.0-BETA1.indev</version>
         </dependency>
     </dependencies>
 </project>
