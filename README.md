@@ -45,6 +45,14 @@
   - [ ] /teamchat disable
   - [ ] Teammessagelayout: '@Team - ezTxmMC >> Hey'
 - [ ] '@' before online user name and in aqua
+- [ ] Backpacks
+  - [ ] Custom model
+  - [ ] Placed as barrier with direction to player
+  - [ ] Rightclick -> open
+  - [ ] Shift + rightclick -> place
+  - [ ] Not stackable
+  - [ ] Only one in inventory
+  - [ ] Upgradable
 
 ## Technology
 
