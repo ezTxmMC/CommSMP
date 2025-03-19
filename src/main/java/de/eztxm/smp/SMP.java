@@ -1,8 +1,10 @@
 package de.eztxm.smp;
 
+import de.eztxm.smp.config.LockConfig;
 import de.eztxm.smp.listener.ChatListener;
 import de.eztxm.smp.listener.JoinListener;
 import de.eztxm.smp.listener.QuitListener;
+import de.eztxm.smp.lock.LockListener;
 import de.eztxm.smp.util.PlayerManager;
 import de.eztxm.smp.util.Registry;
 import lombok.Getter;
@@ -20,6 +22,11 @@ public final class SMP extends JavaPlugin {
     private Registry registry;
     private PlayerManager playerManager;
 
+    @Getter
+    private String prefix;
+    @Getter
+    private LockConfig lockConfig;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -28,6 +35,7 @@ public final class SMP extends JavaPlugin {
         this.registry.registerListener(new JoinListener());
         this.registry.registerListener(new QuitListener());
         this.registry.registerListener(new ChatListener());
+        this.registry.registerListener(new LockListener(this));
         this.playerManager = new PlayerManager();
     }
 
@@ -35,4 +43,5 @@ public final class SMP extends JavaPlugin {
     public void onDisable() {
         instance = null;
     }
+
 }
