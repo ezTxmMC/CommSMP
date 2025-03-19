@@ -1,5 +1,6 @@
 package de.eztxm.smp;
 
+import de.eztxm.smp.util.PlayerManager;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -11,10 +12,13 @@ public final class SMP extends JavaPlugin {
     private static SMP instance;
     private LuckPerms luckPerms;
 
+    private PlayerManager playerManager;
+
     @Override
     public void onEnable() {
         instance = this;
         this.luckPerms = LuckPermsProvider.get();
+        this.playerManager = new PlayerManager();
     }
 
     @Override
