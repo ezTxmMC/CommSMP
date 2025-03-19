@@ -10,6 +10,13 @@ import java.util.*;
 @JsonClassConfig(path = "plugins/LockSystem", fileName = "locks.json")
 public class LockConfig {
 
+    public record LockInfo(
+            @JsonClassElement String owner,
+            @JsonClassElement List<String> trusted,
+            @JsonClassElement boolean viewable,
+            @JsonClassElement boolean donate
+    ) {}
+
     private static JsonProcessor<LockConfig> jsonProcessor;
 
     @JsonClassElement
@@ -31,16 +38,12 @@ public class LockConfig {
 
     public UUID getOwner(final Location location) {
         LockInfo info = locks.get(getLocationKey(location));
-        return (info != null && info.owner != null) ? UUID.fromString(info.owner) : null;
+        return (info != null && info.owner() != null) ? UUID.fromString(info.owner()) : null;
     }
 
     public void lock(final Location location, final UUID owner) {
         String key = getLocationKey(location);
-        LockInfo info = new LockInfo();
-        info.owner = owner.toString();
-        info.trusted = new ArrayList<>();
-        info.viewable = false;
-        info.donate = false;
+        LockInfo info = new LockInfo(owner.toString(), new ArrayList<>(), false, false);
         locks.put(key, info);
         save();
     }
@@ -51,26 +54,25 @@ public class LockConfig {
     }
 
     public boolean donate(final Location location) {
-        LockInfo info = locks.get(getLocationKey(location));
-        if (info == null) return false;
-        if (!info.donate) {
-            info.donate = true;
-            save();
-            return true;
-        }
-        info.donate = false;
+        String key = getLocationKey(location);
+        LockInfo oldInfo = locks.get(key);
+        if (oldInfo == null) return false;
+        boolean newDonate = !oldInfo.donate();
+        LockInfo newInfo = new LockInfo(oldInfo.owner(), oldInfo.trusted(), oldInfo.viewable(), newDonate);
+        locks.put(key, newInfo);
         save();
-        return false;
+        return newDonate;
     }
 
     public List<UUID> getTrusted(final Location location) {
         LockInfo info = locks.get(getLocationKey(location));
         List<UUID> result = new ArrayList<>();
-        if (info != null && info.trusted != null) {
-            for (String uuidStr : info.trusted) {
+        if (info != null && info.trusted() != null) {
+            for (String uuidStr : info.trusted()) {
                 try {
                     result.add(UUID.fromString(uuidStr));
                 } catch (IllegalArgumentException e) {
+                    // Ungültige UUID überspringen
                 }
             }
         }
@@ -79,49 +81,55 @@ public class LockConfig {
 
     public void addTrusted(final Location location, final UUID playerUUID) {
         String key = getLocationKey(location);
-        LockInfo info = locks.get(key);
-        if (info == null) return;
-        if (info.trusted == null) {
-            info.trusted = new ArrayList<>();
-        }
-        info.trusted.add(playerUUID.toString());
+        LockInfo oldInfo = locks.get(key);
+        if (oldInfo == null) return;
+        List<String> newTrusted = new ArrayList<>(oldInfo.trusted());
+        newTrusted.add(playerUUID.toString());
+        LockInfo newInfo = new LockInfo(oldInfo.owner(), newTrusted, oldInfo.viewable(), oldInfo.donate());
+        locks.put(key, newInfo);
         save();
     }
 
     public void removeTrusted(final Location location, final UUID playerUUID) {
         String key = getLocationKey(location);
-        LockInfo info = locks.get(key);
-        if (info == null || info.trusted == null) return;
-        info.trusted.remove(playerUUID.toString());
+        LockInfo oldInfo = locks.get(key);
+        if (oldInfo == null) return;
+        List<String> newTrusted = new ArrayList<>(oldInfo.trusted());
+        newTrusted.remove(playerUUID.toString());
+        LockInfo newInfo = new LockInfo(oldInfo.owner(), newTrusted, oldInfo.viewable(), oldInfo.donate());
+        locks.put(key, newInfo);
         save();
     }
 
     public void setTrusted(final Location location, final List<UUID> trustedPlayers) {
         String key = getLocationKey(location);
-        LockInfo info = locks.get(key);
-        if (info == null) return;
-        List<String> trusted = new ArrayList<>();
+        LockInfo oldInfo = locks.get(key);
+        if (oldInfo == null) return;
+        List<String> newTrusted = new ArrayList<>();
         for (UUID uuid : trustedPlayers) {
-            trusted.add(uuid.toString());
+            newTrusted.add(uuid.toString());
         }
-        info.trusted = trusted;
+        LockInfo newInfo = new LockInfo(oldInfo.owner(), newTrusted, oldInfo.viewable(), oldInfo.donate());
+        locks.put(key, newInfo);
         save();
     }
 
     public boolean isDonatable(final Location location) {
         LockInfo info = locks.get(getLocationKey(location));
-        return info != null && info.donate;
+        return info != null && info.donate();
     }
 
     public boolean isViewable(final Location location) {
         LockInfo info = locks.get(getLocationKey(location));
-        return info != null && (info.viewable || info.donate);
+        return info != null && (info.viewable() || info.donate());
     }
 
     public void toggleViewable(final Location location) {
-        LockInfo info = locks.get(getLocationKey(location));
-        if (info == null) return;
-        info.viewable = !info.viewable;
+        String key = getLocationKey(location);
+        LockInfo oldInfo = locks.get(key);
+        if (oldInfo == null) return;
+        LockInfo newInfo = new LockInfo(oldInfo.owner(), oldInfo.trusted(), !oldInfo.viewable(), oldInfo.donate());
+        locks.put(key, newInfo);
         save();
     }
 
@@ -152,19 +160,5 @@ public class LockConfig {
             e.printStackTrace();
         }
         return new LockConfig();
-    }
-
-    public static class LockInfo {
-        @JsonClassElement
-        public String owner;
-        @JsonClassElement
-        public List<String> trusted = new ArrayList<>();
-        @JsonClassElement
-        public boolean viewable;
-        @JsonClassElement
-        public boolean donate;
-
-        public LockInfo() {
-        }
     }
 }
