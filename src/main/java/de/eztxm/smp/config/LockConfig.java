@@ -7,7 +7,7 @@ import org.bukkit.Location;
 
 import java.util.*;
 
-@JsonClassConfig(path = "plugins/LockSystem", fileName = "locks.json")
+@JsonClassConfig(path = "plugins/SMP", fileName = "locks.json")
 public class LockConfig {
 
     public record LockInfo(
