@@ -1,6 +1,9 @@
 package de.eztxm.smp;
 
 import de.eztxm.smp.chunk.CustomChunkGen;
+import de.eztxm.smp.command.PositionCommand;
+import de.eztxm.smp.command.api.CommandAliases;
+import de.eztxm.smp.command.api.SimpleCommandRegistry;
 import de.eztxm.smp.config.LockConfig;
 import de.eztxm.smp.listener.ChatListener;
 import de.eztxm.smp.listener.DeathListener;
@@ -9,6 +12,7 @@ import de.eztxm.smp.listener.QuitListener;
 import de.eztxm.smp.lock.LockListener;
 import de.eztxm.smp.util.PlayerManager;
 import de.eztxm.smp.util.Registry;
+import de.syntaxjason.syntaxjasonapi.minecraft.tick.AnimationHolder;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -32,11 +36,17 @@ public final class SMP extends JavaPlugin {
     @Getter
     private LockConfig lockConfig;
 
+    @Getter
+    private AnimationHolder positionHolder;
+
     @Override
     public void onEnable() {
         instance = this;
         this.lockConfig = LockConfig.load();
         this.luckPerms = LuckPermsProvider.get();
+
+        positionHolder = new AnimationHolder();
+
         this.registry = new Registry(instance);
         this.registry.registerListener(new JoinListener(this));
         this.registry.registerListener(new QuitListener(this));
@@ -64,6 +74,11 @@ public final class SMP extends JavaPlugin {
         }
     }
 
+    private void registerCommands() {
+        SimpleCommandRegistry commandRegistry = new SimpleCommandRegistry(this);
+        commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos", "pos", "poslist", "positionlist"), new PositionCommand());
+    }
+
     @Override
     public void onDisable() {
         this.lockConfig.save();
@@ -72,7 +87,7 @@ public final class SMP extends JavaPlugin {
 
     @Override
     public @Nullable ChunkGenerator getDefaultWorldGenerator(String worldName, @Nullable String id) {
-        if(worldName.toLowerCase().contains("nether")) {
+        if (worldName.toLowerCase().contains("nether")) {
             return new CustomChunkGen();
         }
         return super.getDefaultWorldGenerator(worldName, id);
