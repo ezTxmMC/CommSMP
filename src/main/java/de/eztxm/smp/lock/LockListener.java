@@ -29,13 +29,9 @@ public class LockListener implements Listener {
     }
 
     @EventHandler
-    public void onChestPlace(final BlockPlaceEvent event) {
+    public void onPlace(final BlockPlaceEvent event) {
         final Block placedBlock = event.getBlock();
         final Player player = event.getPlayer();
-
-        if (placedBlock.getType() != Material.CHEST) {
-            return;
-        }
 
         for (final Block adjacentBlock : getAdjacentBlocks(placedBlock)) {
             if (adjacentBlock.getType() != Material.CHEST) {
@@ -58,6 +54,11 @@ public class LockListener implements Listener {
                 player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Die Kiste wurde erfolgreich verbunden und gesperrt."));
                 return;
             }
+        }
+
+        if(LockUtil.isLockable(placedBlock)) {
+            lockConfig.lock(placedBlock.getLocation(), player.getUniqueId());
+            player.sendMessage(smp.getPrefix() + "Der Block wurde automatisch gesperrt!");
         }
     }
 

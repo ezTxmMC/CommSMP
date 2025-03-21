@@ -29,11 +29,13 @@ public final class SMP extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.lockConfig = LockConfig.load();
+
         instance = this;
         this.luckPerms = LuckPermsProvider.get();
         this.registry = new Registry(instance);
-        this.registry.registerListener(new JoinListener());
-        this.registry.registerListener(new QuitListener());
+        this.registry.registerListener(new JoinListener(this));
+        this.registry.registerListener(new QuitListener(this));
         this.registry.registerListener(new ChatListener());
         this.registry.registerListener(new LockListener(this));
         this.playerManager = new PlayerManager();
@@ -41,6 +43,7 @@ public final class SMP extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.lockConfig.save();
         instance = null;
     }
 
