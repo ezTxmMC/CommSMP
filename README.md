@@ -19,11 +19,11 @@
     - [x] Starting with '@': Serverside
     - [x] Starting with '!': In 30 blocks radius
 - [ ] (Optional) SimpleVoiceChat activate sculk sensor & shrieker
-- [ ] Shoppingarea
+- [ ] Shoppingarea (SyntaxJason)
     - [ ] Buy plot
     - [ ] Expand plot
     - [ ] Reduce plot
-- [ ] Private messages
+- [ ] Private messages (TntTastisch)
     - [ ] /message <player> <message>  - alias: /msg - overwrite /tell, /w & /whisper with it
     - [ ] /reply <message>             - alias: /r
     - [ ] Offline inbox
@@ -44,7 +44,7 @@
     - [x] /teamchat enable
     - [x] /teamchat disable
     - [x] Teammessagelayout: '@Team - ezTxmMC >> Hey'
-- [x] '@' before online user name and in aqua
+- [x] '@' before online username and in aqua
 - [ ] Backpacks (SyntaxJason & TntTastisch)
     - [ ] Custom model (Tom)
     - [ ] Placed as barrier with direction to player
