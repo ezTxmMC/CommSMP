@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public class PositionConfig extends JsonConfig {
     private static final HashMap<UUID, PositionConfig> instances = new HashMap<>();
 
     public static PositionConfig getPositionData(Player player) {
-        if(instances.containsKey(player.getUniqueId())) {
+        if (instances.containsKey(player.getUniqueId())) {
             return instances.get(player.getUniqueId());
         }
         return new PositionConfig(player);
@@ -43,7 +42,7 @@ public class PositionConfig extends JsonConfig {
         this.player = player;
     }
 
-    public void setPostion(String name, Location location) {
+    public void setPosition(String name, Location location) {
         this.set(name, new StringBuilder()
                 .append(location.getX()).append(":")
                 .append(location.getY()).append(":")
@@ -60,7 +59,7 @@ public class PositionConfig extends JsonConfig {
     }
 
     public Location getPosition(String name) {
-        if(get(name) == null) return null;
+        if (get(name) == null) return null;
         String[] args = name.split(":");
         return new Location(Bukkit.getWorld(args[5]), Double.parseDouble(args[0]),
                 Double.parseDouble(args[1]), Double.parseDouble(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
@@ -76,7 +75,8 @@ public class PositionConfig extends JsonConfig {
         Path filePath = Paths.get(this.getConfigPath(), this.getConfigName());
         try {
             Files.writeString(filePath, this.getCustomJsonObject().toJsonString(true));
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     public void reload() {
@@ -102,6 +102,7 @@ public class PositionConfig extends JsonConfig {
             field.setAccessible(true);
             field.set(this, JsonObject.parseValue(builder.toString()));
             field.setAccessible(false);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 }

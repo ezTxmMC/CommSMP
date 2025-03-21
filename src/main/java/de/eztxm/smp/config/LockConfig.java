@@ -15,7 +15,8 @@ public class LockConfig {
             @JsonClassElement List<String> trusted,
             @JsonClassElement boolean viewable,
             @JsonClassElement boolean donate
-    ) {}
+    ) {
+    }
 
     private static JsonProcessor<LockConfig> jsonProcessor;
 
