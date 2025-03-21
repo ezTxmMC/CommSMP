@@ -1,7 +1,7 @@
 package de.eztxm.smp.scoreboard;
 
 import de.eztxm.smp.SMP;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import de.eztxm.smp.util.AdventureColor;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class SpawnScoreboard {
     private final Scoreboard scoreboard;
@@ -21,7 +24,7 @@ public class SpawnScoreboard {
                 .objective(
                         "display",
                         Criteria.DUMMY,
-                        MiniMessage.miniMessage().deserialize("§x§0§0§5§f§f§f§l CommSMP "))
+                        AdventureColor.apply("§x§0§0§5§f§f§f§l CommSMP "))
                 .displaySlot(DisplaySlot.SIDEBAR)
                 .score(15, "§0                    §0")
                 .score(14, "§7Status:")

@@ -2,7 +2,7 @@ package de.eztxm.smp.lock;
 
 import de.eztxm.smp.SMP;
 import de.eztxm.smp.config.LockConfig;
-import de.eztxm.smp.util.BukkitColor;
+import de.eztxm.smp.util.AdventureColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -46,20 +46,20 @@ public class LockListener implements Listener {
 
                 if (ownerUUID == null || !player.getUniqueId().equals(ownerUUID)) {
                     player.sendMessage(
-                            BukkitColor.apply(smp.getPrefix() + "Du kannst diese Kiste nicht mit einer gesperrten Kiste verbinden."));
+                            AdventureColor.apply(smp.getPrefix() + "Du kannst diese Kiste nicht mit einer gesperrten Kiste verbinden."));
                     event.setCancelled(true);
                     return;
                 }
 
                 lockConfig.lock(placedBlock.getLocation(), ownerUUID);
-                player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Die Kiste wurde erfolgreich verbunden und gesperrt."));
+                player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Die Kiste wurde erfolgreich verbunden und gesperrt."));
                 return;
             }
         }
 
-        if(LockUtil.isLockable(placedBlock)) {
+        if (LockUtil.isLockable(placedBlock)) {
             lockConfig.lock(placedBlock.getLocation(), player.getUniqueId());
-            player.sendMessage(smp.getPrefix() + "Der Block wurde automatisch gesperrt!");
+            player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Der Block wurde automatisch gesperrt!"));
         }
     }
 
@@ -70,42 +70,42 @@ public class LockListener implements Listener {
         }
 
         final Block block = event.getInventory().getLocation() != null ? event.getInventory().getLocation().getBlock() : null;
-        if(block == null) {
+        if (block == null) {
             return;
         }
         Location location = block.getLocation();
-        if(!lockConfig.isLocked(location)) {
+        if (!lockConfig.isLocked(location)) {
             return;
         }
         UUID ownerUUID = lockConfig.getOwner(location);
         List<UUID> trusted = lockConfig.getTrusted(location);
 
-        if((ownerUUID != null && ownerUUID.equals(player.getUniqueId())) || trusted.contains(player.getUniqueId())) {
+        if ((ownerUUID != null && ownerUUID.equals(player.getUniqueId())) || trusted.contains(player.getUniqueId())) {
             return;
         }
 
-        if(lockConfig.isDonatable(location)) {
-            if((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)
+        if (lockConfig.isDonatable(location)) {
+            if ((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)
                     || (event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)) {
-                player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
+                player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
                 event.setCancelled(true);
                 return;
             }
-            if(event.getCursor() != null && event.getCursor().getType() != Material.AIR && event.getClickedInventory() == event.getView().getTopInventory()) {
+            if (event.getCursor() != null && event.getCursor().getType() != Material.AIR && event.getClickedInventory() == event.getView().getTopInventory()) {
                 return;
             }
-            if(event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getBottomInventory()) {
+            if (event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getBottomInventory()) {
                 return;
             }
             event.setCancelled(true);
-            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Nur das Hinzufügen von Items ist erlaubt!"));
+            player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Nur das Hinzufügen von Items ist erlaubt!"));
         }
 
-        if(lockConfig.isViewable(location)) {
-            if(ownerUUID != null && ownerUUID.equals(player.getUniqueId()) || trusted.contains(player.getUniqueId())) {
+        if (lockConfig.isViewable(location)) {
+            if (ownerUUID != null && ownerUUID.equals(player.getUniqueId()) || trusted.contains(player.getUniqueId())) {
                 return;
             }
-            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst den Inhalt nicht verändern!"));
+            player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Du kannst den Inhalt nicht verändern!"));
             event.setCancelled(true);
         }
     }
@@ -145,7 +145,7 @@ public class LockListener implements Listener {
         final UUID ownerUUID = lockConfig.getOwner(location);
         if (!player.getUniqueId().equals(ownerUUID) && !lockConfig.getTrusted(location).contains(player.getUniqueId())
                 && !player.hasPermission("lock.bypass")) {
-            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Dieser Block ist &cgesperrt&7 und gehört jemand anderem."));
+            player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Dieser Block ist &cgesperrt&7 und gehört jemand anderem."));
             event.setCancelled(true);
         }
     }
@@ -163,12 +163,12 @@ public class LockListener implements Listener {
         final UUID ownerUUID = lockConfig.getOwner(location);
         if (!player.getUniqueId().equals(ownerUUID) && !player.hasPermission("lock.bypass")) {
             player.sendMessage(
-                    BukkitColor.apply(smp.getPrefix() + "Du kannst diesen Block nicht &czerstören&7, da er &cgesperrt &7ist."));
+                    AdventureColor.apply(smp.getPrefix() + "Du kannst diesen Block nicht &czerstören&7, da er &cgesperrt &7ist."));
             event.setCancelled(true);
             return;
         }
         lockConfig.unlock(location);
-        player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Die Sperre wurde &aerfolgreich &7entfernt."));
+        player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Die Sperre wurde &aerfolgreich &7entfernt."));
     }
 
     private Block[] getAdjacentBlocks(final Block block) {
