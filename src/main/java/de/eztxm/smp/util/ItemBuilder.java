@@ -125,7 +125,6 @@ public class ItemBuilder {
         SkullMeta skullMeta = (SkullMeta) this.itemMeta;
         skullMeta.setPlayerProfile(player.getPlayerProfile());
         skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getName()));
-        this.itemMeta = skullMeta;
         return this;
     }
 
