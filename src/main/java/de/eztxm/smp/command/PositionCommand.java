@@ -7,16 +7,17 @@ import de.eztxm.smp.util.AdventureColor;
 import de.syntaxjason.syntaxjasonapi.minecraft.ParticleAnimationTicked;
 import de.syntaxjason.syntaxjasonapi.minecraft.ParticleBuilder;
 import de.syntaxjason.syntaxjasonapi.minecraft.ParticleData;
+import de.syntaxjason.syntaxjasonapi.minecraft.tick.AnimationHolder;
 import de.syntaxjason.syntaxjasonapi.minecraft.tick.TickedAnimation;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PositionCommand implements SimpleCommand {
+
+    private HashMap<UUID, AnimationHolder> animation = new HashMap<>();
 
     private PositionConfig config;
 
@@ -49,11 +50,23 @@ public class PositionCommand implements SimpleCommand {
             return;
         }
 
-        TickedAnimation trailAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(player.getEyeLocation()).radius(0.1).steps(20).particleCount(5).animationType(ParticleAnimationTicked.AnimationType.BEAM).rotation(0).shoot(true).build();
-        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(targetLocation).radius(1.0).steps(50).particleCount(1).animationType(ParticleAnimationTicked.AnimationType.CIRCLE).rotation(0).shoot(false).build();
+        if(animation.containsKey(player.getUniqueId())) {
+            animation.get(player.getUniqueId()).stop();
+            animation.remove(player.getUniqueId());
+            player.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "&aPartikeleffekte für die Position " + args[0] + " deaktiviert!"));
+            return;
+        }
 
-        SMP.getInstance().getPositionHolder().addAnimation(trailAnimation);
-        SMP.getInstance().getPositionHolder().addAnimation(circleAnimation);
+        AnimationHolder animationHolder = new AnimationHolder();
+
+        TickedAnimation trailAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(player.getEyeLocation()).loop(true).radius(0.1).steps(20).particleCount(5).animationType(ParticleAnimationTicked.AnimationType.BEAM).rotation(0).shoot(true).build();
+        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(targetLocation).loop(true).radius(1.0).steps(50).particleCount(1).animationType(ParticleAnimationTicked.AnimationType.CIRCLE).rotation(0).shoot(false).build();
+
+        animationHolder.addAnimation(trailAnimation);
+        animationHolder.addAnimation(circleAnimation);
+        animationHolder.start();
+
+        animation.put(player.getUniqueId(), animationHolder);
 
         player.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "&aPartikeleffekte für die Position " + args[0] + " aktiviert!"));
     }

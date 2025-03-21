@@ -36,16 +36,11 @@ public final class SMP extends JavaPlugin {
     @Getter
     private LockConfig lockConfig;
 
-    @Getter
-    private AnimationHolder positionHolder;
-
     @Override
     public void onEnable() {
         instance = this;
         this.lockConfig = LockConfig.load();
         this.luckPerms = LuckPermsProvider.get();
-
-        positionHolder = new AnimationHolder();
 
         registerCommands();
 
