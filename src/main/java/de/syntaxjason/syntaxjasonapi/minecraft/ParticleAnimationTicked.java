@@ -38,6 +38,7 @@ public class ParticleAnimationTicked implements TickedAnimation {
     private final boolean loopedReverse;
     private final boolean boundPlayerOnly;
     private final Player boundCenter;
+    private final Player boundPlayer;
 
     private int direction;
     private int currentStep;
@@ -46,7 +47,7 @@ public class ParticleAnimationTicked implements TickedAnimation {
     public ParticleAnimationTicked(JavaPlugin plugin, ParticleData particle, Location center, double radius,
                                    int totalSteps, int particleCount, AnimationType animationType,
                                    double rotation, ParticleCollisionListener collisionListener,
-                                   boolean loop, boolean reverse, boolean loopedReverse, boolean boundPlayerOnly, Player boundCenter) {
+                                   boolean loop, boolean reverse, boolean loopedReverse, boolean boundPlayerOnly, Player boundCenter, Player boundPlayer) {
         this.plugin = plugin;
         this.particle = particle;
         this.center = center;
@@ -61,6 +62,7 @@ public class ParticleAnimationTicked implements TickedAnimation {
         this.loopedReverse = loopedReverse;
         this.boundPlayerOnly = boundPlayerOnly;
         this.boundCenter = boundCenter;
+        this.boundPlayer = boundPlayer;
 
         if (reverse && !loopedReverse) {
             this.currentStep = totalSteps;
@@ -192,7 +194,11 @@ public class ParticleAnimationTicked implements TickedAnimation {
     private void spawnParticles(World world, Location location) {
         for (int i = 0; i < particleCount; i++) {
             Location spawnLoc = location.clone().add(randomOffset(), 0, randomOffset());
-            ParticleLib.sendParticleToBound(boundCenter, particle, spawnLoc);
+            if(boundPlayerOnly) {
+                ParticleLib.sendParticleToBound(boundPlayer, particle, spawnLoc);
+                continue;
+            }
+            ParticleLib.sendParticleToAll(world, particle, spawnLoc);
         }
     }
 

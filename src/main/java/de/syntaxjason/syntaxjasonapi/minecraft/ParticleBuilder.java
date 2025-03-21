@@ -17,6 +17,7 @@ public class ParticleBuilder {
     private double rotation = 0;
     private ParticleCollisionListener collisionListener = null;
     private Player boundCenter = null;
+    private Player boundPlayer = null;
     private boolean loop = false;
     private boolean reverse = false;
     private boolean loopedReverse = false;
@@ -39,6 +40,10 @@ public class ParticleBuilder {
     public ParticleBuilder boundPlayerOnly(boolean bool) {
         this.boundPlayerOnly = bool;
         return this;
+    }
+
+    public ParticleBuilder boundPlayer(Player player) {
+        this.boundPlayer = player;
     }
 
     public ParticleBuilder center(Location center) {
@@ -128,7 +133,8 @@ public class ParticleBuilder {
                 reverse,
                 loopedReverse,
                 boundPlayerOnly,
-                boundCenter
+                boundCenter,
+                boundPlayer
         );
     }
 }

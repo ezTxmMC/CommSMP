@@ -59,8 +59,8 @@ public class PositionCommand implements SimpleCommand {
 
         AnimationHolder animationHolder = new AnimationHolder();
 
-        TickedAnimation trailAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(player.getEyeLocation()).loop(true).radius(0.1).steps(20).particleCount(5).animationType(ParticleAnimationTicked.AnimationType.BEAM).rotation(0).shoot(true).build();
-        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.FLAME).center(targetLocation).loop(true).radius(1.0).steps(50).particleCount(1).animationType(ParticleAnimationTicked.AnimationType.CIRCLE).rotation(0).shoot(false).build();
+        TickedAnimation trailAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.DUST).boundPlayerOnly(true).center(player.getEyeLocation()).loop(true).steps(20).particleCount(5).animationType(ParticleAnimationTicked.AnimationType.BEAM).shoot(true).build();
+        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.DUST).boundPlayerOnly(true).center(targetLocation).loop(true).steps(50).particleCount(1).animationType(ParticleAnimationTicked.AnimationType.CIRCLE).shoot(false).build();
 
         animationHolder.addAnimation(trailAnimation);
         animationHolder.addAnimation(circleAnimation);
