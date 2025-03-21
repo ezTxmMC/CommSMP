@@ -1,8 +1,8 @@
-name: SMP
-version: '1.0'
+name: ${project.name}
+version: '${project.version}'
 main: de.eztxm.smp.SMP
 api-version: '1.21'
-authors: [ ezTxmMC ]
+authors: [ ezTxmMC, SyntaxJason, TntTastisch ]
 load: STARTUP
 
 dependencies:
