@@ -17,6 +17,21 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>eztxm-repo</id>
+            <url>https://repo.eztxm.de/maven/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -39,24 +54,9 @@
         <dependency>
             <groupId>de.eztxm</groupId>
             <artifactId>ezlib-config-json</artifactId>
-            <version>1.0-BETA1.indev</version>
+            <version>1.0-BETA1.indev2</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>papermc-repo</id>
-            <url>https://repo.papermc.io/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>eztxm-repo</id>
-            <url>https://repo.eztxm.de/maven/snapshots/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

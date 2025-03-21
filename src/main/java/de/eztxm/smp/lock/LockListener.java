@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.List;
 import java.util.UUID;
 
 public class LockListener implements Listener {
@@ -43,7 +44,7 @@ public class LockListener implements Listener {
             if (lockConfig.isLocked(adjacentLocation)) {
                 final UUID ownerUUID = lockConfig.getOwner(adjacentLocation);
 
-                if (!player.getUniqueId().equals(ownerUUID)) {
+                if (ownerUUID == null || !player.getUniqueId().equals(ownerUUID)) {
                     player.sendMessage(
                             BukkitColor.apply(smp.getPrefix() + "Du kannst diese Kiste nicht mit einer gesperrten Kiste verbinden."));
                     event.setCancelled(true);
@@ -69,45 +70,42 @@ public class LockListener implements Listener {
         }
 
         final Block block = event.getInventory().getLocation() != null ? event.getInventory().getLocation().getBlock() : null;
-        if (block == null || !lockConfig.isLocked(block.getLocation())
-                || lockConfig.getTrusted(block.getLocation()).contains(player.getUniqueId())
-                || lockConfig.getOwner(block.getLocation()).equals(player.getUniqueId())) {
+        if(block == null) {
+            return;
+        }
+        Location location = block.getLocation();
+        if(!lockConfig.isLocked(location)) {
+            return;
+        }
+        UUID ownerUUID = lockConfig.getOwner(location);
+        List<UUID> trusted = lockConfig.getTrusted(location);
+
+        if((ownerUUID != null && ownerUUID.equals(player.getUniqueId())) || trusted.contains(player.getUniqueId())) {
             return;
         }
 
-        if (lockConfig.isDonatable(block.getLocation())) {
-            if (event.isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory()
-                    && event.getCurrentItem() != null) {
-                player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen."));
+        if(lockConfig.isDonatable(location)) {
+            if((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)
+                    || (event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)) {
+                player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
                 event.setCancelled(true);
                 return;
             }
-
-            if (event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null) {
-                player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen."));
-                event.setCancelled(true);
+            if(event.getCursor() != null && event.getCursor().getType() != Material.AIR && event.getClickedInventory() == event.getView().getTopInventory()) {
                 return;
             }
-
-            if (event.getCursor() != null && event.getCursor().getType() != Material.AIR
-                    && event.getClickedInventory() == event.getView().getTopInventory()) {
+            if(event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getBottomInventory()) {
                 return;
             }
-
-            if (event.isShiftClick() && event.getClickedInventory() == event.getView().getBottomInventory()) {
-                return;
-            }
-
             event.setCancelled(true);
-            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Nur das Hinzufügen von Items ist erlaubt."));
+            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Nur das Hinzufügen von Items ist erlaubt!"));
         }
 
-        if (lockConfig.isViewable(block.getLocation())) {
-            if (lockConfig.getOwner(block.getLocation()).equals(player.getUniqueId())
-                    || lockConfig.getTrusted(block.getLocation()).contains(player.getUniqueId())) {
+        if(lockConfig.isViewable(location)) {
+            if(ownerUUID != null && ownerUUID.equals(player.getUniqueId()) || trusted.contains(player.getUniqueId())) {
                 return;
             }
-            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst nur den Inhalt ansehen, nicht ändern."));
+            player.sendMessage(BukkitColor.apply(smp.getPrefix() + "Du kannst den Inhalt nicht verändern!"));
             event.setCancelled(true);
         }
     }
@@ -118,7 +116,6 @@ public class LockListener implements Listener {
         if (block == null || !lockConfig.isLocked(block.getLocation())) {
             return;
         }
-
         event.setCancelled(true);
     }
 
@@ -128,7 +125,6 @@ public class LockListener implements Listener {
         if (block == null || !lockConfig.isLocked(block.getLocation())) {
             return;
         }
-
         event.setCancelled(true);
     }
 
@@ -137,12 +133,12 @@ public class LockListener implements Listener {
         final Block block = event.getClickedBlock();
         final Player player = event.getPlayer();
 
-        if (block == null || !lockConfig.isLocked(block.getLocation())) {
+        if (block == null) {
             return;
         }
 
         final Location location = block.getLocation();
-        if (lockConfig.isViewable(location)) {
+        if (lockConfig.isViewable(location) || !lockConfig.isLocked(block.getLocation())) {
             return;
         }
 
