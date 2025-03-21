@@ -3,6 +3,7 @@ version: '1.0'
 main: de.eztxm.smp.SMP
 api-version: '1.21'
 authors: [ ezTxmMC ]
+load: STARTUP
 
 dependencies:
   bootstrap:

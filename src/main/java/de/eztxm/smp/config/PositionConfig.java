@@ -14,9 +14,27 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.UUID;
 
 public class PositionConfig extends JsonConfig {
+
+    private static final HashMap<UUID, PositionConfig> instances = new HashMap<>();
+
+    public static PositionConfig getPositionData(Player player) {
+        if(instances.containsKey(player.getUniqueId())) {
+            return instances.get(player.getUniqueId());
+        }
+        return new PositionConfig(player);
+    }
+
+    public static void updatePositionData(Player player, PositionConfig config) {
+        instances.remove(player.getUniqueId());
+        instances.put(player.getUniqueId(), config);
+    }
+
 
     private final Player player;
 

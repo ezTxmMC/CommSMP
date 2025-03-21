@@ -132,7 +132,7 @@ public class LockConfig {
         save();
     }
 
-    private void save() {
+    public void save() {
         try {
             jsonProcessor.getInstance().locks = this.locks;
             jsonProcessor.saveConfiguration();

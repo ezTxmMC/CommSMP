@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class PositionCommand implements CommandExecutor, TabCompleter {
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if(!(commandSender instanceof Player player)) {
@@ -61,10 +62,8 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    private void listPositions(Player player, String[] args) {
-        if(!checkArgs(player, args)) {
-            return;
-        }
+    private void listPositions(Player player) {
+
     }
 
     private void delPosition(Player player, String[] args) {
