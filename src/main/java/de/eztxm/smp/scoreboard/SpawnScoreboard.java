@@ -2,6 +2,7 @@ package de.eztxm.smp.scoreboard;
 
 import de.eztxm.smp.SMP;
 import de.eztxm.smp.util.AdventureColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
@@ -57,7 +58,7 @@ public class SpawnScoreboard {
             rank.addEntry(ChatColor.BLACK.toString());
         }
         assert group != null;
-        rank.setPrefix("§8> " + (group.getDisplayName() == null ? "" : AdventureColor.apply(group.getDisplayName())));
+        rank.setPrefix("§8> " + (group.getDisplayName() == null ? "" : ChatColor.translateAlternateColorCodes('&', LegacyComponentSerializer.legacySection().serialize(AdventureColor.apply(group.getDisplayName())))));
         Team diamonds = this.scoreboard.getTeam("diamonds");
         if (diamonds == null) {
             diamonds = this.scoreboard.registerNewTeam("diamonds");
