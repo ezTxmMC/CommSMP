@@ -8,6 +8,8 @@ import com.openai.models.ModerationCreateParams;
 import com.openai.models.ModerationCreateResponse;
 import com.openai.models.ModerationModel;
 import de.eztxm.smp.SMP;
+import de.eztxm.smp.listener.filter.BlackList;
+import de.eztxm.smp.listener.filter.FilterCategory;
 import de.eztxm.smp.util.AdventureColor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -20,12 +22,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
+
+    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {}
+
+    private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
     private final OpenAIClientAsync client;
 
@@ -38,7 +44,9 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
-        if(filter(event.getMessage())) {
+        FilterResult result = filter(event.getMessage());
+
+        if(result.flagged()) {
             sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
             event.setCancelled(true);
             return;
@@ -82,44 +90,87 @@ public class ChatListener implements Listener {
     }
 
     private Component formatMessageForReceiver(String message, boolean global, Player sender, Player receiver) {
-        String mentionPattern = "(?i)" + Pattern.quote("@" + receiver.getName());
-        Pattern pattern = Pattern.compile(mentionPattern);
+        String mention = "@" + receiver.getName();
+        String regex = "(?i)" + Pattern.quote(mention);
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(message);
 
-        Component globalComponent = global
-                ? Component.text("[G] ", NamedTextColor.DARK_GRAY)
-                : Component.empty();
+        Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : Component.empty();
+        Component base = AdventureColor.apply("&e" + sender.getName() + " &8» &f");
 
-        Component base = Component.text(sender.getName() + " » ", NamedTextColor.YELLOW);
-
-        if (matcher.find()) {
+        if(matcher.find()) {
             matcher.reset();
             List<Component> parts = new ArrayList<>();
             int lastEnd = 0;
 
             while(matcher.find()) {
                 if(matcher.start() > lastEnd) {
-                    parts.add(Component.text(message.substring(lastEnd, matcher.start()), NamedTextColor.WHITE));
+                    String before = message.substring(lastEnd, matcher.start());
+                    parts.add(AdventureColor.apply(before));
                 }
-                parts.add(Component.text(message.substring(matcher.start(), matcher.end()), NamedTextColor.AQUA));
+                String hit = message.substring(matcher.start(), matcher.end());
+                parts.add(AdventureColor.apply("&b" + hit));
                 lastEnd = matcher.end();
             }
-            if(lastEnd < message.length()){
-                parts.add(Component.text(message.substring(lastEnd), NamedTextColor.WHITE));
+            if(lastEnd < message.length()) {
+                parts.add(AdventureColor.apply(message.substring(lastEnd)));
             }
 
             Component messageComponent = Component.join(JoinConfiguration.noSeparators(), parts);
             receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
-
             return globalComponent.append(base).append(messageComponent);
         }
 
-        return globalComponent.append(base).append(Component.text(message, NamedTextColor.WHITE));
+        return globalComponent.append(base).append(AdventureColor.apply(message));
     }
 
-    private boolean filter(String message) {
-        ModerationCreateParams params = ModerationCreateParams.builder().input(message.replaceAll("@", "").replaceAll("\\*", "").replaceAll("\\+", "")).model(ModerationModel.TEXT_MODERATION_STABLE).build();
+    private FilterResult filter(String message) {
+        String cleanedMessage = message.replaceAll("@", "").replaceAll("[*+]", "").toLowerCase();
+
+        if (moderationCache.containsKey(cleanedMessage)) {
+            return new FilterResult(moderationCache.get(cleanedMessage), EnumSet.noneOf(FilterCategory.class));
+        }
+
+        EnumSet<FilterCategory> blacklist = BlackList.checkMessage(message);
+        if(!blacklist.isEmpty()) {
+            return new FilterResult(true, blacklist);
+        }
+
+        ModerationCreateParams params = ModerationCreateParams.builder()
+                .input(cleanedMessage)
+                .model(ModerationModel.TEXT_MODERATION_LATEST)
+                .build();
+
         ModerationCreateResponse response = client.moderations().create(params).join();
-        return response.results().stream().anyMatch(Moderation::flagged);
+        Moderation result = response.results().getFirst();
+
+
+        if(!result.flagged()) {
+
+            params = ModerationCreateParams.builder()
+                    .input(message)
+                    .model(ModerationModel.OMNI_MODERATION_LATEST)
+                    .build();
+
+            response = client.moderations().create(params).join();
+            result = response.results().getFirst();
+        }
+
+        boolean flagged = result.flagged();
+        EnumSet<FilterCategory> categories = EnumSet.noneOf(FilterCategory.class);
+
+        if (result.categories().sexual()) categories.add(FilterCategory.SEXUAL);
+        if (result.categories().hate()) categories.add(FilterCategory.HATE);
+        if (result.categories().harassment()) categories.add(FilterCategory.HARASSMENT);
+        if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
+        if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
+
+        if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
+            flagged = true;
+            categories.add(FilterCategory.RECHTSEXTREM);
+        }
+
+        moderationCache.put(cleanedMessage, flagged);
+        return new FilterResult(flagged, categories);
     }
 }
