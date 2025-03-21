@@ -1,45 +1,68 @@
 package de.eztxm.smp.command;
 
 import de.eztxm.smp.SMP;
-import de.eztxm.smp.util.BukkitColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import de.eztxm.smp.command.api.SimpleCommand;
+import de.eztxm.smp.util.AdventureColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PositionCommand implements CommandExecutor, TabCompleter {
+public class PositionCommand implements SimpleCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if(!(commandSender instanceof Player player)) {
-            return false;
+    public void execute(String label, CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof Player player)) {
+            return;
         }
-
         switch (label.toLowerCase()) {
             case "setposition",
-                    "setpos" -> setPostion(player, args);
+                 "setpos" -> setPostion(player, args);
             case "delposition",
-                    "deletepostion",
-                    "delpos" -> delPosition(player, args);
+                 "deletepostion",
+                 "delpos" -> delPosition(player, args);
             case "positionlist",
-                    "poslist" -> listPositions(player);
+                 "poslist" -> listPositions(player);
             default -> position(player, args);
         }
-        return false;
+        return;
     }
 
+    private void position(Player player, String[] args) {
+        if (!checkArgs(player, args)) {
+            return;
+        }
+    }
+
+    private void listPositions(Player player) {
+
+    }
+
+    private void delPosition(Player player, String[] args) {
+        if (!checkArgs(player, args)) {
+            return;
+        }
+    }
+
+    private void setPostion(Player player, String[] args) {
+        if (!checkArgs(player, args)) {
+            return;
+        }
+    }
+
+    @Override
+    public List<String> suggest(String label, CommandSender sender, String[] args) {
+        return SimpleCommand.super.suggest(label, sender, args);
+    }
+
+
     private boolean checkArgs(Player player, String[] args) {
-        if(args.length >= 10) {
+        if (args.length >= 10) {
             player.sendMessage("Du bist behindert... Aber mach weiter so xD");
             return false;
         }
-        if(args.length != 1) {
-            player.sendMessage(BukkitColor.apply(SMP.getInstance().getPrefix() + """
+        if (args.length != 1) {
+            player.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + """
                     &7Guten Tag lieber Bürgergeld Empfänger. Leider ist mir aufgefallen das du ziemlich Unterkomplex bist. 
                     Diese Vermutung kam daher, das du ein Befehl verwendest, der mehrere Argumente benötigt, du jedoch keines oder zu viele angegeben hast.
                     Damit du für das nächste mal weißt wie du den Befehl hand haben musst, zeige ich dir mal, wie er richtig benutzt wird. 
@@ -54,32 +77,5 @@ public class PositionCommand implements CommandExecutor, TabCompleter {
             return false;
         }
         return true;
-    }
-
-    private void position(Player player, String[] args) {
-        if(!checkArgs(player, args)) {
-            return;
-        }
-    }
-
-    private void listPositions(Player player) {
-
-    }
-
-    private void delPosition(Player player, String[] args) {
-        if(!checkArgs(player, args)) {
-            return;
-        }
-    }
-
-    private void setPostion(Player player, String[] args) {
-        if(!checkArgs(player, args)) {
-            return;
-        }
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
-        return null;
     }
 }

@@ -1,6 +1,9 @@
 package de.eztxm.smp;
 
 import de.eztxm.smp.chunk.CustomChunkGen;
+import de.eztxm.smp.command.TestCommand;
+import de.eztxm.smp.command.api.CommandAliases;
+import de.eztxm.smp.command.api.SimpleCommandRegistry;
 import de.eztxm.smp.config.LockConfig;
 import de.eztxm.smp.listener.ChatListener;
 import de.eztxm.smp.listener.DeathListener;
@@ -64,6 +67,11 @@ public final class SMP extends JavaPlugin {
         }
     }
 
+    private void registerCommands() {
+        SimpleCommandRegistry commandRegistry = new SimpleCommandRegistry(this);
+        commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos", "pos", "poslist", "positionlist"), new TestCommand());
+    }
+
     @Override
     public void onDisable() {
         this.lockConfig.save();
@@ -72,7 +80,7 @@ public final class SMP extends JavaPlugin {
 
     @Override
     public @Nullable ChunkGenerator getDefaultWorldGenerator(String worldName, @Nullable String id) {
-        if(worldName.toLowerCase().contains("nether")) {
+        if (worldName.toLowerCase().contains("nether")) {
             return new CustomChunkGen();
         }
         return super.getDefaultWorldGenerator(worldName, id);
