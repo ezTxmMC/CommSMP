@@ -43,13 +43,12 @@ public class PositionConfig extends JsonConfig {
     }
 
     public void setPosition(String name, Location location) {
-        this.set(name, new StringBuilder()
-                .append(location.getX()).append(":")
-                .append(location.getY()).append(":")
-                .append(location.getZ()).append(":")
-                .append(location.getPitch()).append(":")
-                .append(location.getYaw()).append(":")
-                .append(location.getWorld().getName()).toString());
+        this.set(name, location.getX() + ":" +
+                location.getY() + ":" +
+                location.getZ() + ":" +
+                location.getPitch() + ":" +
+                location.getYaw() + ":" +
+                location.getWorld().getName());
         save();
     }
 

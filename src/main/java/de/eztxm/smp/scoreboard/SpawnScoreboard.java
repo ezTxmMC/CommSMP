@@ -2,6 +2,7 @@ package de.eztxm.smp.scoreboard;
 
 import de.eztxm.smp.SMP;
 import de.eztxm.smp.util.AdventureColor;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
@@ -24,7 +25,7 @@ public class SpawnScoreboard {
                 .objective(
                         "display",
                         Criteria.DUMMY,
-                        AdventureColor.apply("§x§0§0§5§f§f§f§l CommSMP "))
+                        Component.text("§x§0§0§5§f§f§f§l CommSMP "))
                 .displaySlot(DisplaySlot.SIDEBAR)
                 .score(15, "§0                    §0")
                 .score(14, "§7Status:")

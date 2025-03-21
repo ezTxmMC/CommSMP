@@ -47,6 +47,8 @@ public final class SMP extends JavaPlugin {
 
         positionHolder = new AnimationHolder();
 
+        registerCommands();
+
         this.registry = new Registry(instance);
         this.registry.registerListener(new JoinListener(this));
         this.registry.registerListener(new QuitListener(this));
