@@ -1,12 +1,16 @@
 package de.eztxm.smp.backpacks.models;
 
 import de.eztxm.smp.backpacks.UpdateType;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Setter
+@Getter
 public class LastUpdatedModel {
 
     private UUID user;
@@ -32,59 +36,4 @@ public class LastUpdatedModel {
     }
 
 
-    public UUID getUser() {
-        return user;
-    }
-
-    public void setUser(UUID user) {
-        this.user = user;
-    }
-
-    public OffsetDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public UpdateType getType() {
-        return type;
-    }
-
-    public void setType(UpdateType type) {
-        this.type = type;
-    }
-
-    public Material getItem() {
-        return item;
-    }
-
-    public void setItem(Material item) {
-        this.item = item;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getSlot() {
-        return slot;
-    }
-
-    public void setSlot(int slot) {
-        this.slot = slot;
-    }
-
-    public Inventory getMovedTo() {
-        return movedTo;
-    }
-
-    public void setMovedTo(Inventory movedTo) {
-        this.movedTo = movedTo;
-    }
 }

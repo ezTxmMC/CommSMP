@@ -1,5 +1,7 @@
 package de.eztxm.smp.backpacks.models;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class BackpackModel {
 
     private final UUID uniqueId;
@@ -15,6 +19,7 @@ public class BackpackModel {
     private OffsetDateTime creationDate;
     private ItemStack[] items;
     private List<LastUpdatedModel> lastUpdated;
+
     public BackpackModel(UUID uniqueId, UUID creator, OffsetDateTime creationDate, ItemStack[] items, List<LastUpdatedModel> lastUpdated) {
         this.uniqueId = uniqueId;
         this.creator = creator;
@@ -85,41 +90,5 @@ public class BackpackModel {
 
     public BackpackModel(UUID uniqueId, UUID creator, List<LastUpdatedModel> lastUpdated) {
         this(uniqueId, creator, OffsetDateTime.now(), new ItemStack[]{}, lastUpdated);
-    }
-
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    public UUID getCreator() {
-        return creator;
-    }
-
-    public void setCreator(UUID creator) {
-        this.creator = creator;
-    }
-
-    public OffsetDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(OffsetDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public ItemStack[] getItems() {
-        return items;
-    }
-
-    public void setItems(ItemStack[] items) {
-        this.items = items;
-    }
-
-    public List<LastUpdatedModel> getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(List<LastUpdatedModel> lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 }
