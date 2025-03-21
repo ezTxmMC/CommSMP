@@ -2,7 +2,6 @@ package de.eztxm.smp.listener;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,54 +13,63 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onChat(PlayerChatEvent event) {
-        Player player = event.getPlayer();
+        Player sender = event.getPlayer();
         String message = event.getMessage();
 
-        if (message.startsWith("@")) {
-            event.setCancelled(false);
-            return;
+        boolean global = false;
+        int radius = 15;
+
+        if (message.startsWith("!")) {
+            global = true;
+            radius = 30;
+            message = message.substring(1).trim();
         }
 
-        int radius = message.startsWith("!") ? 30 : 15;
-        boolean global = message.startsWith("!");
-        String trimmedMessage = global ? message.substring(1).trim() : message;
+        if (message.startsWith("@") && global) {
+            message = message.substring(1).trim();
+        }
 
-        boolean reachedSomeone = sendMessage(player, trimmedMessage, radius);
+        boolean reachedSomeone = sendMessage(sender, message, global, radius);
         if (!reachedSomeone) {
-            player.sendMessage(Component.text(global ? "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '@' vor deiner Nachricht, um mit allen zu schreiben." : "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '!' vor deiner Nachricht, um weitere Distanz zu schreiben und '@', um mit allen zu schreiben.", NamedTextColor.RED));
+            String hint = global ? "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '@' vor deiner Nachricht, um mit allen zu schreiben." : "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '!' vor deiner Nachricht, um weitere Distanz zu schreiben und '@', um mit allen zu schreiben.";
+            sender.sendMessage(Component.text(hint, NamedTextColor.RED));
         }
 
         event.setCancelled(true);
     }
 
-    private boolean sendMessage(Player sender, String message, int radius) {
+    private boolean sendMessage(Player sender, String message, boolean global, int radius) {
         boolean reachedSomeone = false;
 
         for (Entity entity : sender.getLocation().getWorld().getNearbyEntities(sender.getLocation(), radius, radius, radius)) {
-            if (entity instanceof Player target) {
-                Component formattedMessage = formatMentionMessage(target, message);
-                target.sendMessage(formattedMessage);
+            if (entity instanceof Player receiver) {
+                Component formattedMessage = formatMessageForReceiver(message, global, receiver);
+                receiver.sendMessage(formattedMessage);
                 reachedSomeone = true;
             }
         }
         return reachedSomeone;
     }
 
-    private Component formatMentionMessage(Player receiver, String message) {
-        Component finalMessage = Component.empty();
-        String[] words = message.split(" ");
+    private Component formatMessageForReceiver(String message, boolean global, Player receiver) {
+        String receiverName = receiver.getName();
+        String lowerMessage = message.toLowerCase();
+        String lowerName = receiverName.toLowerCase();
 
-        for (String word : words) {
-            Player mentionedPlayer = Bukkit.getPlayerExact(word);
-            if (mentionedPlayer != null && mentionedPlayer.isOnline()) {
-                if (mentionedPlayer.getUniqueId().equals(receiver.getUniqueId())) {
-                    receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
-                }
-                finalMessage = finalMessage.append(Component.text("@", NamedTextColor.AQUA)).append(Component.text(mentionedPlayer.getName(), NamedTextColor.AQUA)).append(Component.space());
-                continue;
-            }
-            finalMessage = finalMessage.append(Component.text(word)).append(Component.space());
+        if (lowerMessage.contains(lowerName)) {
+            int index = lowerMessage.indexOf(lowerName);
+            String before = message.substring(0, index);
+            String namePart = message.substring(index, index + receiverName.length());
+            String after = message.substring(index + receiverName.length());
+
+            String prefix = global ? "" : "@";
+
+            receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
+
+            return Component.text(before)
+                    .append(Component.text(prefix + namePart, NamedTextColor.AQUA))
+                    .append(Component.text(after));
         }
-        return finalMessage;
+        return Component.text(message);
     }
 }
