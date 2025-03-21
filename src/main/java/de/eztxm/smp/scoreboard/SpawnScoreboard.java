@@ -27,7 +27,7 @@ public class SpawnScoreboard {
                         AdventureColor.apply("<#005fff><bold> CommSMP </bold>"))
                 .displaySlot(DisplaySlot.SIDEBAR)
                 .score(15, "§0                    §0")
-                .score(14, "§7Status:")
+                .score(14, "§7Rang:")
                 .score(13, ChatColor.BLACK.toString())
                 .score(12, "§0                    §1")
                 .score(11, "§7Diamanten:")
@@ -57,7 +57,7 @@ public class SpawnScoreboard {
             rank.addEntry(ChatColor.BLACK.toString());
         }
         assert group != null;
-        rank.setPrefix("§8> " + (group.getDisplayName() == null ? "" : group.getDisplayName()));
+        rank.setPrefix("§8> " + (group.getDisplayName() == null ? "" : AdventureColor.apply(group.getDisplayName())));
         Team diamonds = this.scoreboard.getTeam("diamonds");
         if (diamonds == null) {
             diamonds = this.scoreboard.registerNewTeam("diamonds");
