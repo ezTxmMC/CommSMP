@@ -2,11 +2,11 @@
 
 ## Functionality
 
-- [ ] Save Positions
-    - [ ] /setposition <name>      - alias: /setpos
-    - [ ] /deleteposition <name>   - alias: /delpos
-    - [ ] /positionlist - alias: /poslist
-    - [ ] /position <name>         - alias: /pos - 30 blocks animated particle line in direction
+- [x] Save Positions
+    - [x] /setposition <name>      - alias: /setpos
+    - [x] /deleteposition <name>   - alias: /delpos
+    - [x] /positionlist - alias: /poslist
+    - [x] /position <name>         - alias: /pos - 30 blocks animated particle line in direction
 - [x] Locksystem
     - [x] Chest & Doublechest lock
     - [x] Furnace lock
@@ -44,9 +44,9 @@
     - [x] /teamchat enable
     - [x] /teamchat disable
     - [x] Teammessagelayout: '@Team - ezTxmMC >> Hey'
-- [ ] '@' before online user name and in aqua
-- [ ] Backpacks
-    - [ ] Custom model
+- [x] '@' before online user name and in aqua
+- [ ] Backpacks (SyntaxJason & TntTastisch)
+    - [ ] Custom model (Tom)
     - [ ] Placed as barrier with direction to player
     - [ ] Rightclick -> open
     - [ ] Shift + rightclick -> place
