@@ -44,6 +44,7 @@ public class ParticleBuilder {
 
     public ParticleBuilder boundPlayer(Player player) {
         this.boundPlayer = player;
+        return this;
     }
 
     public ParticleBuilder center(Location center) {
