@@ -127,6 +127,7 @@ public class ParticleBuilder {
                 loop,
                 reverse,
                 loopedReverse,
+                boundPlayerOnly,
                 boundCenter
         );
     }
