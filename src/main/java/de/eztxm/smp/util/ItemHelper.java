@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -38,30 +39,6 @@ public class ItemHelper {
 
     public ItemHelper setMaterial(Material material) {
         this.itemStack.setType(material);
-        return this;
-    }
-
-    public ItemHelper setSkullOwner(@Nullable String owner) {
-        if (this.itemStack.getType() != Material.PLAYER_HEAD) {
-            setMaterial(Material.PLAYER_HEAD);
-            checkForMeta();
-            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
-            skullMeta.setOwner(owner);
-            this.itemMeta = skullMeta;
-            return this;
-        }
-        return this;
-    }
-
-    public ItemHelper setSkullProfile(@Nullable PlayerProfile playerProfile) {
-        if (this.itemStack.getType() != Material.PLAYER_HEAD) {
-            setMaterial(Material.PLAYER_HEAD);
-            checkForMeta();
-            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
-            skullMeta.setPlayerProfile(playerProfile);
-            this.itemMeta = skullMeta;
-            return this;
-        }
         return this;
     }
 
