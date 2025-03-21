@@ -1,159 +1,184 @@
 package de.eztxm.smp.util;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ItemBuilder {
     private final ItemStack itemStack;
-    private final ItemMeta itemMeta;
+    private ItemMeta itemMeta;
 
-    /***
-     * Erstelle mit dem Constructor ein ItemStack mit einem Material.
-     * @param material - Material
-     */
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    /***
-     * Nutze einen ItemStack im ItemBuilder.
-     * @param itemStack - ItemStack
-     */
     public ItemBuilder(ItemStack itemStack) {
         this.itemStack = itemStack;
         this.itemMeta = itemStack.getItemMeta();
     }
 
-    /***
-     * Setze den Namen des ItemStacks.
-     * @param name - Displayname
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
+    private void checkForMeta() {
+        if (this.itemMeta == null) {
+            this.itemMeta = this.itemStack.getItemMeta();
+        }
+    }
+
     public ItemBuilder name(Component name) {
+        checkForMeta();
         this.itemMeta.displayName(name);
         return this;
     }
 
-    /***
-     * Setze die Anzahl des ItemStacks.
-     * @param amount - Amount
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder amount(int amount) {
         this.itemStack.setAmount(amount);
         return this;
     }
 
-    /***
-     * Gebe dem ItemStack ein Enchantment und ein Level.
-     * @param enchantment - Enchantment
-     * @param level - Level des Enchantments
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder enchant(Enchantment enchantment, int level) {
         this.itemStack.addEnchantment(enchantment, level);
         return this;
     }
 
-    /***
-     * Entferne dem ItemStack ein Enchantment.
-     * @param enchantment - Enchantment.
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder disenchant(Enchantment enchantment) {
         this.itemStack.removeEnchantment(enchantment);
         return this;
     }
 
-    /***
-     * Setze die CustomModelData-ID des ItemStacks.
-     * @param id - CustomModelData-ID
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder customModelData(int id) {
+        checkForMeta();
         this.itemMeta.setCustomModelData(id);
         return this;
     }
 
-    /***
-     * Setze die maximale Anzahl eines Stacks des ItemStacks.
-     * @param stackSize - Stack size
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder maxStackSize(int stackSize) {
+        checkForMeta();
         this.itemMeta.setMaxStackSize(stackSize);
         return this;
     }
 
-    /***
-     * Setze die Lore des ItemStacks.
-     * @param lines - Lore lines
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder lore(Component... lines) {
+        checkForMeta();
         this.itemMeta.lore(List.of(lines));
         return this;
     }
 
-    /***
-     * Editiere die Lore des ItemStacks
-     * @param line - Line
-     * @param content - Content
-     * @return - Gibt die Klasse für Oneliner zurück.
-     */
     public ItemBuilder editLoreLine(int line, Component content) {
+        checkForMeta();
         List<Component> lore = this.itemMeta.lore();
-        assert lore != null;
-        lore.set(line, content);
-        this.itemMeta.lore(lore);
+        if (lore != null && line >= 0 && line < lore.size()) {
+            lore.set(line, content);
+            this.itemMeta.lore(lore);
+        }
         return this;
     }
 
-    /***
-     * Setze ItemFlags für des ItemStacks
-     * @param itemFlags - ItemFlags
-     * @return - Gibt die Klasse für Onliner zurück.
-     */
-    public ItemBuilder itemFlags(ItemFlag... itemFlags) {
-        this.itemMeta.addItemFlags(itemFlags);
+    public ItemBuilder itemFlags(ItemFlag... flags) {
+        checkForMeta();
+        this.itemMeta.addItemFlags(flags);
         return this;
     }
 
-    /***
-     * Setze den ItemStack unzerstörbar.
-     * @return - Gibt die Klasse für Onliner zurück.
-     */
     public ItemBuilder unbreakable() {
+        checkForMeta();
         this.itemMeta.setUnbreakable(true);
         return this;
     }
 
-    /***
-     * Verstecke die ToolTips.
-     * @return - Gibt die Klasse für Onliner zurück.
-     */
+    public ItemBuilder breakable() {
+        checkForMeta();
+        this.itemMeta.setUnbreakable(false);
+        return this;
+    }
+
     public ItemBuilder hideToolTip() {
+        checkForMeta();
         this.itemMeta.setHideTooltip(true);
         return this;
     }
 
     public ItemBuilder glint() {
+        checkForMeta();
         this.itemMeta.setEnchantmentGlintOverride(true);
         return this;
     }
 
-    /***
-     * Hole dir den fertigen ItemStack.
-     * @return - ItemStack
-     */
-    public ItemStack toItemStack() {
+    public ItemBuilder setSkullOwner(@Nullable Player player) {
+        if (this.itemStack.getType() != Material.PLAYER_HEAD) {
+            this.itemStack.setType(Material.PLAYER_HEAD);
+        }
+        checkForMeta();
+        if (!(this.itemMeta instanceof SkullMeta)) {
+            this.itemMeta = this.itemStack.getItemMeta();
+        }
+        SkullMeta skullMeta = (SkullMeta) this.itemMeta;
+        skullMeta.setPlayerProfile(player.getPlayerProfile());
+        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getName()));
+        this.itemMeta = skullMeta;
+        return this;
+    }
+
+    public ItemBuilder setDisplayName(String displayName) {
+        checkForMeta();
+        this.itemMeta.displayName(AdventureColor.apply(displayName));
+        return this;
+    }
+
+    public ItemBuilder removeLore() {
+        checkForMeta();
+        this.itemMeta.lore(new ArrayList<>());
+        return this;
+    }
+
+    public ItemBuilder setLore(List<Component> lore) {
+        checkForMeta();
+        this.itemMeta.lore(lore);
+        return this;
+    }
+
+    public ItemBuilder setDurability(short durability) {
+        this.itemStack.setDurability(durability);
+        return this;
+    }
+
+    public ItemBuilder addEnchantment(Enchantment enchantment, int level, boolean unsafe) {
+        if (unsafe) {
+            this.itemStack.addUnsafeEnchantment(enchantment, level);
+        } else {
+            this.itemStack.addEnchantment(enchantment, level);
+        }
+        return this;
+    }
+
+    public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
+        return addEnchantment(enchantment, level, false);
+    }
+
+    public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments, boolean unsafe) {
+        if (unsafe) {
+            this.itemStack.addUnsafeEnchantments(enchantments);
+        } else {
+            this.itemStack.addEnchantments(enchantments);
+        }
+        return this;
+    }
+
+    public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments) {
+        return addEnchantments(enchantments, false);
+    }
+
+    public ItemStack build() {
         this.itemStack.setItemMeta(itemMeta);
         return this.itemStack;
     }
