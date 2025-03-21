@@ -21,7 +21,7 @@ public class SpawnScoreboard {
                 .objective(
                         "display",
                         Criteria.DUMMY,
-                        MiniMessage.miniMessage().deserialize("§x§0§0§5§f§f§f§l CommSMP "))
+                        MiniMessage.miniMessage().deserialize("<#005fff><bold> CommSMP </bold>"))
                 .displaySlot(DisplaySlot.SIDEBAR)
                 .score(15, "§0                    §0")
                 .score(14, "§7Status:")
