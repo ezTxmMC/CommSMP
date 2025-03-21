@@ -19,9 +19,6 @@ public class LockUtil {
                 || type == Material.ENDER_CHEST || type == Material.DISPENSER || type == Material.DROPPER;
     }
 
-    /**
-     * Prüft, ob der Block eine Holztür ist.
-     */
     private static boolean isWoodenDoor(final Material type) {
         return type == Material.OAK_DOOR || type == Material.SPRUCE_DOOR || type == Material.BIRCH_DOOR || type == Material.JUNGLE_DOOR
                 || type == Material.ACACIA_DOOR || type == Material.DARK_OAK_DOOR || type == Material.CRIMSON_DOOR
@@ -29,9 +26,6 @@ public class LockUtil {
                 || type == Material.CHERRY_DOOR;
     }
 
-    /**
-     * Prüft, ob der Block eine Holzfalltür ist.
-     */
     private static boolean isWoodenTrapdoor(final Material type) {
         return type == Material.OAK_TRAPDOOR || type == Material.SPRUCE_TRAPDOOR || type == Material.BIRCH_TRAPDOOR
                 || type == Material.JUNGLE_TRAPDOOR || type == Material.ACACIA_TRAPDOOR || type == Material.DARK_OAK_TRAPDOOR

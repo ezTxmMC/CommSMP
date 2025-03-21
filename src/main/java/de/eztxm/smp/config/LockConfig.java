@@ -72,7 +72,6 @@ public class LockConfig {
                 try {
                     result.add(UUID.fromString(uuidStr));
                 } catch (IllegalArgumentException e) {
-                    // Ungültige UUID überspringen
                 }
             }
         }
