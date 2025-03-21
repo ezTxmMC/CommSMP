@@ -43,11 +43,11 @@ public class PositionConfig extends JsonConfig {
     }
 
     public void setPosition(String name, Location location) {
-        this.set(name, location.getX() + ":" +
-                location.getY() + ":" +
-                location.getZ() + ":" +
-                location.getPitch() + ":" +
-                location.getYaw() + ":" +
+        this.set(name, location.getX() + ";" +
+                location.getY() + ";" +
+                location.getZ() + ";" +
+                location.getPitch() + ";" +
+                location.getYaw() + ";" +
                 location.getWorld().getName());
         save();
     }
@@ -59,7 +59,7 @@ public class PositionConfig extends JsonConfig {
 
     public Location getPosition(String name) {
         if (get(name) == null) return null;
-        String[] args = name.split(":");
+        String[] args = get(name).asString().split(";");
         return new Location(Bukkit.getWorld(args[5]), Double.parseDouble(args[0]),
                 Double.parseDouble(args[1]), Double.parseDouble(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
     }
