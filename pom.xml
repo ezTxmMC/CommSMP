@@ -56,6 +56,11 @@
             <artifactId>ezlib-config-json</artifactId>
             <version>1.0-BETA1.indev2</version>
         </dependency>
+        <dependency>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+            <version>0.31.0</version>
+        </dependency>
     </dependencies>
 
     <build>

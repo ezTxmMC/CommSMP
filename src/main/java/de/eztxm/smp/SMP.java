@@ -1,9 +1,11 @@
 package de.eztxm.smp;
 
+import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import de.eztxm.smp.chunk.CustomChunkGen;
 import de.eztxm.smp.command.PositionCommand;
 import de.eztxm.smp.command.api.CommandAliases;
 import de.eztxm.smp.command.api.SimpleCommandRegistry;
+import de.eztxm.smp.config.Config;
 import de.eztxm.smp.config.LockConfig;
 import de.eztxm.smp.listener.ChatListener;
 import de.eztxm.smp.listener.DeathListener;
@@ -35,11 +37,14 @@ public final class SMP extends JavaPlugin {
     private String prefix;
     @Getter
     private LockConfig lockConfig;
+    @Getter
+    private Config mainConfig;
 
     @Override
     public void onEnable() {
         instance = this;
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
+        this.mainConfig = JsonProcessor.loadConfiguration(Config.class).getInstance();
         this.lockConfig = LockConfig.load();
         this.luckPerms = LuckPermsProvider.get();
 
