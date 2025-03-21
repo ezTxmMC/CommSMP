@@ -39,6 +39,7 @@ public final class SMP extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
         this.lockConfig = LockConfig.load();
         this.luckPerms = LuckPermsProvider.get();
 
