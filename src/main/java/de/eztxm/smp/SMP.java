@@ -3,6 +3,7 @@ package de.eztxm.smp;
 import de.eztxm.smp.chunk.CustomChunkGen;
 import de.eztxm.smp.config.LockConfig;
 import de.eztxm.smp.listener.ChatListener;
+import de.eztxm.smp.listener.DeathListener;
 import de.eztxm.smp.listener.JoinListener;
 import de.eztxm.smp.listener.QuitListener;
 import de.eztxm.smp.lock.LockListener;
@@ -11,6 +12,7 @@ import de.eztxm.smp.util.Registry;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.NamespacedKey;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
@@ -33,16 +35,33 @@ public final class SMP extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
         this.lockConfig = LockConfig.load();
-
         this.luckPerms = LuckPermsProvider.get();
         this.registry = new Registry(instance);
         this.registry.registerListener(new JoinListener(this));
         this.registry.registerListener(new QuitListener(this));
         this.registry.registerListener(new ChatListener());
+        this.registry.registerListener(new DeathListener());
         this.registry.registerListener(new LockListener(this));
         this.playerManager = new PlayerManager();
+        String[] recipes = {
+                "netherite_ingot",
+                "netherite_block",
+                "netherite_upgrade_smithing_template",
+                "netherite_scrap",
+                "netherite_helmet",
+                "netherite_chestplate",
+                "netherite_leggings",
+                "netherite_boots",
+                "netherite_sword",
+                "netherite_pickaxe",
+                "netherite_axe",
+                "netherite_shovel",
+                "netherite_hoe"
+        };
+        for (String recipe : recipes) {
+            this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
+        }
     }
 
     @Override

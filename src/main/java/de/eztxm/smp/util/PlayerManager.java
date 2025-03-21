@@ -11,4 +11,5 @@ import java.util.UUID;
 @Getter
 public class PlayerManager {
     private HashMap<UUID, BukkitTask> scoreboardTasks = new HashMap<>();
+    private HashMap<UUID, Boolean> teamchat = new HashMap<>();
 }
