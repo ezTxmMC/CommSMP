@@ -8,12 +8,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 
 public class ChatListener implements Listener {
 
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
+    public void onChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
