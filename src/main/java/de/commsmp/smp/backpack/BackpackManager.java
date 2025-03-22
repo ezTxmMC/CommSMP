@@ -14,12 +14,12 @@ public class BackpackManager {
     }
 
     public void registerCrafting() {
-        ShapedRecipe leather = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "leather"), new ItemBuilder(Material.BROWN_SHULKER_BOX).build());
-        ShapedRecipe copper = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "copper"), new ItemBuilder(Material.RED_SHULKER_BOX).build());
-        ShapedRecipe iron = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "iron"), new ItemBuilder(Material.LIGHT_GRAY_SHULKER_BOX).build());
-        ShapedRecipe gold = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "gold"), new ItemBuilder(Material.ORANGE_SHULKER_BOX).build());
-        ShapedRecipe diamond = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "diamond"), new ItemBuilder(Material.LIGHT_BLUE_SHULKER_BOX).build());
-        ShapedRecipe netherite = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "netherite"), new ItemBuilder(Material.BLACK_SHULKER_BOX).build());
+        ShapedRecipe leather = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_leather"), new ItemBuilder(Material.BROWN_SHULKER_BOX).build());
+        ShapedRecipe copper = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_copper"), new ItemBuilder(Material.RED_SHULKER_BOX).build());
+        ShapedRecipe iron = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_iron"), new ItemBuilder(Material.LIGHT_GRAY_SHULKER_BOX).build());
+        ShapedRecipe gold = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_gold"), new ItemBuilder(Material.ORANGE_SHULKER_BOX).build());
+        ShapedRecipe diamond = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_diamond"), new ItemBuilder(Material.LIGHT_BLUE_SHULKER_BOX).build());
+        ShapedRecipe netherite = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_netherite"), new ItemBuilder(Material.BLACK_SHULKER_BOX).build());
 
         leather.shape("xxx", "xzx", "xxx");
         leather.setIngredient('x', Material.LEATHER);
