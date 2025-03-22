@@ -37,4 +37,23 @@ public class Messages {
     public static String LOCK_USAGE;
     @JsonClassElement
     public static String LOCK_AUTO_LOCK;
+
+    public Messages() {
+        PREFIX = "";
+        NO_PERMISSION = "";
+        ERROR = "";
+        POSITION_USAGE = "";
+        POSITION_SET = "";
+        POSITION_LIST = "";
+        POSITION_DELETE = "";
+        POSITION_PARTICLES_ON = "";
+        POSITION_PARTICLES_OFF = "";
+        TEAMCHAT_FORMAT = "";
+        TEAMCHAT_USAGE = "";
+        UNLOCK_USAGE = "";
+        UNLOCK_SUCCESS = "";
+        UNLOCK_NOT_OWNED = "";
+        LOCK_USAGE = "";
+        LOCK_AUTO_LOCK = "";
+    }
 }
