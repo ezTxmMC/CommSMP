@@ -1,8 +1,8 @@
 package de.commsmp.smp.config;
 
+import de.commsmp.smp.SMP;
 import de.eztxm.ezlib.config.JsonConfig;
 import de.eztxm.ezlib.config.object.JsonObject;
-import de.commsmp.smp.SMP;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

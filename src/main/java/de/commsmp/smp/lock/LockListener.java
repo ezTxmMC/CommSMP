@@ -127,7 +127,7 @@ public class LockListener implements Listener {
         final Player player = event.getPlayer();
 
         for (final Block adjacentBlock : getAdjacentBlocks(placedBlock)) {
-            if(placedBlock.getType() != Material.CHEST) continue;
+            if (placedBlock.getType() != Material.CHEST) continue;
             if (adjacentBlock.getType() != Material.CHEST) continue;
 
 

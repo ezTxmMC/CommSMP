@@ -1,22 +1,22 @@
 package de.commsmp.smp;
 
-import de.commsmp.smp.message.Messages;
-import de.eztxm.ezlib.config.reflect.JsonProcessor;
-import de.commsmp.smp.command.TeamchatCommand;
-import de.commsmp.smp.generation.CustomChunkGen;
 import de.commsmp.smp.command.PositionCommand;
+import de.commsmp.smp.command.TeamchatCommand;
 import de.commsmp.smp.command.api.CommandAliases;
 import de.commsmp.smp.command.api.SimpleCommandRegistry;
 import de.commsmp.smp.config.Config;
 import de.commsmp.smp.config.LockConfig;
+import de.commsmp.smp.generation.CustomChunkGen;
 import de.commsmp.smp.listener.ChatListener;
 import de.commsmp.smp.listener.DeathListener;
 import de.commsmp.smp.listener.JoinListener;
 import de.commsmp.smp.listener.QuitListener;
 import de.commsmp.smp.lock.LockListener;
+import de.commsmp.smp.message.Messages;
 import de.commsmp.smp.util.GraveStoneHandler;
 import de.commsmp.smp.util.PlayerManager;
 import de.commsmp.smp.util.Registry;
+import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;

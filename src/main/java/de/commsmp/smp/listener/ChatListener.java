@@ -33,12 +33,13 @@ import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
-    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {}
+    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {
+    }
 
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
     private final OpenAIClientAsync client;
-    private  final AtomicBoolean filtered = new AtomicBoolean();
+    private final AtomicBoolean filtered = new AtomicBoolean();
 
     public ChatListener() {
         client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
@@ -57,7 +58,7 @@ public class ChatListener implements Listener {
             }
         });
 
-        if(filtered.get()) {
+        if (filtered.get()) {
             filtered.set(false);
             return;
         }
@@ -149,10 +150,10 @@ public class ChatListener implements Listener {
                 return new FilterResult(moderationCache.get(cleanedMessage), EnumSet.noneOf(FilterCategory.class));
             }
 
-        EnumSet<FilterCategory> blacklist = Blacklist.checkMessage(message);
-        if (!blacklist.isEmpty()) {
-            return new FilterResult(true, blacklist);
-        }
+            EnumSet<FilterCategory> blacklist = Blacklist.checkMessage(message);
+            if (!blacklist.isEmpty()) {
+                return new FilterResult(true, blacklist);
+            }
 
             ModerationCreateParams params = ModerationCreateParams.builder()
                     .input(cleanedMessage)
@@ -183,10 +184,10 @@ public class ChatListener implements Listener {
             if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
             if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
 
-        if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
-            flagged = true;
-            categories.add(FilterCategory.EXTREME_RIGHTWING);
-        }
+            if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
+                flagged = true;
+                categories.add(FilterCategory.EXTREME_RIGHTWING);
+            }
 
             moderationCache.put(cleanedMessage, flagged);
             return new FilterResult(flagged, categories);
