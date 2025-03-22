@@ -56,6 +56,7 @@
     - [ ] Only one in inventory
     - [ ] Upgradable
 - [ ] Messages File
+- [x] Custom death messages
 
 ## Technology
 
