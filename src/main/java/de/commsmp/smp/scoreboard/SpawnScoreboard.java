@@ -35,7 +35,7 @@ public class SpawnScoreboard {
                 .score(10, ChatColor.DARK_GRAY.toString())
                 .score(9, "§1                    §0")
                 .score(8, "§1                    §1")
-                .score(7, "§x§0§0§5§f§f§f§o          smp.eztxm.de");
+                .score(7, "§1     §x§0§0§5§f§f§f§ocommsmp.de§1     ");
         this.scoreboard = builder.getScoreboard();
         this.player = player;
         Team rank = this.scoreboard.registerNewTeam("rank");
