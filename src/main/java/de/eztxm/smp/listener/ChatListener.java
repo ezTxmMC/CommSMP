@@ -63,14 +63,21 @@ public class ChatListener implements Listener {
         }
 
         boolean global = false;
+        boolean scream = false;
         int radius = 15;
 
-        if (message.startsWith("@")) {
+        if (message.startsWith("@g")) {
             global = true;
             message = message.substring(1).trim();
         }
 
-        boolean reachedSomeone = sendMessage(sender, message, global, radius);
+        if (message.startsWith("!")) {
+            scream = true;
+            radius = 30;
+            message = message.substring(1).trim();
+        }
+
+        boolean reachedSomeone = sendMessage(sender, message, global, scream, radius);
         if (!reachedSomeone) {
             String hint = global ? "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '@' vor deiner Nachricht, um mit allen zu schreiben." : "Du konntest niemanden mit deiner Nachricht erreichen. Nutze '!' vor deiner Nachricht, um weitere Distanz zu schreiben und '@', um mit allen zu schreiben.";
             sender.sendMessage(Component.text(hint, NamedTextColor.RED));
@@ -79,19 +86,19 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
     }
 
-    private boolean sendMessage(Player sender, String message, boolean global, int radius) {
+    private boolean sendMessage(Player sender, String message, boolean global, boolean scream, int radius) {
         boolean reachedSomeone = false;
 
         if (global) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(formatMessageForReceiver(message, true, sender, player));
+                player.sendMessage(formatMessageForReceiver(message, true, false, sender, player));
             }
             return true;
         }
 
         for (Entity entity : sender.getLocation().getWorld().getNearbyEntities(sender.getLocation(), radius, radius, radius)) {
             if (entity instanceof Player receiver) {
-                Component formattedMessage = formatMessageForReceiver(message, global, sender, receiver);
+                Component formattedMessage = formatMessageForReceiver(message, global, scream, sender, receiver);
                 receiver.sendMessage(formattedMessage);
                 reachedSomeone = true;
             }
@@ -99,13 +106,13 @@ public class ChatListener implements Listener {
         return reachedSomeone;
     }
 
-    private Component formatMessageForReceiver(String message, boolean global, Player sender, Player receiver) {
+    private Component formatMessageForReceiver(String message, boolean global, boolean scream, Player sender, Player receiver) {
         String mention = "@" + receiver.getName();
         String regex = "(?i)" + Pattern.quote(mention);
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(message);
 
-        Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : Component.empty();
+        Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : scream ? AdventureColor.apply("&8[&cRuft&8]") : Component.empty();
         Component base = AdventureColor.apply("<yellow>" + sender.getName() + " <dark_gray>» ");
 
         if (matcher.find()) {
