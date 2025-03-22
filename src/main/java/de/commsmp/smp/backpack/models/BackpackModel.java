@@ -1,5 +1,6 @@
 package de.commsmp.smp.backpack.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class BackpackModel {
 
     private final UUID uniqueId;
@@ -19,14 +21,6 @@ public class BackpackModel {
     private OffsetDateTime creationDate;
     private ItemStack[] items;
     private List<LastUpdatedModel> lastUpdated;
-
-    public BackpackModel(UUID uniqueId, UUID creator, OffsetDateTime creationDate, ItemStack[] items, List<LastUpdatedModel> lastUpdated) {
-        this.uniqueId = uniqueId;
-        this.creator = creator;
-        this.creationDate = creationDate;
-        this.items = items;
-        this.lastUpdated = lastUpdated;
-    }
 
     public BackpackModel(UUID uniqueId, UUID creator, OffsetDateTime creationDate, ItemStack[] items) {
         this(uniqueId, creator, creationDate, items, new ArrayList<>());
