@@ -1,13 +1,5 @@
 package de.commsmp.smp.listener;
 
-import com.openai.client.OpenAIClientAsync;
-import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.Moderation;
-import com.openai.models.ModerationCreateParams;
-import com.openai.models.ModerationCreateResponse;
-import com.openai.models.ModerationModel;
-import de.commsmp.smp.SMP;
-import de.commsmp.smp.listener.filter.Blacklist;
 import de.commsmp.smp.listener.filter.FilterCategory;
 import de.commsmp.smp.util.AdventureColor;
 import net.kyori.adventure.text.Component;
@@ -38,11 +30,11 @@ public class ChatListener implements Listener {
 
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
-    private final OpenAIClientAsync client;
+    //private final OpenAIClientAsync client;
     private final AtomicBoolean filtered = new AtomicBoolean();
 
     public ChatListener() {
-        client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
+        //client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
     }
 
     @EventHandler
@@ -50,7 +42,7 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
-        filter(event.getMessage()).thenAccept(result -> {
+        /*filter(event.getMessage()).thenAccept(result -> {
             if (result.flagged()) {
                 sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
                 event.setCancelled(true);
@@ -61,7 +53,7 @@ public class ChatListener implements Listener {
         if (filtered.get()) {
             filtered.set(false);
             return;
-        }
+        }*/
 
         boolean global = false;
         boolean scream = false;
@@ -142,7 +134,7 @@ public class ChatListener implements Listener {
         return globalComponent.append(base).append(AdventureColor.apply(message));
     }
 
-    private CompletableFuture<FilterResult> filter(String message) {
+    /*private CompletableFuture<FilterResult> filter(String message) {
         return CompletableFuture.supplyAsync(() -> {
             String cleanedMessage = message.replaceAll("@", "").replaceAll("[*+]", "").toLowerCase();
 
@@ -192,5 +184,5 @@ public class ChatListener implements Listener {
             moderationCache.put(cleanedMessage, flagged);
             return new FilterResult(flagged, categories);
         }, Executors.newCachedThreadPool());
-    }
+    }*/
 }
