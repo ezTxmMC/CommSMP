@@ -85,6 +85,21 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>com.openai:openai-java</artifact>
+                                    <includes>
+                                        <include>com/openai/**</include>
+                                    </includes>
+                                </filter>
+                                <filter>
+                                    <artifact>de.eztxm:ezlib-config-json</artifact>
+                                    <includes>
+                                        <include>de/eztxm/**</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                            <minimizeJar>true</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>

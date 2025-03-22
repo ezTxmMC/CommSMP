@@ -24,18 +24,22 @@ import org.bukkit.event.player.PlayerChatEvent;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
-    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {
-    }
+    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {}
 
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
     private final OpenAIClientAsync client;
+    private  final AtomicBoolean filtered = new AtomicBoolean();
 
     public ChatListener() {
         client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
@@ -46,11 +50,16 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
-        FilterResult result = filter(event.getMessage());
+        filter(event.getMessage()).thenAccept(result -> {
+            if (result.flagged()) {
+                sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
+                event.setCancelled(true);
+                filtered.set(true);
+            }
+        });
 
-        if (result.flagged()) {
-            sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
-            event.setCancelled(true);
+        if(filtered.get()) {
+            filtered.set(false);
             return;
         }
 
@@ -126,53 +135,55 @@ public class ChatListener implements Listener {
         return globalComponent.append(base).append(AdventureColor.apply(message));
     }
 
-    private FilterResult filter(String message) {
-        String cleanedMessage = message.replaceAll("@", "").replaceAll("[*+]", "").toLowerCase();
+    private CompletableFuture<FilterResult> filter(String message) {
+        return CompletableFuture.supplyAsync(() -> {
+            String cleanedMessage = message.replaceAll("@", "").replaceAll("[*+]", "").toLowerCase();
 
-        if (moderationCache.containsKey(cleanedMessage)) {
-            return new FilterResult(moderationCache.get(cleanedMessage), EnumSet.noneOf(FilterCategory.class));
-        }
+            if (moderationCache.containsKey(cleanedMessage)) {
+                return new FilterResult(moderationCache.get(cleanedMessage), EnumSet.noneOf(FilterCategory.class));
+            }
 
-        EnumSet<FilterCategory> blacklist = BlackList.checkMessage(message);
-        if (!blacklist.isEmpty()) {
-            return new FilterResult(true, blacklist);
-        }
+            EnumSet<FilterCategory> blacklist = BlackList.checkMessage(message);
+            if (!blacklist.isEmpty()) {
+                return new FilterResult(true, blacklist);
+            }
 
-        ModerationCreateParams params = ModerationCreateParams.builder()
-                .input(cleanedMessage)
-                .model(ModerationModel.TEXT_MODERATION_LATEST)
-                .build();
-
-        ModerationCreateResponse response = client.moderations().create(params).join();
-        Moderation result = response.results().getFirst();
-
-
-        if (!result.flagged()) {
-
-            params = ModerationCreateParams.builder()
-                    .input(message)
-                    .model(ModerationModel.OMNI_MODERATION_LATEST)
+            ModerationCreateParams params = ModerationCreateParams.builder()
+                    .input(cleanedMessage)
+                    .model(ModerationModel.TEXT_MODERATION_LATEST)
                     .build();
 
-            response = client.moderations().create(params).join();
-            result = response.results().getFirst();
-        }
+            ModerationCreateResponse response = client.moderations().create(params).join();
+            Moderation result = response.results().getFirst();
 
-        boolean flagged = result.flagged();
-        EnumSet<FilterCategory> categories = EnumSet.noneOf(FilterCategory.class);
 
-        if (result.categories().sexual()) categories.add(FilterCategory.SEXUAL);
-        if (result.categories().hate()) categories.add(FilterCategory.HATE);
-        if (result.categories().harassment()) categories.add(FilterCategory.HARASSMENT);
-        if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
-        if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
+            if (!result.flagged()) {
 
-        if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
-            flagged = true;
-            categories.add(FilterCategory.RECHTSEXTREM);
-        }
+                params = ModerationCreateParams.builder()
+                        .input(message)
+                        .model(ModerationModel.OMNI_MODERATION_LATEST)
+                        .build();
 
-        moderationCache.put(cleanedMessage, flagged);
-        return new FilterResult(flagged, categories);
+                response = client.moderations().create(params).join();
+                result = response.results().getFirst();
+            }
+
+            boolean flagged = result.flagged();
+            EnumSet<FilterCategory> categories = EnumSet.noneOf(FilterCategory.class);
+
+            if (result.categories().sexual()) categories.add(FilterCategory.SEXUAL);
+            if (result.categories().hate()) categories.add(FilterCategory.HATE);
+            if (result.categories().harassment()) categories.add(FilterCategory.HARASSMENT);
+            if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
+            if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
+
+            if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
+                flagged = true;
+                categories.add(FilterCategory.RECHTSEXTREM);
+            }
+
+            moderationCache.put(cleanedMessage, flagged);
+            return new FilterResult(flagged, categories);
+        }, Executors.newCachedThreadPool());
     }
 }

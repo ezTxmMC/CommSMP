@@ -16,7 +16,7 @@ public class LockUtil {
                 || type == Material.PURPLE_SHULKER_BOX || type == Material.BLUE_SHULKER_BOX || type == Material.BROWN_SHULKER_BOX
                 || type == Material.GREEN_SHULKER_BOX || type == Material.RED_SHULKER_BOX || type == Material.BLACK_SHULKER_BOX
                 || type == Material.IRON_DOOR || isWoodenDoor(type) || type == Material.IRON_TRAPDOOR || isWoodenTrapdoor(type)
-                || type == Material.ENDER_CHEST || type == Material.DISPENSER || type == Material.DROPPER || type == Material.BARRIER;
+                || type == Material.ENDER_CHEST || type == Material.DISPENSER || type == Material.DROPPER || type == Material.BARRIER || type == Material.HOPPER;
     }
 
     private static boolean isWoodenDoor(final Material type) {
