@@ -1,10 +1,10 @@
 package de.commsmp.smp.config;
 
+import de.commsmp.smp.SMP;
+import de.commsmp.smp.config.data.LockInfo;
 import de.eztxm.ezlib.config.JsonConfig;
 import de.eztxm.ezlib.config.object.JsonObject;
 import de.eztxm.ezlib.config.object.ObjectConverter;
-import de.commsmp.smp.SMP;
-import de.commsmp.smp.config.data.LockInfo;
 import org.bukkit.Location;
 
 import java.io.IOException;

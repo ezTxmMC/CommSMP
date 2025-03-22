@@ -1,6 +1,7 @@
 package de.commsmp.smp.backpack.models;
 
 import de.commsmp.smp.backpack.UpdateType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class LastUpdatedModel {
 
     private UUID user;
@@ -20,16 +22,6 @@ public class LastUpdatedModel {
     private int amount;
     private int slot;
     private Inventory movedTo;
-
-    public LastUpdatedModel(UUID user, OffsetDateTime timestamp, UpdateType type, Material item, int amount, int slot, Inventory movedTo) {
-        this.user = user;
-        this.timestamp = timestamp;
-        this.type = type;
-        this.item = item;
-        this.amount = amount;
-        this.slot = slot;
-        this.movedTo = movedTo;
-    }
 
     public LastUpdatedModel(UUID user, UpdateType type, Material item, int amount, int slot, Inventory movedTo) {
         this(user, OffsetDateTime.now(), type, item, amount, slot, movedTo);
