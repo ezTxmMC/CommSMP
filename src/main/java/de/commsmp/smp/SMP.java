@@ -25,6 +25,8 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
 
+import java.io.File;
+
 @Getter
 public final class SMP extends JavaPlugin {
     @Getter
@@ -51,7 +53,7 @@ public final class SMP extends JavaPlugin {
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
         this.mainConfig = JsonProcessor.loadConfiguration(Config.class).getInstance();
         this.messages = JsonProcessor.loadConfiguration(Messages.class).getInstance();
-        this.lockConfig = new LockConfig();
+        this.lockConfig = JsonProcessor.loadConfiguration(LockConfig.class).getInstance();
         this.luckPerms = LuckPermsProvider.get();
 
         registerCommands();
@@ -64,23 +66,12 @@ public final class SMP extends JavaPlugin {
         this.registry.registerListener(new LockListener(this));
         this.playerManager = new PlayerManager();
         this.graveStoneHandler = new GraveStoneHandler();
-        String[] recipes = {
-                "netherite_ingot",
-                "netherite_block",
-                "netherite_upgrade_smithing_template",
-                "netherite_scrap",
-                "netherite_helmet",
-                "netherite_chestplate",
-                "netherite_leggings",
-                "netherite_boots",
-                "netherite_sword",
-                "netherite_pickaxe",
-                "netherite_axe",
-                "netherite_shovel",
-                "netherite_hoe"
-        };
-        for (String recipe : recipes) {
-            this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
+
+        if (!(getMainConfig().isNetheriteEnabled())) {
+            String[] recipes = {"netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template", "netherite_scrap", "netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots", "netherite_sword", "netherite_pickaxe", "netherite_axe", "netherite_shovel", "netherite_hoe"};
+            for (String recipe : recipes) {
+                this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
+            }
         }
     }
 

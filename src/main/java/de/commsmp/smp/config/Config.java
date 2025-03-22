@@ -13,4 +13,7 @@ public class Config {
     @JsonClassElement
     private String openAIKey;
 
+    @JsonClassElement
+    private boolean netheriteEnabled;
+
 }
