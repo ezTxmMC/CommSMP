@@ -3,7 +3,7 @@ package de.commsmp.smp.message;
 import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.annotation.JsonClassElement;
 
-@JsonClassConfig(path = "/plugins/SMP", fileName = "messages.json")
+@JsonClassConfig(path = "plugins/SMP", fileName = "messages.json")
 public class Messages {
     @JsonClassElement
     public static String PREFIX;
