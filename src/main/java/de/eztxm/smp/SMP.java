@@ -1,7 +1,8 @@
 package de.eztxm.smp;
 
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
-import de.eztxm.smp.chunk.CustomChunkGen;
+import de.eztxm.smp.command.TeamchatCommand;
+import de.eztxm.smp.generation.CustomChunkGen;
 import de.eztxm.smp.command.PositionCommand;
 import de.eztxm.smp.command.api.CommandAliases;
 import de.eztxm.smp.command.api.SimpleCommandRegistry;
@@ -12,6 +13,7 @@ import de.eztxm.smp.listener.DeathListener;
 import de.eztxm.smp.listener.JoinListener;
 import de.eztxm.smp.listener.QuitListener;
 import de.eztxm.smp.lock.LockListener;
+import de.eztxm.smp.util.GraveStoneHandler;
 import de.eztxm.smp.util.PlayerManager;
 import de.eztxm.smp.util.Registry;
 import lombok.Getter;
@@ -31,6 +33,7 @@ public final class SMP extends JavaPlugin {
 
     private Registry registry;
     private PlayerManager playerManager;
+    private GraveStoneHandler graveStoneHandler;
 
     @Getter
     private String prefix;
@@ -56,6 +59,7 @@ public final class SMP extends JavaPlugin {
         this.registry.registerListener(new DeathListener());
         this.registry.registerListener(new LockListener(this));
         this.playerManager = new PlayerManager();
+        this.graveStoneHandler = new GraveStoneHandler();
         String[] recipes = {
                 "netherite_ingot",
                 "netherite_block",
@@ -79,6 +83,7 @@ public final class SMP extends JavaPlugin {
     private void registerCommands() {
         SimpleCommandRegistry commandRegistry = new SimpleCommandRegistry(this);
         commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos", "pos", "poslist", "positionlist"), new PositionCommand());
+        commandRegistry.register("teamchat", CommandAliases.of("tc"), new TeamchatCommand());
     }
 
     @Override

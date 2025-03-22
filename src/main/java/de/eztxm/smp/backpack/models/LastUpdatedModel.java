@@ -1,6 +1,6 @@
-package de.eztxm.smp.backpacks.models;
+package de.eztxm.smp.backpack.models;
 
-import de.eztxm.smp.backpacks.UpdateType;
+import de.eztxm.smp.backpack.UpdateType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;

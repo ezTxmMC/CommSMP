@@ -1,4 +1,4 @@
-package de.eztxm.smp.backpacks;
+package de.eztxm.smp.backpack;
 
 public class BackpackManager {
 

@@ -58,7 +58,7 @@ public class SpawnScoreboard {
             rank.addEntry(ChatColor.BLACK.toString());
         }
         assert group != null;
-        rank.setPrefix("§8> " + (group.getDisplayName() == null ? "" : ChatColor.translateAlternateColorCodes('&', LegacyComponentSerializer.legacySection().serialize(AdventureColor.apply(group.getDisplayName())))));
+        rank.setPrefix("§8» §7" + (group.getDisplayName() == null ? "" : ChatColor.translateAlternateColorCodes('&', LegacyComponentSerializer.legacySection().serialize(AdventureColor.apply(group.getDisplayName())))));
         Team diamonds = this.scoreboard.getTeam("diamonds");
         if (diamonds == null) {
             diamonds = this.scoreboard.registerNewTeam("diamonds");
@@ -73,6 +73,6 @@ public class SpawnScoreboard {
                 diamondCount += itemStack.getAmount();
             }
         }
-        diamonds.setPrefix("§8> §b" + diamondCount);
+        diamonds.setPrefix("§8» §b" + diamondCount);
     }
 }

@@ -1,4 +1,4 @@
-package de.eztxm.smp.chunk;
+package de.eztxm.smp.generation;
 
 import org.bukkit.Material;
 import org.bukkit.World;

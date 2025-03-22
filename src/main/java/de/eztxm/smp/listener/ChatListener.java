@@ -7,7 +7,7 @@ import com.openai.models.ModerationCreateParams;
 import com.openai.models.ModerationCreateResponse;
 import com.openai.models.ModerationModel;
 import de.eztxm.smp.SMP;
-import de.eztxm.smp.listener.filter.BlackList;
+import de.eztxm.smp.listener.filter.Blacklist;
 import de.eztxm.smp.listener.filter.FilterCategory;
 import de.eztxm.smp.util.AdventureColor;
 import net.kyori.adventure.text.Component;
@@ -28,7 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,9 +65,9 @@ public class ChatListener implements Listener {
         boolean global = false;
         int radius = 15;
 
-        if (message.startsWith("@g")) {
+        if (message.startsWith("@")) {
             global = true;
-            message = message.substring(2).trim();
+            message = message.substring(1).trim();
         }
 
         boolean reachedSomeone = sendMessage(sender, message, global, radius);
@@ -143,10 +142,10 @@ public class ChatListener implements Listener {
                 return new FilterResult(moderationCache.get(cleanedMessage), EnumSet.noneOf(FilterCategory.class));
             }
 
-            EnumSet<FilterCategory> blacklist = BlackList.checkMessage(message);
-            if (!blacklist.isEmpty()) {
-                return new FilterResult(true, blacklist);
-            }
+        EnumSet<FilterCategory> blacklist = Blacklist.checkMessage(message);
+        if (!blacklist.isEmpty()) {
+            return new FilterResult(true, blacklist);
+        }
 
             ModerationCreateParams params = ModerationCreateParams.builder()
                     .input(cleanedMessage)
@@ -177,10 +176,10 @@ public class ChatListener implements Listener {
             if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
             if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
 
-            if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
-                flagged = true;
-                categories.add(FilterCategory.RECHTSEXTREM);
-            }
+        if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
+            flagged = true;
+            categories.add(FilterCategory.EXTREME_RIGHTWING);
+        }
 
             moderationCache.put(cleanedMessage, flagged);
             return new FilterResult(flagged, categories);

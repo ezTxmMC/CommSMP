@@ -14,6 +14,8 @@
     - [x] Door lock
     - [x] Trapdoor lock
     - [x] Placed Backpack lock
+    - [ ] Chest minecart
+    - [ ] Hopper minecart
 - [x] Multichatsystem
     - [x] Normal: In 15 blocks radius
     - [x] Starting with '@': Serverside
@@ -39,8 +41,8 @@
     - [ ] /passive -> Chilling with friends -> Disabling all progressive features
 - [x] Drop player head on death
 - [ ] Create protected and player-binded chest on death with player inventory
-- [ ] Teamchat
-    - [ ] /teamchat <message>  - alias: /tc
+- [x] Teamchat
+    - [x] /teamchat <message>  - alias: /tc
     - [x] /teamchat enable
     - [x] /teamchat disable
     - [x] Teammessagelayout: '@Team - ezTxmMC >> Hey'
@@ -53,6 +55,7 @@
     - [ ] Not stackable
     - [ ] Only one in inventory
     - [ ] Upgradable
+- [ ] Messages File
 
 ## Technology
 

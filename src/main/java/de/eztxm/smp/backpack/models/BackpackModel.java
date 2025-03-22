@@ -1,4 +1,4 @@
-package de.eztxm.smp.backpacks.models;
+package de.eztxm.smp.backpack.models;
 
 import lombok.Getter;
 import lombok.Setter;

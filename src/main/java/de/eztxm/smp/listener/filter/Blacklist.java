@@ -3,7 +3,7 @@ package de.eztxm.smp.listener.filter;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class BlackList {
+public class Blacklist {
 
     private static final Map<FilterCategory, List<Pattern>> filters = new HashMap<>();
 
@@ -15,7 +15,7 @@ public class BlackList {
         add(FilterCategory.HATE, "idiot", "depp", "arsch", "bastard");
         add(FilterCategory.SEXUAL, "nackt", "porno", "sex", "fetisch");
         add(FilterCategory.HATE, "hasse dich", "du bist nix wert");
-        add(FilterCategory.RECHTSEXTREM, "hitler", "nazi", "heil", "sieg", "14/88");
+        add(FilterCategory.EXTREME_RIGHTWING, "hitler", "nazi", "heil", "sieg", "14/88");
     }
 
     public static void add(FilterCategory category, String... keywords) {

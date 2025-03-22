@@ -2,6 +2,7 @@ package de.eztxm.smp.listener;
 
 import de.eztxm.smp.SMP;
 import de.eztxm.smp.scoreboard.SpawnScoreboard;
+import de.eztxm.smp.util.GraveStoneHandler;
 import de.eztxm.smp.util.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
 
 public class JoinListener implements Listener {
 
@@ -25,5 +28,9 @@ public class JoinListener implements Listener {
         BukkitTask scoreboardTask = Bukkit.getScheduler().runTaskTimerAsynchronously(smp, scoreboard::update, 5L, 20 * 3L);
         PlayerManager playerManager = smp.getPlayerManager();
         playerManager.getScoreboardTasks().put(player.getUniqueId(), scoreboardTask);
+        playerManager.getTeamchat().put(player.getUniqueId(), true);
+        playerManager.getGraveStones().put(player.getUniqueId(), new HashMap<>());
+        GraveStoneHandler graveStoneHandler = smp.getGraveStoneHandler();
+        graveStoneHandler.getGraveStoneInteractables().put(player.getUniqueId(), new HashMap<>());
     }
 }
