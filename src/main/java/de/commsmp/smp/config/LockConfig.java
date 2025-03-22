@@ -1,8 +1,7 @@
 package de.commsmp.smp.config;
 
-import de.commsmp.smp.SMP;
 import de.commsmp.smp.config.data.LockInfo;
-import de.eztxm.ezlib.config.JsonConfig;
+import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.object.JsonObject;
 import de.eztxm.ezlib.config.object.ObjectConverter;
 import org.bukkit.Location;
@@ -13,12 +12,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class LockConfig extends JsonConfig {
-
-    private final Map<String, LockInfo> locks = new HashMap<>();
+@JsonClassConfig(path = "plugins/SMP", fileName = "locks.json")
+public class LockConfig {
+    private final JsonObject config;
+    private final Map<String, LockInfo> locks;
 
     public LockConfig() {
-        super(SMP.getInstance().getDataFolder().getPath(), "locks.json");
+        this.config = new JsonObject();
+        this.locks = new HashMap<>();
         loadLocks();
     }
 
@@ -131,7 +132,7 @@ public class LockConfig extends JsonConfig {
 
     public void loadLocks() {
         locks.clear();
-        JsonObject json = getCustomJsonObject();
+        JsonObject json = this.config;
         if (json == null) return;
         if (json.getElements().isEmpty()) return;
         for (String key : json.getElements().keySet()) {
@@ -145,9 +146,8 @@ public class LockConfig extends JsonConfig {
         }
     }
 
-    @Override
     public void save() {
-        JsonObject json = getCustomJsonObject();
+        JsonObject json = this.config;
         json.getElements().clear();
 
         for (Map.Entry<String, LockInfo> entry : locks.entrySet()) {
@@ -157,7 +157,7 @@ public class LockConfig extends JsonConfig {
             json.set(key, lockJson);
         }
 
-        Path filePath = Paths.get(getConfigPath(), getConfigName());
+        Path filePath = Paths.get("plugins/SMP", "locks.json");
         try {
             Files.writeString(filePath, json.toJsonString(true));
         } catch (IOException ignored) {
