@@ -57,9 +57,14 @@
             <version>1.0-BETA1.indev2</version>
         </dependency>
         <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>0.31.0</version>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-tools</artifactId>
+            <version>2.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.6</version>
         </dependency>
     </dependencies>
 
@@ -86,12 +91,6 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
-                                <filter>
-                                    <artifact>com.openai:openai-java</artifact>
-                                    <includes>
-                                        <include>com/openai/**</include>
-                                    </includes>
-                                </filter>
                                 <filter>
                                     <artifact>de.eztxm:ezlib-config-json</artifact>
                                     <includes>
