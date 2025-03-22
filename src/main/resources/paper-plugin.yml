@@ -1,6 +1,6 @@
 name: ${project.name}
 version: '${project.version}'
-main: de.eztxm.smp.SMP
+main: de.commsmp.smp.SMP
 api-version: '1.21'
 authors: [ ezTxmMC, SyntaxJason, TntTastisch ]
 load: STARTUP
