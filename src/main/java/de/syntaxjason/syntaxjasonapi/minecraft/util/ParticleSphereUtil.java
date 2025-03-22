@@ -1,6 +1,7 @@
 package de.syntaxjason.syntaxjasonapi.minecraft.util;
 
 import org.bukkit.Location;
+
 import java.util.ArrayList;
 import java.util.List;
 

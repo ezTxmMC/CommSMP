@@ -14,13 +14,19 @@ public class DefaultParticleVector implements ParticleVector {
     }
 
     @Override
-    public double getX() { return x; }
+    public double getX() {
+        return x;
+    }
 
     @Override
-    public double getY() { return y; }
+    public double getY() {
+        return y;
+    }
 
     @Override
-    public double getZ() { return z; }
+    public double getZ() {
+        return z;
+    }
 
     @Override
     public ParticleVector add(double dx, double dy, double dz) {

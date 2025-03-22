@@ -1,8 +1,8 @@
 package de.syntaxjason.syntaxjasonapi.minecraft;
 
-import de.syntaxjason.syntaxjasonapi.minecraft.tick.TickedAnimation;
 import de.syntaxjason.syntaxjasonapi.minecraft.raytrace.BlockRayTraceResult;
 import de.syntaxjason.syntaxjasonapi.minecraft.raytrace.RayTraceResult;
+import de.syntaxjason.syntaxjasonapi.minecraft.tick.TickedAnimation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

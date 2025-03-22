@@ -133,9 +133,9 @@ public class LockConfig extends JsonConfig {
         locks.clear();
         JsonObject json = getCustomJsonObject();
         if (json == null) return;
-        if(json.getElements().isEmpty()) return;
+        if (json.getElements().isEmpty()) return;
         for (String key : json.getElements().keySet()) {
-            if(key == null) return;
+            if (key == null) return;
             try {
                 LockInfo info = LockInfo.fromString(new ObjectConverter(json.get(key)).asString());
                 locks.put(key, info);

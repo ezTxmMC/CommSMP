@@ -67,7 +67,7 @@ public abstract class AbstractTickTimer {
         while (state.get() != 0) {
             try {
                 if (state.get() == 2) {
-                    Thread.sleep(this.pauseLength / 1_000_000, (int)(this.pauseLength % 1_000_000));
+                    Thread.sleep(this.pauseLength / 1_000_000, (int) (this.pauseLength % 1_000_000));
                     continue;
                 }
                 prevNanoTime = nanoTime;
@@ -77,7 +77,7 @@ public abstract class AbstractTickTimer {
                 long sleepTime = nextLength - (System.nanoTime() - nanoTime);
                 if (sleepTime > 0) {
                     Thread.sleep(TimeUnit.NANOSECONDS.toMillis(sleepTime),
-                            (int)(sleepTime % TimeUnit.MILLISECONDS.toNanos(1)));
+                            (int) (sleepTime % TimeUnit.MILLISECONDS.toNanos(1)));
                 } else {
                     Thread.yield();
                 }

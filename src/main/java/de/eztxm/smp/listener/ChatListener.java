@@ -1,6 +1,5 @@
 package de.eztxm.smp.listener;
 
-import com.openai.client.OpenAIClient;
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.models.Moderation;
@@ -22,14 +21,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
-    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {}
+    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {
+    }
 
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
@@ -46,7 +48,7 @@ public class ChatListener implements Listener {
 
         FilterResult result = filter(event.getMessage());
 
-        if(result.flagged()) {
+        if (result.flagged()) {
             sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
             event.setCancelled(true);
             return;
@@ -72,8 +74,8 @@ public class ChatListener implements Listener {
     private boolean sendMessage(Player sender, String message, boolean global, int radius) {
         boolean reachedSomeone = false;
 
-        if(global) {
-            for(Player player : Bukkit.getOnlinePlayers()) {
+        if (global) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(formatMessageForReceiver(message, true, sender, player));
             }
             return true;
@@ -98,13 +100,13 @@ public class ChatListener implements Listener {
         Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : Component.empty();
         Component base = AdventureColor.apply("&e" + sender.getName() + " &8» &f");
 
-        if(matcher.find()) {
+        if (matcher.find()) {
             matcher.reset();
             List<Component> parts = new ArrayList<>();
             int lastEnd = 0;
 
-            while(matcher.find()) {
-                if(matcher.start() > lastEnd) {
+            while (matcher.find()) {
+                if (matcher.start() > lastEnd) {
                     String before = message.substring(lastEnd, matcher.start());
                     parts.add(AdventureColor.apply(before));
                 }
@@ -112,7 +114,7 @@ public class ChatListener implements Listener {
                 parts.add(AdventureColor.apply("&b" + hit));
                 lastEnd = matcher.end();
             }
-            if(lastEnd < message.length()) {
+            if (lastEnd < message.length()) {
                 parts.add(AdventureColor.apply(message.substring(lastEnd)));
             }
 
@@ -132,7 +134,7 @@ public class ChatListener implements Listener {
         }
 
         EnumSet<FilterCategory> blacklist = BlackList.checkMessage(message);
-        if(!blacklist.isEmpty()) {
+        if (!blacklist.isEmpty()) {
             return new FilterResult(true, blacklist);
         }
 
@@ -145,7 +147,7 @@ public class ChatListener implements Listener {
         Moderation result = response.results().getFirst();
 
 
-        if(!result.flagged()) {
+        if (!result.flagged()) {
 
             params = ModerationCreateParams.builder()
                     .input(message)

@@ -194,7 +194,7 @@ public class ParticleAnimationTicked implements TickedAnimation {
     private void spawnParticles(World world, Location location) {
         for (int i = 0; i < particleCount; i++) {
             Location spawnLoc = location.clone().add(randomOffset(), 0, randomOffset());
-            if(boundPlayerOnly) {
+            if (boundPlayerOnly) {
                 ParticleLib.sendParticleToBound(boundPlayer, particle, spawnLoc);
                 continue;
             }

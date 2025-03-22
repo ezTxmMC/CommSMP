@@ -1,7 +1,5 @@
 package de.eztxm.smp.listener.filter;
 
-import java.util.List;
-
 import java.util.*;
 import java.util.regex.Pattern;
 

@@ -11,7 +11,8 @@ public final class ParticleLib {
 
     private static JavaPlugin plugin;
 
-    private ParticleLib() {}
+    private ParticleLib() {
+    }
 
     public static void initialize(JavaPlugin plugin) {
         ParticleLib.plugin = plugin;

@@ -50,7 +50,7 @@ public class PositionCommand implements SimpleCommand {
             return;
         }
 
-        if(animation.containsKey(player.getUniqueId())) {
+        if (animation.containsKey(player.getUniqueId())) {
             animation.get(player.getUniqueId()).stop();
             animation.remove(player.getUniqueId());
             player.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "&aPartikeleffekte für die Position " + args[0] + " deaktiviert!"));

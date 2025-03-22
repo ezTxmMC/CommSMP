@@ -14,7 +14,6 @@ import de.eztxm.smp.listener.QuitListener;
 import de.eztxm.smp.lock.LockListener;
 import de.eztxm.smp.util.PlayerManager;
 import de.eztxm.smp.util.Registry;
-import de.syntaxjason.syntaxjasonapi.minecraft.tick.AnimationHolder;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
