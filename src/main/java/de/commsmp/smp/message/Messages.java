@@ -4,7 +4,7 @@ import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.annotation.JsonClassElement;
 
 @JsonClassConfig(path = "/plugins/SMP", fileName = "messages.json")
-public class Message {
+public class Messages {
     @JsonClassElement
     public static String PREFIX;
     @JsonClassElement

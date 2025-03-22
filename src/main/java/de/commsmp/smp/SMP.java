@@ -1,5 +1,6 @@
 package de.commsmp.smp;
 
+import de.commsmp.smp.message.Messages;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import de.commsmp.smp.command.TeamchatCommand;
 import de.commsmp.smp.generation.CustomChunkGen;
@@ -38,15 +39,18 @@ public final class SMP extends JavaPlugin {
     @Getter
     private String prefix;
     @Getter
-    private LockConfig lockConfig;
-    @Getter
     private Config mainConfig;
+    @Getter
+    private Messages messages;
+    @Getter
+    private LockConfig lockConfig;
 
     @Override
     public void onEnable() {
         instance = this;
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
         this.mainConfig = JsonProcessor.loadConfiguration(Config.class).getInstance();
+        this.messages = JsonProcessor.loadConfiguration(Messages.class).getInstance();
         this.lockConfig = new LockConfig();
         this.luckPerms = LuckPermsProvider.get();
 
