@@ -106,7 +106,7 @@ public class ChatListener implements Listener {
         Matcher matcher = pattern.matcher(message);
 
         Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : Component.empty();
-        Component base = AdventureColor.apply("&e" + sender.getName() + " &8» &f");
+        Component base = AdventureColor.apply("<yellow>" + sender.getName() + " <dark_gray>» ");
 
         if (matcher.find()) {
             matcher.reset();
@@ -126,7 +126,7 @@ public class ChatListener implements Listener {
                 parts.add(AdventureColor.apply(message.substring(lastEnd)));
             }
 
-            Component messageComponent = Component.join(JoinConfiguration.noSeparators(), parts);
+            Component messageComponent = Component.join(JoinConfiguration.noSeparators(), parts).color(NamedTextColor.GRAY);
             receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
             return globalComponent.append(base).append(messageComponent);
         }
