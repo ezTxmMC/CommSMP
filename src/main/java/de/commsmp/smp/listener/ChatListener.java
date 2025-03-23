@@ -61,7 +61,7 @@ public class ChatListener implements Listener {
 
         if (message.startsWith("@g")) {
             global = true;
-            message = message.substring(1).trim();
+            message = message.substring(2).trim();
         }
 
         if (message.startsWith("!")) {
@@ -82,16 +82,27 @@ public class ChatListener implements Listener {
     private boolean sendMessage(Player sender, String message, boolean global, boolean scream, int radius) {
         boolean reachedSomeone = false;
 
-        if (global) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(formatMessageForReceiver(message, true, false, sender, player));
+        String mentionedName = extractMention(message);
+        if(mentionedName != null) {
+            Player mentionedPlayer = Bukkit.getPlayerExact(mentionedName);
+            if(mentionedPlayer == null || !mentionedPlayer.isOnline()) {
+                mentionedName = null;
+            }
+            if(mentionedPlayer != null || mentionedPlayer.isOnline()) {
+                mentionedName = mentionedPlayer.getName();
+            }
+        }
+
+        if(global) {
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(formatMessageForReceiver(message, true, scream, sender, player, mentionedName));
             }
             return true;
         }
 
-        for (Entity entity : sender.getLocation().getWorld().getNearbyEntities(sender.getLocation(), radius, radius, radius)) {
-            if (entity instanceof Player receiver) {
-                Component formattedMessage = formatMessageForReceiver(message, global, scream, sender, receiver);
+        for(Entity entity : sender.getLocation().getWorld().getNearbyEntities(sender.getLocation(), radius, radius, radius)) {
+            if(entity instanceof Player receiver) {
+                Component formattedMessage = formatMessageForReceiver(message, false, scream, sender, receiver, mentionedName);
                 receiver.sendMessage(formattedMessage);
                 reachedSomeone = true;
             }
@@ -99,20 +110,20 @@ public class ChatListener implements Listener {
         return reachedSomeone;
     }
 
-    private Component formatMessageForReceiver(String message, boolean global, boolean scream, Player sender, Player receiver) {
-        String mention = "@" + receiver.getName();
-        String regex = "(?i)" + Pattern.quote(mention);
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(message);
-
-        Component globalComponent = global ? AdventureColor.apply("&8[&eG&8] ") : scream ? AdventureColor.apply("&8[&cRuft&8]") : Component.empty();
+    private Component formatMessageForReceiver(String message, boolean global, boolean scream, Player sender, Player receiver, String mentionedName) {
+        Component globalComponent = global
+                ? AdventureColor.apply("&8[&eG&8] ")
+                : scream
+                ? AdventureColor.apply("&8[&cRuft&8] ")
+                : Component.empty();
         Component base = AdventureColor.apply("<yellow>" + sender.getName() + " <dark_gray>» ");
 
-        if (matcher.find()) {
-            matcher.reset();
+        if (mentionedName != null) {
+            String mention = "@" + mentionedName;
+            Pattern pattern = Pattern.compile("(?i)" + Pattern.quote(mention));
+            Matcher matcher = pattern.matcher(message);
             List<Component> parts = new ArrayList<>();
             int lastEnd = 0;
-
             while (matcher.find()) {
                 if (matcher.start() > lastEnd) {
                     String before = message.substring(lastEnd, matcher.start());
@@ -123,15 +134,25 @@ public class ChatListener implements Listener {
                 lastEnd = matcher.end();
             }
             if (lastEnd < message.length()) {
-                parts.add(AdventureColor.apply(message.substring(lastEnd)));
+                parts.add(AdventureColor.apply("&7" + message.substring(lastEnd)));
             }
+            Component messageComponent = Component.join(JoinConfiguration.noSeparators(), parts);
 
-            Component messageComponent = Component.join(JoinConfiguration.noSeparators(), parts).color(NamedTextColor.GRAY);
-            receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
+            if (receiver.getName().equalsIgnoreCase(mentionedName)) {
+                receiver.playSound(receiver.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1f, 1f);
+            }
             return globalComponent.append(base).append(messageComponent);
         }
-
         return globalComponent.append(base).append(AdventureColor.apply(message));
+    }
+
+    public String extractMention(String message) {
+        Pattern pattern = Pattern.compile("(?i)@([a-zA-Z0-9_]+)");
+        Matcher matcher = pattern.matcher(message);
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 
     /*private CompletableFuture<FilterResult> filter(String message) {
