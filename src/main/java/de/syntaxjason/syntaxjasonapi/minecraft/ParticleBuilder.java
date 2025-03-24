@@ -132,7 +132,7 @@ public class ParticleBuilder {
             double distance = shootDirection.length();
             double effectiveDistance = (maxDistance > 0) ? Math.min(distance, maxDistance) : distance;
             List<Location> points = generateBeamPoints(center, shootDirection, totalSteps, effectiveDistance);
-            return new ProjectileAnimation(plugin, particle, points, shootDirection.clone().normalize().multiply(0.5), loop, collisionListener);
+            return new ProjectileAnimation(plugin, particle, points, shootDirection.clone().normalize().multiply(0.5), collisionListener, loop, maxDistance);
         }
         if (shoot && (animationType == ParticleAnimationTicked.AnimationType.SPHERE ||
                 animationType == ParticleAnimationTicked.AnimationType.HSPHERE)) {
@@ -141,7 +141,7 @@ public class ParticleBuilder {
             org.bukkit.util.Vector vel = (boundCenter != null)
                     ? boundCenter.getEyeLocation().getDirection().normalize().multiply(0.5)
                     : new org.bukkit.util.Vector(0, 0, 1);
-            return new ProjectileAnimation(plugin, particle, points, vel, collisionListener);
+            return new ProjectileAnimation(plugin, particle, points, shootDirection.clone().normalize().multiply(0.5), collisionListener, loop, maxDistance);
         }
         return new ParticleAnimationTicked(
                 plugin,

@@ -1,5 +1,6 @@
 package de.commsmp.smp.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import de.commsmp.smp.config.data.LockInfo;
 import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.object.JsonObject;
@@ -12,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonClassConfig(path = "plugins/SMP", fileName = "locks.json")
 public class LockConfig {
     private final JsonObject config;
@@ -25,8 +27,8 @@ public class LockConfig {
 
     private String getLocationKey(final Location location) {
         return location.getWorld().getName() + "." +
-                location.getBlockX() + "_" +
-                location.getBlockY() + "_" +
+                location.getBlockX() + "." +
+                location.getBlockY() + "." +
                 location.getBlockZ();
     }
 

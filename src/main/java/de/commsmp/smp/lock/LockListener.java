@@ -18,7 +18,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -28,6 +31,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +57,45 @@ public class LockListener implements Listener {
             this.location = location;
             this.timestamp = timestamp;
         }
+    }
+
+    @EventHandler
+    public void onBlockExplode(BlockExplodeEvent event) {
+        List<Block> affectedBlocks = event.blockList();
+        Iterator<Block> iterator = affectedBlocks.iterator();
+        while (iterator.hasNext()) {
+            Block block = iterator.next();
+            if (lockConfig.isLocked(block.getLocation())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMinecartDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Minecart)) {
+            return;
+        }
+        Minecart minecart = (Minecart) entity;
+        PersistentDataContainer container = minecart.getPersistentDataContainer();
+        NamespacedKey lockKey = new NamespacedKey(SMP.getInstance(), "lock");
+        if (!container.has(lockKey, PersistentDataType.STRING)) {
+            return;
+        }
+
+        if (event instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent edbee = (EntityDamageByEntityEvent) event;
+            Entity damager = edbee.getDamager();
+            if (damager instanceof Player) {
+                Player player = (Player) damager;
+                String ownerUUID = container.get(lockKey, PersistentDataType.STRING);
+                if (ownerUUID != null && ownerUUID.equals(player.getUniqueId().toString())) {
+                    return;
+                }
+            }
+        }
+        event.setCancelled(true);
     }
 
     @EventHandler

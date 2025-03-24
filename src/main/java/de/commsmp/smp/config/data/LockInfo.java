@@ -61,7 +61,7 @@ public class LockInfo {
             if (trustedRaw.equals("[]")) {
                 trusted = new ArrayList<>();
             } else {
-                trustedRaw = trustedRaw.substring(1, trustedRaw.length() - 1); // [] entfernen
+                trustedRaw = trustedRaw.substring(1, trustedRaw.length() - 1);
                 trusted = new ArrayList<>(Arrays.asList(trustedRaw.split(", ")));
             }
 
