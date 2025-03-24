@@ -14,8 +14,8 @@
     - [x] Door lock
     - [x] Trapdoor lock
     - [x] Placed Backpack lock
-    - [ ] Chest minecart
-    - [ ] Hopper minecart
+    - [x] Chest minecart
+    - [x] Hopper minecart
 - [x] Multichatsystem
     - [x] Normal: In 15 blocks radius
     - [x] Starting with '@': Serverside

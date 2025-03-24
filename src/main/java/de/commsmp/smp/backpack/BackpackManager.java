@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class BackpackManager {
@@ -15,12 +17,19 @@ public class BackpackManager {
     }
 
     public void registerCrafting() {
-        ShapedRecipe leather = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_leather"), new ItemBuilder(Material.BARRIER).build());
-        ShapedRecipe copper = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_copper"), new ItemBuilder(Material.BARRIER).build());
-        ShapedRecipe iron = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_iron"), new ItemBuilder(Material.BARRIER).build());
-        ShapedRecipe gold = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_gold"), new ItemBuilder(Material.BARRIER).build());
-        ShapedRecipe diamond = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_diamond"), new ItemBuilder(Material.BARRIER).build());
-        ShapedRecipe netherite = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_netherite"), new ItemBuilder(Material.BARRIER).build());
+        ItemStack leatherBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Leder Rucksack").setItemModel("backpack_leather").addData("backpack", "leather").build();
+        ItemStack copperBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Kupfer Rucksack").setItemModel("backpack_leather").addData("backpack", "copper").build();
+        ItemStack ironBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Eisen Rucksack").setItemModel("backpack_leather").addData("backpack", "iron").build();
+        ItemStack goldBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Gold Rucksack").setItemModel("backpack_leather").addData("backpack", "gold").build();
+        ItemStack diamondBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Diamant Rucksack").setItemModel("backpack_leather").addData("backpack", "diamond").build();
+        ItemStack netheriteBackpack = new ItemBuilder(Material.BARRIER).setDisplayName("Netherite Rucksack").setItemModel("backpack_leather").addData("backpack", "netherite").build();
+
+        ShapedRecipe leather = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_leather"), leatherBackpack);
+        ShapedRecipe copper = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_copper"), copperBackpack);
+        ShapedRecipe iron = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_iron"), ironBackpack);
+        ShapedRecipe gold = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_gold"), goldBackpack);
+        ShapedRecipe diamond = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_diamond"), diamondBackpack);
+        ShapedRecipe netherite = new ShapedRecipe(new NamespacedKey(SMP.getInstance(), "backpack_netherite"), netheriteBackpack);
 
         leather.shape("xxx", "xzx", "xxx");
         leather.setIngredient('x', Material.LEATHER);
@@ -28,27 +37,27 @@ public class BackpackManager {
 
         copper.shape("xyx", "xzx", "xyx");
         copper.setIngredient('x', Material.LEATHER);
-        copper.setIngredient('z', Material.BROWN_SHULKER_BOX); // Leather Backpack
+        copper.setIngredient('z', new RecipeChoice.ExactChoice(leatherBackpack)); // Leather Backpack
         copper.setIngredient('y', Material.COPPER_INGOT);
 
         iron.shape("xyx", "xzx", "xyx");
         iron.setIngredient('x', Material.LEATHER);
-        iron.setIngredient('z', Material.RED_SHULKER_BOX); // Copper Backpack
+        iron.setIngredient('z', new RecipeChoice.ExactChoice(copperBackpack)); // Copper Backpack
         iron.setIngredient('y', Material.IRON_INGOT);
 
         gold.shape("xyx", "xzx", "xyx");
         gold.setIngredient('x', Material.LEATHER);
-        gold.setIngredient('z', Material.LIGHT_GRAY_SHULKER_BOX); // Iron Backpack
+        gold.setIngredient('z', new RecipeChoice.ExactChoice(ironBackpack)); // Iron Backpack
         gold.setIngredient('y', Material.GOLD_INGOT);
 
         diamond.shape("xyx", "xzx", "xyx");
         diamond.setIngredient('x', Material.LEATHER);
-        diamond.setIngredient('z', Material.ORANGE_SHULKER_BOX); // Gold Backpack
+        diamond.setIngredient('z', new RecipeChoice.ExactChoice(goldBackpack)); // Gold Backpack
         diamond.setIngredient('y', Material.DIAMOND);
 
         netherite.shape("xyx", "xzx", "xyx");
         netherite.setIngredient('x', Material.NETHERITE_SCRAP);
-        netherite.setIngredient('z', Material.LIGHT_BLUE_SHULKER_BOX); // Diamond Backpack
+        netherite.setIngredient('z', new RecipeChoice.ExactChoice(diamondBackpack)); // Diamond Backpack
         netherite.setIngredient('y', Material.GOLD_INGOT);
 
         Bukkit.addRecipe(leather);

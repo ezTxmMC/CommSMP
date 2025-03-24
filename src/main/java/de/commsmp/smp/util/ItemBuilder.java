@@ -1,6 +1,7 @@
 package de.commsmp.smp.util;
 
 import de.commsmp.smp.SMP;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,6 +11,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemBuilder {
+
     private final ItemStack itemStack;
     private ItemMeta itemMeta;
 
@@ -181,6 +185,23 @@ public class ItemBuilder {
 
     public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments) {
         return addEnchantments(enchantments, false);
+    }
+
+    public ItemBuilder addData(String key, String value) {
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        container.set(new NamespacedKey(SMP.getInstance(), key), PersistentDataType.STRING, value);
+        return this;
+    }
+
+    public ItemBuilder removeData(String key) {
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        container.remove(new NamespacedKey(SMP.getInstance(), key));
+        return this;
+    }
+
+    public String getData(String key) {
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        return container.get(new NamespacedKey(SMP.getInstance(), key), PersistentDataType.STRING);
     }
 
     public ItemStack build() {
