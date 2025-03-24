@@ -21,7 +21,7 @@
     - [x] Starting with '@': Serverside
     - [x] Starting with '!': In 30 blocks radius
 - [ ] (Optional) SimpleVoiceChat activate sculk sensor & shrieker
-- [ ] Shoppingarea Tom)
+- [ ] Shoppingarea (Tom)
     - [ ] Buy plot
     - [ ] Expand plot
     - [ ] Reduce plot
@@ -31,10 +31,10 @@
     - [ ] Offline inbox
 - [ ] Spawnelytraglide
 - [x] Remove netherite stuff
-- [ ] Roleplaymode
+- [ ] Roleplaymode (Tom)
     - [ ] /roleplay - alias: /rp
     - [ ] Suffix in tab
-- [ ] Status
+- [ ] Status (Tom)
     - [ ] /rec -> Recording
     - [ ] /live -> Streaming
     - [ ] /afk -> Away from keyboard / Not there
@@ -57,8 +57,13 @@
     - [ ] Upgradable
 - [ ] Messages File
 - [x] Custom death messages
-- [ ] GraveStone-System (David)
+- [ ] GraveStone-System (TntTastisch)
     - [ ] Custom model
+    - [ ] Spawn as block at death
+    - [ ] Not breakable
+    - [ ] Only by owner interactable
+    - [ ] GUI with inventory items
+    - [ ] Disable inventory drop
 
 ## Technology
 
