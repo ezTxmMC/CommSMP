@@ -21,7 +21,7 @@
     - [x] Starting with '@': Serverside
     - [x] Starting with '!': In 30 blocks radius
 - [ ] (Optional) SimpleVoiceChat activate sculk sensor & shrieker
-- [ ] Shoppingarea (SyntaxJason)
+- [ ] Shoppingarea Tom)
     - [ ] Buy plot
     - [ ] Expand plot
     - [ ] Reduce plot
@@ -57,6 +57,8 @@
     - [ ] Upgradable
 - [ ] Messages File
 - [x] Custom death messages
+- [ ] GraveStone-System (David)
+    - [ ] Custom model
 
 ## Technology
 
