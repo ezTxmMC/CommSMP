@@ -15,3 +15,4 @@ public class EntityRayTraceResult extends RayTraceResult {
         return entity;
     }
 }
+

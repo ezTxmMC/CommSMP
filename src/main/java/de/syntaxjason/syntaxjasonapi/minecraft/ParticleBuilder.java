@@ -5,6 +5,10 @@ import de.syntaxjason.syntaxjasonapi.minecraft.util.ParticleSphereUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParticleBuilder {
     private final JavaPlugin plugin;
@@ -23,6 +27,8 @@ public class ParticleBuilder {
     private boolean loopedReverse = false;
     private boolean shoot = false;
     private boolean boundPlayerOnly = false;
+    private Vector shootDirection = null;
+    private double maxDistance = -1;
 
     public ParticleBuilder(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -107,14 +113,31 @@ public class ParticleBuilder {
         return this;
     }
 
+    public ParticleBuilder shootDirection(Vector direction) {
+        this.shootDirection = direction;
+        return this;
+    }
+
+    public ParticleBuilder maxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
+        return this;
+    }
+
+
     public TickedAnimation build() {
         if (particle == null || center == null) {
             throw new IllegalStateException("Particle und Center müssen gesetzt sein!");
         }
+        if (shoot && animationType == ParticleAnimationTicked.AnimationType.BEAM && shootDirection != null) {
+            double distance = shootDirection.length();
+            double effectiveDistance = (maxDistance > 0) ? Math.min(distance, maxDistance) : distance;
+            List<Location> points = generateBeamPoints(center, shootDirection, totalSteps, effectiveDistance);
+            return new ProjectileAnimation(plugin, particle, points, shootDirection.clone().normalize().multiply(0.5), loop, collisionListener);
+        }
         if (shoot && (animationType == ParticleAnimationTicked.AnimationType.SPHERE ||
                 animationType == ParticleAnimationTicked.AnimationType.HSPHERE)) {
             boolean hollow = (animationType == ParticleAnimationTicked.AnimationType.HSPHERE);
-            java.util.List<Location> points = ParticleSphereUtil.generateSphere(center, radius, hollow);
+            List<Location> points = ParticleSphereUtil.generateSphere(center, radius, hollow);
             org.bukkit.util.Vector vel = (boundCenter != null)
                     ? boundCenter.getEyeLocation().getDirection().normalize().multiply(0.5)
                     : new org.bukkit.util.Vector(0, 0, 1);
@@ -137,5 +160,16 @@ public class ParticleBuilder {
                 boundCenter,
                 boundPlayer
         );
+    }
+
+    private List<Location> generateBeamPoints(Location start, Vector direction, int steps, double length) {
+        List<Location> points = new ArrayList<>();
+        Vector normDir = direction.normalize();
+        double stepLength = length / steps;
+        for (int i = 0; i < steps; i++) {
+            Location point = start.clone().add(normDir.clone().multiply(stepLength * i));
+            points.add(point);
+        }
+        return points;
     }
 }

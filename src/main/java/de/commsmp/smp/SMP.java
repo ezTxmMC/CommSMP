@@ -67,7 +67,7 @@ public final class SMP extends JavaPlugin {
         this.playerManager = new PlayerManager();
         this.graveStoneHandler = new GraveStoneHandler();
         this.backpackManager = new BackpackManager();
-        this.backpackManager.registerCrafting();
+        //this.backpackManager.registerCrafting();
 
         if (!(getMainConfig().isNetheriteEnabled())) {
             String[] recipes = {"netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template", "netherite_scrap", "netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots", "netherite_sword", "netherite_pickaxe", "netherite_axe", "netherite_shovel", "netherite_hoe"};

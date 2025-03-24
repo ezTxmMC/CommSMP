@@ -12,6 +12,7 @@ import de.syntaxjason.syntaxjasonapi.minecraft.tick.TickedAnimation;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -57,12 +58,37 @@ public class PositionCommand implements SimpleCommand {
             return;
         }
 
+        // Berechne den Richtungsvektor vom Spieler zur Target-Location
+        Vector shootDirection = targetLocation.toVector().subtract(player.getLocation().toVector());
+
         AnimationHolder animationHolder = new AnimationHolder();
 
-        TickedAnimation trailAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.DUST).boundPlayerOnly(true).boundPlayer(player).center(player.getLocation()).loop(true).steps(20).particleCount(5).animationType(ParticleAnimationTicked.AnimationType.BEAM).shoot(true).build();
-        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance()).particle(ParticleData.DUST).boundPlayerOnly(true).boundPlayer(player).center(targetLocation).loop(true).steps(50).particleCount(1).animationType(ParticleAnimationTicked.AnimationType.CIRCLE).shoot(false).build();
+        TickedAnimation beamAnimation = ParticleBuilder.builder(SMP.getInstance())
+                .particle(ParticleData.DUST)
+                .boundPlayerOnly(true)
+                .boundPlayer(player)
+                .center(player.getLocation())
+                .loop(true)
+                .steps(20)
+                .particleCount(5)
+                .animationType(ParticleAnimationTicked.AnimationType.BEAM)
+                .shoot(true)
+                .shootDirection(shootDirection)
+                .build();
 
-        animationHolder.addAnimation(trailAnimation);
+        TickedAnimation circleAnimation = ParticleBuilder.builder(SMP.getInstance())
+                .particle(ParticleData.DUST)
+                .boundPlayerOnly(true)
+                .boundPlayer(player)
+                .center(targetLocation)
+                .loop(true)
+                .steps(50)
+                .particleCount(1)
+                .animationType(ParticleAnimationTicked.AnimationType.CIRCLE)
+                .shoot(false)
+                .build();
+
+        animationHolder.addAnimation(beamAnimation);
         animationHolder.addAnimation(circleAnimation);
         animationHolder.start();
 
