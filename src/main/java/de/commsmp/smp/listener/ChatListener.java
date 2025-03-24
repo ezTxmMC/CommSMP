@@ -15,12 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +24,9 @@ public class ChatListener implements Listener {
 
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
-    //private final OpenAIClientAsync client;
     private final Moderation moderation;
-    private final AtomicBoolean filtered = new AtomicBoolean();
 
     public ChatListener() {
-        //client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
         moderation = new Moderation(SMP.getInstance().getMainConfig().getOpenAIKey());
     }
 
@@ -51,18 +44,6 @@ public class ChatListener implements Listener {
             }, 1L);
             return;
         }
-        /*filter(event.getMessage()).thenAccept(result -> {
-            if (result.flagged()) {
-                sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
-                event.setCancelled(true);
-                filtered.set(true);
-            }
-        });
-
-        if (filtered.get()) {
-            filtered.set(false);
-            return;
-        }*/
 
         boolean global = false;
         boolean scream = false;

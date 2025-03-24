@@ -1,7 +1,9 @@
 package de.commsmp.smp.util;
 
+import de.commsmp.smp.SMP;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -47,6 +49,12 @@ public class ItemBuilder {
 
     public ItemBuilder enchant(Enchantment enchantment, int level) {
         this.itemStack.addEnchantment(enchantment, level);
+        return this;
+    }
+
+    public ItemBuilder setItemModel(String resourceName) {
+        checkForMeta();
+        this.itemMeta.setItemModel(new NamespacedKey(SMP.getInstance(), "commsmp:item/" + resourceName));
         return this;
     }
 
