@@ -1,6 +1,7 @@
 package de.commsmp.smp.listener;
 
-import de.commsmp.smp.listener.filter.FilterCategory;
+import de.commsmp.smp.SMP;
+import de.commsmp.smp.listener.filter.Moderation;
 import de.commsmp.smp.util.AdventureColor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -25,16 +26,15 @@ import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
-    private record FilterResult(boolean flagged, EnumSet<FilterCategory> categories) {
-    }
-
     private final ConcurrentHashMap<String, Boolean> moderationCache = new ConcurrentHashMap<>();
 
     //private final OpenAIClientAsync client;
+    private final Moderation moderation;
     private final AtomicBoolean filtered = new AtomicBoolean();
 
     public ChatListener() {
         //client = OpenAIOkHttpClientAsync.builder().apiKey(SMP.getInstance().getMainConfig().getOpenAIKey()).build();
+        moderation = new Moderation(SMP.getInstance().getMainConfig().getOpenAIKey());
     }
 
     @EventHandler
@@ -42,6 +42,15 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
+        if(moderation.filter(message)) {
+            sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
+            event.setCancelled(true);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(SMP.getInstance(), () -> {
+                String aiOutput = moderation.answer(sender.getName(), event.getMessage());
+                sender.sendMessage(AdventureColor.apply("<gradient:#FB0808:#EEA400><bold>Aurora</gradient> <dark_gray><bold>|</bold> <gray>" + aiOutput));
+            }, 1L);
+            return;
+        }
         /*filter(event.getMessage()).thenAccept(result -> {
             if (result.flagged()) {
                 sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
