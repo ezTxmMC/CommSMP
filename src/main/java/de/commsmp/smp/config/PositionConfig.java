@@ -42,6 +42,11 @@ public class PositionConfig extends JsonConfig {
         this.player = player;
     }
 
+    public PositionConfig(UUID uniqueId) {
+        super(SMP.getInstance().getDataFolder().getPath(), uniqueId.toString(), false);
+        this.player = Bukkit.getPlayer(uniqueId);
+    }
+
     public void setPosition(String name, Location location) {
         this.set(name, location.getX() + ";" +
                 location.getY() + ";" +
