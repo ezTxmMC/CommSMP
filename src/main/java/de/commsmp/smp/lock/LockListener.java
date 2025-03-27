@@ -3,30 +3,34 @@ package de.commsmp.smp.lock;
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.config.LockConfig;
 import de.commsmp.smp.util.AdventureColor;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Rail;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -60,9 +64,8 @@ public class LockListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockExplode(BlockExplodeEvent event) {
-        List<Block> affectedBlocks = event.blockList();
-        Iterator<Block> iterator = affectedBlocks.iterator();
+    public void onEntityExplode(EntityExplodeEvent event) {
+        Iterator<Block> iterator = event.blockList().iterator();
         while (iterator.hasNext()) {
             Block block = iterator.next();
             if (lockConfig.isLocked(block.getLocation())) {
@@ -72,9 +75,9 @@ public class LockListener implements Listener {
     }
 
     @EventHandler
-    public void onMinecartDamage(EntityDamageEvent event) {
-        Entity entity = event.getEntity();
-        if (!(entity instanceof Minecart)) {
+    public void onMinecartDamage(PrePlayerAttackEntityEvent event) {
+        Entity entity = event.getAttacked();
+        if (!(entity instanceof HopperMinecart || entity instanceof StorageMinecart)) {
             return;
         }
         Minecart minecart = (Minecart) entity;
@@ -83,20 +86,28 @@ public class LockListener implements Listener {
         if (!container.has(lockKey, PersistentDataType.STRING)) {
             return;
         }
-
-        if (event instanceof EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent edbee = (EntityDamageByEntityEvent) event;
-            Entity damager = edbee.getDamager();
-            if (damager instanceof Player) {
-                Player player = (Player) damager;
-                String ownerUUID = container.get(lockKey, PersistentDataType.STRING);
-                if (ownerUUID != null && ownerUUID.equals(player.getUniqueId().toString())) {
-                    return;
-                }
-            }
+        Player player = event.getPlayer();
+        String ownerUUID = container.get(lockKey, PersistentDataType.STRING);
+        if (ownerUUID != null && ownerUUID.equals(player.getUniqueId().toString())) {
+            return;
         }
         event.setCancelled(true);
     }
+
+    @EventHandler
+    public void onVehicleDamage(VehicleDamageEvent event) {
+        Vehicle vehicle = event.getVehicle();
+        if (!(vehicle instanceof HopperMinecart || vehicle instanceof StorageMinecart)) {
+            return;
+        }
+        if(event.getAttacker() == null) {
+            NamespacedKey lockKey = new NamespacedKey(SMP.getInstance(), "lock");
+            if (vehicle.getPersistentDataContainer().has(lockKey, PersistentDataType.STRING)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
 
     @EventHandler
     public void onPlayerMinecartInteract(final PlayerInteractEvent event) {
@@ -119,7 +130,6 @@ public class LockListener implements Listener {
             for (Entity entity : clickedBlock.getWorld().getNearbyEntities(spawnLocation, radiusX, radiusY, radiusZ)) {
                 if (entity instanceof Minecart) {
                     Minecart minecart = (Minecart) entity;
-                    // Filter für die Minecart-Typen
                     if (!(minecart instanceof HopperMinecart || minecart instanceof StorageMinecart)) {
                         continue;
                     }
@@ -162,6 +172,22 @@ public class LockListener implements Listener {
 
         event.setCancelled(true);
         event.getPlayer().sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Dieses Minecart ist gesperrt!"));
+    }
+
+    @EventHandler
+    public void onBlockIgnite(BlockIgniteEvent event) {
+        Block block = event.getBlock();
+        if (lockConfig.isLocked(block.getLocation())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        Block block = event.getBlock();
+        if (lockConfig.isLocked(block.getLocation())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -247,18 +273,42 @@ public class LockListener implements Listener {
 
     @EventHandler
     public void onHopperExtractFromLockedChest(final InventoryMoveItemEvent event) {
-        final Block block = event.getSource().getLocation() != null ? event.getSource().getLocation().getBlock() : null;
-        if (block == null || !lockConfig.isLocked(block.getLocation())) {
+        if (event.getSource().getLocation() == null) return;
+        Block chestBlock = event.getSource().getLocation().getBlock();
+
+        if (!lockConfig.isLocked(chestBlock.getLocation())) return;
+
+        UUID chestOwner = lockConfig.getOwner(chestBlock.getLocation());
+        if (chestOwner == null) {
+            event.setCancelled(true);
             return;
         }
-        event.setCancelled(true);
-    }
 
-    @EventHandler
-    public void onHopperPickupFromLockedChest(final InventoryPickupItemEvent event) {
-        final Block block = event.getInventory().getLocation() != null ? event.getInventory().getLocation().getBlock() : null;
-        if (block == null || !lockConfig.isLocked(block.getLocation())) {
-            return;
+        if (event.getDestination().getHolder() instanceof HopperMinecart) {
+            HopperMinecart hopper = (HopperMinecart) event.getDestination().getHolder();
+            PersistentDataContainer container = hopper.getPersistentDataContainer();
+            NamespacedKey lockKey = new NamespacedKey(SMP.getInstance(), "lock");
+            if (container.has(lockKey, PersistentDataType.STRING)) {
+                String hopperOwnerStr = container.get(lockKey, PersistentDataType.STRING);
+                if (hopperOwnerStr != null) {
+                    UUID hopperOwner = UUID.fromString(hopperOwnerStr);
+                    if (chestOwner.equals(hopperOwner)) {
+                        return;
+                    }
+                }
+            }
+        }
+        if(event.getDestination().getHolder() instanceof Hopper) {
+            Block hopperBlock = event.getDestination().getLocation().getBlock();
+            if (!lockConfig.isLocked(hopperBlock.getLocation())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            UUID hopperOwner = lockConfig.getOwner(hopperBlock.getLocation());
+            if (hopperOwner != null && hopperOwner.equals(chestOwner)) {
+                return;
+            }
         }
         event.setCancelled(true);
     }

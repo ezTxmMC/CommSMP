@@ -1,8 +1,8 @@
 package de.commsmp.smp.config;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import de.commsmp.smp.SMP;
 import de.commsmp.smp.config.data.LockInfo;
-import de.eztxm.ezlib.config.annotation.JsonClassConfig;
+import de.eztxm.ezlib.config.JsonConfig;
 import de.eztxm.ezlib.config.object.JsonObject;
 import de.eztxm.ezlib.config.object.ObjectConverter;
 import org.bukkit.Location;
@@ -13,22 +13,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonClassConfig(path = "plugins/SMP", fileName = "locks.json")
-public class LockConfig {
-    private final JsonObject config;
+public class LockConfig extends JsonConfig {
     private final Map<String, LockInfo> locks;
 
     public LockConfig() {
-        this.config = new JsonObject();
+        super(SMP.getInstance().getDataFolder().getPath(), "locks.json", false);
         this.locks = new HashMap<>();
         loadLocks();
     }
 
     private String getLocationKey(final Location location) {
-        return location.getWorld().getName() + "." +
-                location.getBlockX() + "." +
-                location.getBlockY() + "." +
+        return location.getWorld().getName() + ";" +
+                location.getBlockX() + ";" +
+                location.getBlockY() + ";" +
                 location.getBlockZ();
     }
 
@@ -71,7 +68,7 @@ public class LockConfig {
             for (String uuidStr : info.getTrusted()) {
                 try {
                     result.add(UUID.fromString(uuidStr));
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException ignored) {
                 }
             }
         }
@@ -134,11 +131,11 @@ public class LockConfig {
 
     public void loadLocks() {
         locks.clear();
-        JsonObject json = this.config;
-        if (json == null) return;
-        if (json.getElements().isEmpty()) return;
+        JsonObject json = this.getCustomJsonObject();
+        if (json == null || json.getElements().isEmpty()) return;
+
         for (String key : json.getElements().keySet()) {
-            if (key == null) return;
+            if (key == null) continue;
             try {
                 LockInfo info = LockInfo.fromString(new ObjectConverter(json.get(key)).asString());
                 locks.put(key, info);
@@ -148,18 +145,16 @@ public class LockConfig {
         }
     }
 
+    @Override
     public void save() {
-        JsonObject json = this.config;
+        JsonObject json = getCustomJsonObject();
         json.getElements().clear();
 
         for (Map.Entry<String, LockInfo> entry : locks.entrySet()) {
-            String key = entry.getKey();
-            LockInfo info = entry.getValue();
-            String lockJson = info.toString();
-            json.set(key, lockJson);
+            json.set(entry.getKey(), entry.getValue().toString());
         }
 
-        Path filePath = Paths.get("plugins/SMP", "locks.json");
+        Path filePath = Paths.get(this.getConfigPath(), this.getConfigName());
         try {
             Files.writeString(filePath, json.toJsonString(true));
         } catch (IOException ignored) {
