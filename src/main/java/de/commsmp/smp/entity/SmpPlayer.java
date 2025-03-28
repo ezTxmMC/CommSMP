@@ -7,9 +7,7 @@ import de.commsmp.smp.util.GraveStone;
 import de.commsmp.smp.util.cache.IntegerCache;
 import de.commsmp.smp.util.cache.UUIDCache;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 
