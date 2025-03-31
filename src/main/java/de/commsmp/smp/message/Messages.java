@@ -2,58 +2,60 @@ package de.commsmp.smp.message;
 
 import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.annotation.JsonClassElement;
+import lombok.Getter;
 
+@Getter
 @JsonClassConfig(path = "plugins/SMP", fileName = "messages.json")
 public class Messages {
     @JsonClassElement
-    public static String PREFIX;
+    public String prefix;
     @JsonClassElement
-    public static String NO_PERMISSION;
+    public String noPermission;
     @JsonClassElement
-    public static String ERROR;
+    public String error;
     @JsonClassElement
-    public static String POSITION_USAGE;
+    public String positionUsage;
     @JsonClassElement
-    public static String POSITION_SET;
+    public String positionSet;
     @JsonClassElement
-    public static String POSITION_LIST;
+    public String positionList;
     @JsonClassElement
-    public static String POSITION_DELETE;
+    public String positionDelete;
     @JsonClassElement
-    public static String POSITION_PARTICLES_ON;
+    public String positionParticlesOn;
     @JsonClassElement
-    public static String POSITION_PARTICLES_OFF;
+    public String positionParticlesOff;
     @JsonClassElement
-    public static String TEAMCHAT_FORMAT;
+    public String teamchatFormat;
     @JsonClassElement
-    public static String TEAMCHAT_USAGE;
+    public String teamchatUsage;
     @JsonClassElement
-    public static String UNLOCK_USAGE;
+    public String unlockUsage;
     @JsonClassElement
-    public static String UNLOCK_SUCCESS;
+    public String unlockSuccess;
     @JsonClassElement
-    public static String UNLOCK_NOT_OWNED;
+    public String unlockNotOwned;
     @JsonClassElement
-    public static String LOCK_USAGE;
+    public String lockUsage;
     @JsonClassElement
-    public static String LOCK_AUTO_LOCK;
+    public String lockAutoLock;
 
     public Messages() {
-        PREFIX = "";
-        NO_PERMISSION = "";
-        ERROR = "";
-        POSITION_USAGE = "";
-        POSITION_SET = "";
-        POSITION_LIST = "";
-        POSITION_DELETE = "";
-        POSITION_PARTICLES_ON = "";
-        POSITION_PARTICLES_OFF = "";
-        TEAMCHAT_FORMAT = "";
-        TEAMCHAT_USAGE = "";
-        UNLOCK_USAGE = "";
-        UNLOCK_SUCCESS = "";
-        UNLOCK_NOT_OWNED = "";
-        LOCK_USAGE = "";
-        LOCK_AUTO_LOCK = "";
+        prefix = "";
+        noPermission = "";
+        error = "";
+        positionUsage = "";
+        positionSet = "";
+        positionList = "";
+        positionDelete = "";
+        positionParticlesOn = "";
+        positionParticlesOff = "";
+        teamchatFormat = "";
+        teamchatUsage = "";
+        unlockUsage = "";
+        unlockSuccess = "";
+        unlockNotOwned = "";
+        lockUsage = "";
+        lockAutoLock = "";
     }
 }
