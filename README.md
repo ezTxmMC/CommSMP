@@ -40,7 +40,6 @@
   - [x] /afk -> Away from keyboard / Not there
   - [ ] /passive -> Chilling with friends -> Disabling all progressive features
 - [x] Drop player head on death
-- [ ] Create protected and player-binded chest on death with player inventory (GraveStone-System)
 - [x] Teamchat
   - [x] /teamchat <message> - alias: /tc
   - [x] /teamchat enable
