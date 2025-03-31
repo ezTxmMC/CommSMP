@@ -9,30 +9,33 @@ import org.bukkit.entity.Player;
 
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
-import de.commsmp.smp.util.Status;
-import de.commsmp.smp.util.StatusType;
+import de.commsmp.smp.util.Mode;
+import de.commsmp.smp.util.ModeType;
 
-public class StatusCommand implements SimpleCommand {
+public class ModeCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
             return;
         }
-        if (label.equalsIgnoreCase("status")) {
+        if (label.equalsIgnoreCase("mode")) {
             if (args.length == 0) {
                 player.sendMessage(
-                        SMP.getInstance().getPrefix() + "/status <#33ffff><status>");
+                        SMP.getInstance().getPrefix() + "/mode <#33ffff><mode>");
                 return;
             }
             label = args[0];
         }
-        Status status = SMP.getInstance().getPlayerManager().getStatus().get(player.getUniqueId());
-        StatusType statusType = StatusType.valueOf(label.toUpperCase());
-        status.setListName(statusType);
-        status.updateHead(statusType);
+        Mode mode = SMP.getInstance().getPlayerManager().getModes().get(player.getUniqueId());
+        ModeType modeType = ModeType.valueOf(label.toUpperCase());
+        if (modeType.equals(ModeType.PASSIVE)) {
+            // Check if the player is not in combat
+        }
+        mode.setListName(modeType);
+        mode.updateHead(modeType);
         player.sendMessage(
-                SMP.getInstance().getPrefix() + "Dein Status wurde zu <#33ffff>" + statusType.name()
+                SMP.getInstance().getPrefix() + "Dein Modus wurde zu <#33ffff>" + modeType.name()
                         + " <gray>geändert.");
     }
 
@@ -40,8 +43,8 @@ public class StatusCommand implements SimpleCommand {
     public List<String> suggest(String label, CommandSender sender, String[] args) {
         if (args.length == 1) {
             List<String> types = new ArrayList<>();
-            for (StatusType statusType : StatusType.values()) {
-                types.add(statusType.name());
+            for (ModeType modeType : ModeType.values()) {
+                types.add(modeType.name());
             }
             types.removeIf(type -> !args[0].startsWith(type));
             return types;

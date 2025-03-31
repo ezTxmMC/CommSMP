@@ -1,6 +1,7 @@
 package de.commsmp.smp;
 
 import de.commsmp.smp.backpack.BackpackManager;
+import de.commsmp.smp.command.ModeCommand;
 import de.commsmp.smp.command.PositionCommand;
 import de.commsmp.smp.command.StatusCommand;
 import de.commsmp.smp.command.TeamchatCommand;
@@ -85,8 +86,10 @@ public final class SMP extends JavaPlugin {
         commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos",
                 "pos", "poslist", "positionlist"), new PositionCommand());
         commandRegistry.register("teamchat", CommandAliases.of("tc"), new TeamchatCommand());
-        commandRegistry.register("afk", CommandAliases.of("live", "none", "passive", "rec", "roleplay"),
+        commandRegistry.register("status", CommandAliases.of("none", "afk", "live", "rec"),
                 new StatusCommand());
+        commandRegistry.register("mode", CommandAliases.of("none", "passive", "roleplay"),
+                new ModeCommand());
     }
 
     @Override

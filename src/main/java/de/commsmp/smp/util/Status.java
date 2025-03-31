@@ -3,32 +3,31 @@ package de.commsmp.smp.util;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 
+import lombok.Getter;
+
 public class Status {
     private final Player player;
     private final ArmorStand armorStand;
+    @Getter
+    private final StatusType statusType;
 
     public Status(Player player) {
         this.player = player;
         this.armorStand = this.createArmorStand(StatusType.NONE);
+        this.statusType = StatusType.NONE;
     }
 
-    public void setListName(StatusType nameMode) {
+    public void setListName(StatusType statusType) {
         String suffix = "";
-        switch (nameMode) {
+        switch (statusType) {
             case REC -> {
                 suffix = " <dark_gray>▪ <#ff3333>REC";
             }
             case LIVE -> {
                 suffix = " <dark_gray>▪ <#9933ff>LIVE";
             }
-            case ROLEPLAY -> {
-                suffix = " <dark_gray>▪ <#33ffcc>RP";
-            }
             case AFK -> {
                 suffix = " <dark_gray>▪ <#888888>AFK";
-            }
-            case PASSIVE -> {
-                suffix = " <dark_gray>▪ <#cccccc>PASSIVE";
             }
             case NONE -> suffix = "";
         }
@@ -44,14 +43,8 @@ public class Status {
             case LIVE -> {
                 head = "<#9933ff>LIVE";
             }
-            case ROLEPLAY -> {
-                head = "<#33ffcc>RP";
-            }
             case AFK -> {
                 head = "<#888888>AFK";
-            }
-            case PASSIVE -> {
-                head = "<#cccccc>PASSIVE";
             }
             case NONE -> head = "";
         }
@@ -74,14 +67,8 @@ public class Status {
             case LIVE -> {
                 head = "<#9933ff>LIVE";
             }
-            case ROLEPLAY -> {
-                head = "<#33ffcc>RP";
-            }
             case AFK -> {
                 head = "<#888888>AFK";
-            }
-            case PASSIVE -> {
-                head = "<#cccccc>PASSIVE";
             }
             case NONE -> head = "";
         }

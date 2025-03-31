@@ -3,6 +3,7 @@ package de.commsmp.smp.listener;
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.scoreboard.SpawnScoreboard;
 import de.commsmp.smp.util.GraveStoneHandler;
+import de.commsmp.smp.util.Mode;
 import de.commsmp.smp.util.PlayerManager;
 import de.commsmp.smp.util.Status;
 
@@ -34,6 +35,8 @@ public class JoinListener implements Listener {
         playerManager.getTeamchat().put(player.getUniqueId(), true);
         Status status = new Status(player);
         playerManager.getStatus().put(player.getUniqueId(), status);
+        Mode mode = new Mode(player);
+        playerManager.getModes().put(player.getUniqueId(), mode);
         playerManager.getGraveStones().put(player.getUniqueId(), new HashMap<>());
         GraveStoneHandler graveStoneHandler = smp.getGraveStoneHandler();
         graveStoneHandler.getGraveStoneInteractables().put(player.getUniqueId(), new HashMap<>());
