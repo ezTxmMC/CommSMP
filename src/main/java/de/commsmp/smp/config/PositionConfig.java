@@ -34,17 +34,12 @@ public class PositionConfig extends JsonConfig {
         instances.put(player.getUniqueId(), config);
     }
 
-
-    private final Player player;
-
     public PositionConfig(Player player) {
         super(SMP.getInstance().getDataFolder().getPath(), player.getUniqueId().toString(), false);
-        this.player = player;
     }
 
     public PositionConfig(UUID uniqueId) {
         super(SMP.getInstance().getDataFolder().getPath(), uniqueId.toString(), false);
-        this.player = Bukkit.getPlayer(uniqueId);
     }
 
     public void setPosition(String name, Location location) {
@@ -63,10 +58,12 @@ public class PositionConfig extends JsonConfig {
     }
 
     public Location getPosition(String name) {
-        if (get(name) == null) return null;
+        if (get(name) == null)
+            return null;
         String[] args = get(name).asString().split(";");
         return new Location(Bukkit.getWorld(args[5]), Double.parseDouble(args[0]),
-                Double.parseDouble(args[1]), Double.parseDouble(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
+                Double.parseDouble(args[1]), Double.parseDouble(args[2]), Float.parseFloat(args[3]),
+                Float.parseFloat(args[4]));
     }
 
     public Set<String> getPositions() {
