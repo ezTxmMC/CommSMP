@@ -28,11 +28,16 @@ public class HarvestListener implements Listener {
             }
             event.setCancelled(true);
             Material dropMaterial = getDropMaterial(block.getType());
+            Material dropSeedMaterial = getDropSeedMaterial(block.getType());
             if (dropMaterial != null) {
                 block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(
                         dropMaterial,
-                        new Random().nextInt(3)
-                ));
+                        1 + new Random().nextInt(2)));
+                if (new Random().nextInt(3) == 0) {
+                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(
+                            dropSeedMaterial,
+                            1 + new Random().nextInt(1)));
+                }
             }
             ageable.setAge(0);
             block.setBlockData(ageable);
@@ -45,6 +50,16 @@ public class HarvestListener implements Listener {
             case POTATOES -> Material.POTATO;
             case BEETROOTS -> Material.BEETROOT;
             case WHEAT_SEEDS -> Material.WHEAT;
+            default -> blockType;
+        };
+    }
+
+    private Material getDropSeedMaterial(Material blockType) {
+        return switch (blockType) {
+            case CARROTS -> Material.CARROT;
+            case POTATOES -> Material.POTATO;
+            case BEETROOTS -> Material.BEETROOT_SEEDS;
+            case WHEAT_SEEDS -> Material.WHEAT_SEEDS;
             default -> blockType;
         };
     }
