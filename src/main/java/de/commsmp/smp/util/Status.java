@@ -27,6 +27,9 @@ public class Status {
             case AFK -> {
                 suffix = " <dark_gray>▪ <#888888>AFK";
             }
+            case PASSIVE -> {
+                suffix = " <dark_gray>▪ <#cccccc>PASSIVE";
+            }
             case NONE -> suffix = "";
         }
         player.playerListName(AdventureColor.apply("<gray>" + player.getName() + suffix));
@@ -46,6 +49,9 @@ public class Status {
             }
             case AFK -> {
                 head = "<#888888>AFK";
+            }
+            case PASSIVE -> {
+                head = "<#cccccc>PASSIVE";
             }
             case NONE -> head = "";
         }
@@ -73,6 +79,9 @@ public class Status {
             }
             case AFK -> {
                 head = "<#888888>AFK";
+            }
+            case PASSIVE -> {
+                head = "<#cccccc>PASSIVE";
             }
             case NONE -> head = "";
         }

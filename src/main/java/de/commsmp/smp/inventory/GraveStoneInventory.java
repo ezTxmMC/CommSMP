@@ -9,12 +9,17 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.commsmp.smp.util.AdventureColor;
+
 public class GraveStoneInventory implements InventoryHolder {
     private final Inventory inventory;
 
     public GraveStoneInventory(Player player) {
-        this.inventory = Bukkit.createInventory(this, this.calculateChestSize(player.getInventory().getContents().length), "Grave Stone");
-        for (@Nullable ItemStack itemStack : player.getInventory().getContents()) {
+        this.inventory = Bukkit.createInventory(this,
+                this.calculateChestSize(player.getInventory().getContents().length),
+                AdventureColor.apply("Grave Stone"));
+        for (@Nullable
+        ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }

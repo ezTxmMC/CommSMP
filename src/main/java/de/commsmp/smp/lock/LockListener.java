@@ -11,7 +11,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Rail;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
@@ -19,22 +18,17 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -44,24 +38,25 @@ public class LockListener implements Listener {
     private final SMP smp;
     private final LockConfig lockConfig;
 
-    private final List<MinecartSpawnRecord> spawnRecords = new ArrayList<>();
+    // private final List<MinecartSpawnRecord> spawnRecords = new ArrayList<>();
 
     public LockListener(final SMP smp) {
         this.smp = smp;
         this.lockConfig = smp.getLockConfig();
     }
 
-    private static class MinecartSpawnRecord {
-        private final UUID playerUUID;
-        private final Location location;
-        private final long timestamp;
+    // private static class MinecartSpawnRecord {
+    // private final UUID playerUUID;
+    // private final Location location;
+    // private final long timestamp;
 
-        public MinecartSpawnRecord(UUID playerUUID, Location location, long timestamp) {
-            this.playerUUID = playerUUID;
-            this.location = location;
-            this.timestamp = timestamp;
-        }
-    }
+    // public MinecartSpawnRecord(UUID playerUUID, Location location, long
+    // timestamp) {
+    // this.playerUUID = playerUUID;
+    // this.location = location;
+    // this.timestamp = timestamp;
+    // }
+    // }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
@@ -100,7 +95,7 @@ public class LockListener implements Listener {
         if (!(vehicle instanceof HopperMinecart || vehicle instanceof StorageMinecart)) {
             return;
         }
-        if(event.getAttacker() == null) {
+        if (event.getAttacker() == null) {
             NamespacedKey lockKey = new NamespacedKey(SMP.getInstance(), "lock");
             if (vehicle.getPersistentDataContainer().has(lockKey, PersistentDataType.STRING)) {
                 event.setCancelled(true);
@@ -108,18 +103,22 @@ public class LockListener implements Listener {
         }
     }
 
-
     @EventHandler
     public void onPlayerMinecartInteract(final PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
         Block clickedBlock = event.getClickedBlock();
-        if (clickedBlock == null) return;
+        if (clickedBlock == null)
+            return;
 
-        if (!(clickedBlock.getBlockData() instanceof Rail)) return;
+        if (!(clickedBlock.getBlockData() instanceof Rail))
+            return;
 
-        if (event.getItem() == null) return;
+        if (event.getItem() == null)
+            return;
         Material itemType = event.getItem().getType();
-        if (!(itemType == Material.HOPPER_MINECART || itemType == Material.CHEST_MINECART)) return;
+        if (!(itemType == Material.HOPPER_MINECART || itemType == Material.CHEST_MINECART))
+            return;
 
         Location spawnLocation = clickedBlock.getLocation().clone().add(0, 1, 0);
         UUID playerUUID = event.getPlayer().getUniqueId();
@@ -143,13 +142,15 @@ public class LockListener implements Listener {
                         continue;
                     }
                     container.set(lockKey, PersistentDataType.STRING, playerUUID.toString());
-                    event.getPlayer().sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Das Minecart wurde automatisch gesperrt!"));
+                    event.getPlayer().sendMessage(AdventureColor
+                            .apply(SMP.getInstance().getPrefix() + "Das Minecart wurde automatisch gesperrt!"));
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                event.getPlayer().sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Kein Minecart in der Nähe gefunden."));
+                event.getPlayer().sendMessage(
+                        AdventureColor.apply(SMP.getInstance().getPrefix() + "Kein Minecart in der Nähe gefunden."));
             }
         }, 2L);
     }
@@ -157,7 +158,8 @@ public class LockListener implements Listener {
     @EventHandler
     public void onPlayerInteractWithMinecart(final PlayerInteractEntityEvent event) {
         Entity rightClicked = event.getRightClicked();
-        if (!(rightClicked instanceof HopperMinecart || rightClicked instanceof StorageMinecart)) return;
+        if (!(rightClicked instanceof HopperMinecart || rightClicked instanceof StorageMinecart))
+            return;
 
         PersistentDataContainer container = rightClicked.getPersistentDataContainer();
         NamespacedKey lockKey = new NamespacedKey(SMP.getInstance(), "lock");
@@ -171,7 +173,8 @@ public class LockListener implements Listener {
         }
 
         event.setCancelled(true);
-        event.getPlayer().sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Dieses Minecart ist gesperrt!"));
+        event.getPlayer()
+                .sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Dieses Minecart ist gesperrt!"));
     }
 
     @EventHandler
@@ -196,9 +199,10 @@ public class LockListener implements Listener {
         final Player player = event.getPlayer();
 
         for (final Block adjacentBlock : getAdjacentBlocks(placedBlock)) {
-            if (placedBlock.getType() != Material.CHEST) continue;
-            if (adjacentBlock.getType() != Material.CHEST) continue;
-
+            if (placedBlock.getType() != Material.CHEST)
+                continue;
+            if (adjacentBlock.getType() != Material.CHEST)
+                continue;
 
             final Location adjacentLocation = adjacentBlock.getLocation();
 
@@ -207,13 +211,15 @@ public class LockListener implements Listener {
 
                 if (ownerUUID == null || !player.getUniqueId().equals(ownerUUID)) {
                     player.sendMessage(
-                            AdventureColor.apply(smp.getPrefix() + "Du kannst diese Kiste nicht mit einer gesperrten Kiste verbinden."));
+                            AdventureColor.apply(smp.getPrefix()
+                                    + "Du kannst diese Kiste nicht mit einer gesperrten Kiste verbinden."));
                     event.setCancelled(true);
                     return;
                 }
 
                 lockConfig.lock(placedBlock.getLocation(), ownerUUID);
-                player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Die Kiste wurde erfolgreich verbunden und gesperrt."));
+                player.sendMessage(
+                        AdventureColor.apply(smp.getPrefix() + "Die Kiste wurde erfolgreich verbunden und gesperrt."));
                 return;
             }
         }
@@ -230,7 +236,8 @@ public class LockListener implements Listener {
             return;
         }
 
-        final Block block = event.getInventory().getLocation() != null ? event.getInventory().getLocation().getBlock() : null;
+        final Block block = event.getInventory().getLocation() != null ? event.getInventory().getLocation().getBlock()
+                : null;
         if (block == null) {
             return;
         }
@@ -246,16 +253,21 @@ public class LockListener implements Listener {
         }
 
         if (lockConfig.isDonatable(location)) {
-            if ((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)
-                    || (event.getClickedInventory() == event.getView().getTopInventory() && event.getCurrentItem() != null)) {
-                player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
+            if ((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory()
+                    && event.getCurrentItem() != null)
+                    || (event.getClickedInventory() == event.getView().getTopInventory()
+                            && event.getCurrentItem() != null)) {
+                player.sendMessage(
+                        AdventureColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
                 event.setCancelled(true);
                 return;
             }
-            if (event.getCursor() != null && event.getCursor().getType() != Material.AIR && event.getClickedInventory() == event.getView().getTopInventory()) {
+            if (event.getCursor() != null && event.getCursor().getType() != Material.AIR
+                    && event.getClickedInventory() == event.getView().getTopInventory()) {
                 return;
             }
-            if (event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getBottomInventory()) {
+            if (event.getClick().isShiftClick()
+                    && event.getClickedInventory() == event.getView().getBottomInventory()) {
                 return;
             }
             event.setCancelled(true);
@@ -273,10 +285,12 @@ public class LockListener implements Listener {
 
     @EventHandler
     public void onHopperExtractFromLockedChest(final InventoryMoveItemEvent event) {
-        if (event.getSource().getLocation() == null) return;
+        if (event.getSource().getLocation() == null)
+            return;
         Block chestBlock = event.getSource().getLocation().getBlock();
 
-        if (!lockConfig.isLocked(chestBlock.getLocation())) return;
+        if (!lockConfig.isLocked(chestBlock.getLocation()))
+            return;
 
         UUID chestOwner = lockConfig.getOwner(chestBlock.getLocation());
         if (chestOwner == null) {
@@ -298,7 +312,7 @@ public class LockListener implements Listener {
                 }
             }
         }
-        if(event.getDestination().getHolder() instanceof Hopper) {
+        if (event.getDestination().getHolder() instanceof Hopper) {
             Block hopperBlock = event.getDestination().getLocation().getBlock();
             if (!lockConfig.isLocked(hopperBlock.getLocation())) {
                 event.setCancelled(true);
@@ -330,7 +344,8 @@ public class LockListener implements Listener {
         final UUID ownerUUID = lockConfig.getOwner(location);
         if (!player.getUniqueId().equals(ownerUUID) && !lockConfig.getTrusted(location).contains(player.getUniqueId())
                 && !player.hasPermission("lock.bypass")) {
-            player.sendMessage(AdventureColor.apply(smp.getPrefix() + "Dieser Block ist &cgesperrt&7 und gehört jemand anderem."));
+            player.sendMessage(
+                    AdventureColor.apply(smp.getPrefix() + "Dieser Block ist &cgesperrt&7 und gehört jemand anderem."));
             event.setCancelled(true);
         }
     }
@@ -348,7 +363,8 @@ public class LockListener implements Listener {
         final UUID ownerUUID = lockConfig.getOwner(location);
         if (!player.getUniqueId().equals(ownerUUID) && !player.hasPermission("lock.bypass")) {
             player.sendMessage(
-                    AdventureColor.apply(smp.getPrefix() + "Du kannst diesen Block nicht &czerstören&7, da er &cgesperrt &7ist."));
+                    AdventureColor.apply(
+                            smp.getPrefix() + "Du kannst diesen Block nicht &czerstören&7, da er &cgesperrt &7ist."));
             event.setCancelled(true);
             return;
         }
@@ -357,7 +373,7 @@ public class LockListener implements Listener {
     }
 
     private Block[] getAdjacentBlocks(final Block block) {
-        return new Block[]{
+        return new Block[] {
                 block.getRelative(1, 0, 0),
                 block.getRelative(-1, 0, 0),
                 block.getRelative(0, 0, 1),

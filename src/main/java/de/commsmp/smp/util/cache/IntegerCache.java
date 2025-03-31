@@ -1,14 +1,16 @@
 package de.commsmp.smp.util.cache;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
- * Ein spezialisierter Cache, bei dem der Schlüssel immer eine {@link Integer} ist.
- * Der Wert ist generisch und es wird eine Tick-Methode bereitgestellt, um abgelaufene
- * Einträge basierend auf einer vorgegebenen Cache-Zeit automatisch zu entfernen.
+ * Ein spezialisierter Cache, bei dem der Schlüssel immer eine {@link Integer}
+ * ist.
+ * Der Wert ist generisch und es wird eine Tick-Methode bereitgestellt, um
+ * abgelaufene
+ * Einträge basierend auf einer vorgegebenen Cache-Zeit automatisch zu
+ * entfernen.
  *
  * @param <V> Typ des Wertes, der im Cache gespeichert wird.
  */
@@ -21,7 +23,8 @@ public final class IntegerCache<V> implements Cache<Integer, V> {
     /**
      * Erzeugt einen neuen UUIDCache mit der angegebenen Cache-Zeit.
      *
-     * @param cacheTime die Anzahl der Ticks, nach denen ein Eintrag als abgelaufen gilt.
+     * @param cacheTime die Anzahl der Ticks, nach denen ein Eintrag als abgelaufen
+     *                  gilt.
      */
     public IntegerCache(final int cacheTime) {
         this.cacheTime = cacheTime;
@@ -90,4 +93,3 @@ public final class IntegerCache<V> implements Cache<Integer, V> {
         }
     }
 }
-

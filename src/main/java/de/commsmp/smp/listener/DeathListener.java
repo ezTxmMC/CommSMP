@@ -21,7 +21,8 @@ public class DeathListener implements Listener {
         Player player = event.getEntity();
         Player killer = event.getEntity().getKiller();
         EntityDamageEvent cause = player.getLastDamageCause();
-        event.setDeathMessage(processNotification(player.getName(), (killer == null ? null : killer.getName()), cause));
+        event.deathMessage(AdventureColor
+                .apply(processNotification(player.getName(), (killer == null ? null : killer.getName()), cause)));
         PlayerManager playerManager = SMP.getInstance().getPlayerManager();
         GraveStone graveStone = new GraveStone(
                 player,
@@ -30,12 +31,12 @@ public class DeathListener implements Listener {
                 player.getLocation());
         playerManager.getGraveStones().get(player.getUniqueId()).put(
                 playerManager.getGraveStones().get(player.getUniqueId()).size() + 1,
-                graveStone
-        );
+                graveStone);
         graveStone.spawn();
         player.getInventory().clear();
         if (player.getKiller() != null) {
-            player.getLocation().getWorld().dropItemNaturally(player.getLocation(), new ItemBuilder(Material.PLAYER_HEAD).setSkullOwner(player).build());
+            player.getLocation().getWorld().dropItemNaturally(player.getLocation(),
+                    new ItemBuilder(Material.PLAYER_HEAD).setSkullOwner(player).build());
         }
     }
 
@@ -51,8 +52,10 @@ public class DeathListener implements Listener {
         if (cause != null) {
             EntityDamageEvent.DamageCause damage = cause.getCause();
             DeathCause death = DeathCause.fromBukkitCause(damage);
-            if (damage == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || damage == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK
-                    || damage == EntityDamageEvent.DamageCause.ENTITY_ATTACK || damage == EntityDamageEvent.DamageCause.PROJECTILE) {
+            if (damage == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+                    || damage == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK
+                    || damage == EntityDamageEvent.DamageCause.ENTITY_ATTACK
+                    || damage == EntityDamageEvent.DamageCause.PROJECTILE) {
                 EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) cause;
                 EntityType entityType = event.getDamager().getType();
                 if (damage == EntityDamageEvent.DamageCause.PROJECTILE) {

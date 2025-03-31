@@ -12,7 +12,8 @@ public class CustomChunkGen extends ChunkGenerator {
 
     @NotNull
     @Override
-    public ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int x, int z, @NotNull ChunkGenerator.BiomeGrid biome) {
+    public ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int x, int z,
+            @NotNull ChunkGenerator.BiomeGrid biome) {
         if (!(SMP.getInstance().getMainConfig().isNetheriteEnabled())) {
             ChunkData data = createChunkData(world);
             if (world.getName().toLowerCase().contains("nether")) {

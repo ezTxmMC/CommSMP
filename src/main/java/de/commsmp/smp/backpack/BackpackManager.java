@@ -11,10 +11,6 @@ import org.bukkit.inventory.ShapedRecipe;
 
 public class BackpackManager {
 
-        public BackpackManager() {
-
-        }
-
         public void registerCrafting() {
                 ItemStack leatherBackpack = new ItemBuilder(Material.BARRIER).customModelData(13001)
                                 .setDisplayName("Leder Rucksack")

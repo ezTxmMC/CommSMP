@@ -1,7 +1,6 @@
 package de.commsmp.smp.util;
 
 import de.commsmp.smp.SMP;
-import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -9,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -127,7 +127,7 @@ public class ItemBuilder {
 
     public ItemBuilder setSkullOwner(@Nullable Player player) {
         if (this.itemStack.getType() != Material.PLAYER_HEAD) {
-            this.itemStack.setType(Material.PLAYER_HEAD);
+            return null;
         }
         checkForMeta();
         if (!(this.itemMeta instanceof SkullMeta)) {
@@ -135,6 +135,7 @@ public class ItemBuilder {
         }
         SkullMeta skullMeta = (SkullMeta) this.itemMeta;
         skullMeta.setOwningPlayer(player);
+        this.itemStack.setItemMeta(skullMeta);
         return this;
     }
 
@@ -157,7 +158,13 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setDurability(short durability) {
-        this.itemStack.setDurability(durability);
+        checkForMeta();
+        if (!(this.itemMeta instanceof Damageable)) {
+            this.itemMeta = this.itemStack.getItemMeta();
+        }
+        Damageable damageableMeta = (Damageable) this.itemMeta;
+        damageableMeta.setDamage(durability);
+        this.itemStack.setItemMeta(damageableMeta);
         return this;
     }
 

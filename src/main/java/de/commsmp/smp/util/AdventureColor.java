@@ -13,7 +13,13 @@ import java.util.regex.Pattern;
 
 public class AdventureColor {
 
-    private static final Map<String, String> LEGACY_MAP = Map.ofEntries(Map.entry("0", "black"), Map.entry("1", "dark_blue"), Map.entry("2", "dark_green"), Map.entry("3", "dark_aqua"), Map.entry("4", "dark_red"), Map.entry("5", "dark_purple"), Map.entry("6", "gold"), Map.entry("7", "gray"), Map.entry("8", "dark_gray"), Map.entry("9", "blue"), Map.entry("a", "green"), Map.entry("b", "aqua"), Map.entry("c", "red"), Map.entry("d", "light_purple"), Map.entry("e", "yellow"), Map.entry("f", "white"), Map.entry("k", "obfuscated"), Map.entry("l", "bold"), Map.entry("m", "strikethrough"), Map.entry("n", "underlined"), Map.entry("o", "italic"), Map.entry("r", "reset"));
+    private static final Map<String, String> LEGACY_MAP = Map.ofEntries(Map.entry("0", "black"),
+            Map.entry("1", "dark_blue"), Map.entry("2", "dark_green"), Map.entry("3", "dark_aqua"),
+            Map.entry("4", "dark_red"), Map.entry("5", "dark_purple"), Map.entry("6", "gold"), Map.entry("7", "gray"),
+            Map.entry("8", "dark_gray"), Map.entry("9", "blue"), Map.entry("a", "green"), Map.entry("b", "aqua"),
+            Map.entry("c", "red"), Map.entry("d", "light_purple"), Map.entry("e", "yellow"), Map.entry("f", "white"),
+            Map.entry("k", "obfuscated"), Map.entry("l", "bold"), Map.entry("m", "strikethrough"),
+            Map.entry("n", "underlined"), Map.entry("o", "italic"), Map.entry("r", "reset"));
     private static final Pattern LEGACY_PATTERN = Pattern.compile("&([0-9A-Fa-fk-orK-OR])");
 
     public static Component deserializeMixed(String input) {
@@ -28,8 +34,8 @@ public class AdventureColor {
         return MiniMessage.miniMessage().deserialize(sb.toString());
     }
 
-    private static final Pattern GRADIENT_PATTERN = Pattern.compile("\\[([A-Fa-f0-9]{6})-([A-Fa-f0-9]{6})](.*?)(?=\\[|&|$)");
-    private static final Pattern HEX_PATTERN = Pattern.compile("\\[([A-Fa-f0-9]{6})](.*?)(?=\\[|&|$)");
+    private static final Pattern GRADIENT_PATTERN = Pattern
+            .compile("\\[([A-Fa-f0-9]{6})-([A-Fa-f0-9]{6})](.*?)(?=\\[|&|$)");
 
     public static Component apply(String text) {
         return processAll(text);

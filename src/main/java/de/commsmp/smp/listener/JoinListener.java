@@ -5,7 +5,6 @@ import de.commsmp.smp.scoreboard.SpawnScoreboard;
 import de.commsmp.smp.util.GraveStoneHandler;
 import de.commsmp.smp.util.PlayerManager;
 import de.commsmp.smp.util.Status;
-import de.commsmp.smp.util.StatusType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
