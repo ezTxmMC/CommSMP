@@ -5,10 +5,12 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public enum DeathCause {
 
-    PLAYER("$killed wurde von $killer begrüßt", "$killed hat sein Leben für $killer gegeben", "$killed wollte nicht mehr mit $killer Leben", "$killer hat $killed seine Klinge gezeigt"),
+    PLAYER("$killed wurde von $killer begrüßt", "$killed hat sein Leben für $killer gegeben",
+            "$killed wollte nicht mehr mit $killer Leben", "$killer hat $killed seine Klinge gezeigt"),
     NONE("$killed wurde nie gefunden", "$killed ist verschwunden"),
     DOWNING("$killed vergaß zu atmen, während er unter Wasser war"),
-    FALLING("$killed sah das tiefe Loch nicht", "$killed ist runtergefallen", "$killed hat die Lücke nicht gesehen", "$killed's Füße tun weh"),
+    FALLING("$killed sah das tiefe Loch nicht", "$killed ist runtergefallen", "$killed hat die Lücke nicht gesehen",
+            "$killed's Füße wurden gebrochen"),
     FALLING_BLOCK("$killed vergaß, dass Sand herunterfallen kann"),
     SUFFOCATION("$killed wollte ein Fossil sein", "$killed hat sich begraben"),
     FIRE("$killed sprang in einen Schornstein und kam nicht mehr heraus"),
@@ -20,11 +22,11 @@ public enum DeathCause {
     CACTUS("$killed wollte einen Kaktus umarmen"),
     CRAMMING("$killed hatte zu viele Freunde"),
     FLY_INTO_WALL("Während $killed flog, war er nicht aufmerksam", "$killed war zu schnell und die Wand zu hart"),
-    HOT_FLOOR("$killed mochte den heißen und leuchtenden Block in der Nether"),
+    HOT_FLOOR("$killed mochte den heißen und leuchtenden Block im Nether"),
     LIGHTNING("$killed wollte sein Handy aufladen"),
     MAGIC("$killed schaute einer Hexe in die Augen"),
-    MELTING("$killed verwandelte sich in Wasser"),
-    POISON("$killed wählte das falsche Glas"),
+    MELTING("$killed verwandelte sich in Wasserdampf"),
+    POISON("$killed wählte die falsche Flasche"),
     STARVATION("$killed war schlecht im Kochen"),
     SUICIDE("$killed hasste diese Welt"),
     PROJECTILE_ARROW("Der Apfel auf $killed's Kopf wurde verfehlt"),
@@ -36,15 +38,15 @@ public enum DeathCause {
     PROJECTILE_DRAGON_FIREBALL("$killed war im End berühmt"),
     PROJECTILE_SHULKER_BULLET("$killed wollte fliegen"),
     PROJECTILE_WITHER_SKULL("$killed spielte Fangen mit einem Wither"),
-    PROJECTILE_SPECTRAL_ARROW("$killed hatten Pech, weil der Apfel auf ihrem Hut verfehlt wurde"),
+    PROJECTILE_SPECTRAL_ARROW("$killed hatten Pech, weil der Apfel auf dem Hut verfehlt wurde"),
     PROJECTILE_TRIDENT("$killed hatte einen Streit mit Neptun"),
     THORNS("$killed liebte Dornen"),
     VOID("$killed wollte die Welt von unten sehen", "$killed hat sein Inventar aufgegeben"),
     WITHER("$killed hatte zu viel Kontakt mit dunklen Skeletten"),
     CUSTOM("$killed, dies wird ignoriert"),
     ENTITY_ATTACK("$killed wurde von $entity erschlagen", "Der letzte Schlag von $entity hat $killed umgebracht"),
-    ENTITY_SWEEP_ATTACK("$killed wurde von einem $entity in einem Schwung getroffen"),
-    ENTITY_EXPLOSION("$killed machte einen großen Sprung wegen eines $entity", "$entity hat $killed zerbombt");
+    ENTITY_SWEEP_ATTACK("$killed wurde von $entity in einem Schwung getroffen"),
+    ENTITY_EXPLOSION("$killed machte einen großen Sprung durch $entity", "$entity hat $killed zerbombt");
 
     private final String[] fallback;
 
