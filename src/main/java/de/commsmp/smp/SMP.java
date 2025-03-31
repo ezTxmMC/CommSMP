@@ -2,6 +2,7 @@ package de.commsmp.smp;
 
 import de.commsmp.smp.backpack.BackpackManager;
 import de.commsmp.smp.command.PositionCommand;
+import de.commsmp.smp.command.StatusCommand;
 import de.commsmp.smp.command.TeamchatCommand;
 import de.commsmp.smp.command.api.CommandAliases;
 import de.commsmp.smp.command.api.SimpleCommandRegistry;
@@ -49,7 +50,7 @@ public final class SMP extends JavaPlugin {
         instance = this;
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
         this.mainConfig = JsonProcessor.loadConfiguration(Config.class).getInstance();
-        //this.messages = JsonProcessor.loadConfiguration(Messages.class).getInstance();
+        this.messages = JsonProcessor.loadConfiguration(Messages.class).getInstance();
         this.lockConfig = new LockConfig();
         this.luckPerms = LuckPermsProvider.get();
 
@@ -66,10 +67,13 @@ public final class SMP extends JavaPlugin {
         this.playerManager = new PlayerManager();
         this.graveStoneHandler = new GraveStoneHandler();
         this.backpackManager = new BackpackManager();
-        //this.backpackManager.registerCrafting();
+        // this.backpackManager.registerCrafting();
 
         if (!(getMainConfig().isNetheriteEnabled())) {
-            String[] recipes = {"netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template", "netherite_scrap", "netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots", "netherite_sword", "netherite_pickaxe", "netherite_axe", "netherite_shovel", "netherite_hoe"};
+            String[] recipes = { "netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template",
+                    "netherite_scrap", "netherite_helmet", "netherite_chestplate", "netherite_leggings",
+                    "netherite_boots", "netherite_sword", "netherite_pickaxe", "netherite_axe", "netherite_shovel",
+                    "netherite_hoe" };
             for (String recipe : recipes) {
                 this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
             }
@@ -78,8 +82,10 @@ public final class SMP extends JavaPlugin {
 
     private void registerCommands() {
         SimpleCommandRegistry commandRegistry = new SimpleCommandRegistry(this);
-        commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos", "pos", "poslist", "positionlist"), new PositionCommand());
+        commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos",
+                "pos", "poslist", "positionlist"), new PositionCommand());
         commandRegistry.register("teamchat", CommandAliases.of("tc"), new TeamchatCommand());
+        commandRegistry.register("afk", CommandAliases.of("live", "rec", "roleplay"), new StatusCommand());
     }
 
     @Override

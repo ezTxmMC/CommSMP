@@ -4,6 +4,9 @@ import de.commsmp.smp.SMP;
 import de.commsmp.smp.scoreboard.SpawnScoreboard;
 import de.commsmp.smp.util.GraveStoneHandler;
 import de.commsmp.smp.util.PlayerManager;
+import de.commsmp.smp.util.Status;
+import de.commsmp.smp.util.StatusType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,10 +28,13 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         SpawnScoreboard scoreboard = new SpawnScoreboard(player);
-        BukkitTask scoreboardTask = Bukkit.getScheduler().runTaskTimerAsynchronously(smp, scoreboard::update, 5L, 20 * 3L);
+        BukkitTask scoreboardTask = Bukkit.getScheduler().runTaskTimerAsynchronously(smp, scoreboard::update, 5L,
+                20 * 3L);
         PlayerManager playerManager = smp.getPlayerManager();
         playerManager.getScoreboardTasks().put(player.getUniqueId(), scoreboardTask);
         playerManager.getTeamchat().put(player.getUniqueId(), true);
+        Status status = new Status(player);
+        playerManager.getStatus().put(player.getUniqueId(), status);
         playerManager.getGraveStones().put(player.getUniqueId(), new HashMap<>());
         GraveStoneHandler graveStoneHandler = smp.getGraveStoneHandler();
         graveStoneHandler.getGraveStoneInteractables().put(player.getUniqueId(), new HashMap<>());
