@@ -26,6 +26,4 @@ public class LastUpdatedModel {
     public LastUpdatedModel(UUID user, UpdateType type, Material item, int amount, int slot, Inventory movedTo) {
         this(user, OffsetDateTime.now(), type, item, amount, slot, movedTo);
     }
-
-
 }

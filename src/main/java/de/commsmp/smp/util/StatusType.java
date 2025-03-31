@@ -4,6 +4,7 @@ public enum StatusType {
     AFK,
     LIVE,
     NONE,
+    PASSIVE,
     REC,
     ROLEPLAY
 }

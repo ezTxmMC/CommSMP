@@ -67,7 +67,7 @@ public final class SMP extends JavaPlugin {
         this.playerManager = new PlayerManager();
         this.graveStoneHandler = new GraveStoneHandler();
         this.backpackManager = new BackpackManager();
-        // this.backpackManager.registerCrafting();
+        this.backpackManager.registerCrafting();
 
         if (!(getMainConfig().isNetheriteEnabled())) {
             String[] recipes = { "netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template",
@@ -85,7 +85,8 @@ public final class SMP extends JavaPlugin {
         commandRegistry.register("position", CommandAliases.of("setposition", "deleteposition", "delpos", "setpos",
                 "pos", "poslist", "positionlist"), new PositionCommand());
         commandRegistry.register("teamchat", CommandAliases.of("tc"), new TeamchatCommand());
-        commandRegistry.register("afk", CommandAliases.of("live", "rec", "roleplay"), new StatusCommand());
+        commandRegistry.register("afk", CommandAliases.of("live", "none", "passive", "rec", "roleplay"),
+                new StatusCommand());
     }
 
     @Override
