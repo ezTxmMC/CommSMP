@@ -24,7 +24,7 @@ public class StringManipulator {
         if (word.isEmpty()) {
             return word;
         }
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
 }
