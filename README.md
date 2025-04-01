@@ -68,10 +68,10 @@
   - [ ] Disable riptide trident
   - [ ] Disable elytra glide / fly
 - [ ] File based BanSystem (Tom)
-  - [ ] /ban <player> <time> <reason>
-  - [ ] /mute <player> <time> <reason>
-  - [ ] /unban <player>
-  - [ ] /unmute <player>
+  - [x] /ban <player> <time> <reason>
+  - [x] /mute <player> <time> <reason>
+  - [x] /unban <player>
+  - [x] /unmute <player>
   - [ ] /history <player>
   - [ ] /report <player> <reason>
   - [ ] /reports
