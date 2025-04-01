@@ -58,7 +58,7 @@ public class ItemBuilder {
 
     public ItemBuilder setItemModel(String resourceName) {
         checkForMeta();
-        this.itemMeta.setItemModel(new NamespacedKey(SMP.getInstance(), "commsmp:item/" + resourceName));
+        this.itemMeta.setItemModel(new NamespacedKey("commsmp", resourceName));
         return this;
     }
 
