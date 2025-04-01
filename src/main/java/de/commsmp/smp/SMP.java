@@ -78,10 +78,10 @@ public final class SMP extends JavaPlugin {
         this.backpackManager.registerCrafting();
 
         if (!(getMainConfig().isNetheriteEnabled())) {
-            String[] recipes = { "netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template",
+            String[] recipes = {"netherite_ingot", "netherite_block", "netherite_upgrade_smithing_template",
                     "netherite_scrap", "netherite_helmet", "netherite_chestplate", "netherite_leggings",
                     "netherite_boots", "netherite_sword", "netherite_pickaxe", "netherite_axe", "netherite_shovel",
-                    "netherite_hoe" };
+                    "netherite_hoe"};
             for (String recipe : recipes) {
                 this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
             }

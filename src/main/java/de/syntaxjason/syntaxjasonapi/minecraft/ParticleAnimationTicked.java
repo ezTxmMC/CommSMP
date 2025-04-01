@@ -12,18 +12,6 @@ import org.bukkit.util.Vector;
 
 public class ParticleAnimationTicked implements TickedAnimation {
 
-    public enum AnimationType {
-        CIRCLE,
-        SPIRAL,
-        OVAL,
-        OVAL_SPIRAL,
-        RECTANGLE,
-        BEAM,
-        ELLIPTICAL_WAVE,
-        SPHERE,
-        HSPHERE
-    }
-
     private final JavaPlugin plugin;
     private final ParticleData particle;
     private final Location center;
@@ -39,11 +27,9 @@ public class ParticleAnimationTicked implements TickedAnimation {
     private final boolean boundPlayerOnly;
     private final Player boundCenter;
     private final Player boundPlayer;
-
     private int direction;
     private int currentStep;
     private boolean finished = false;
-
     public ParticleAnimationTicked(JavaPlugin plugin, ParticleData particle, Location center, double radius,
                                    int totalSteps, int particleCount, AnimationType animationType,
                                    double rotation, ParticleCollisionListener collisionListener,
@@ -205,5 +191,17 @@ public class ParticleAnimationTicked implements TickedAnimation {
     @Override
     public boolean isFinished() {
         return finished;
+    }
+
+    public enum AnimationType {
+        CIRCLE,
+        SPIRAL,
+        OVAL,
+        OVAL_SPIRAL,
+        RECTANGLE,
+        BEAM,
+        ELLIPTICAL_WAVE,
+        SPHERE,
+        HSPHERE
     }
 }

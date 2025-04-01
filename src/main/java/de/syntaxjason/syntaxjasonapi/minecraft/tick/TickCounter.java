@@ -1,9 +1,8 @@
 /**
- *
  * Copied from Github
- * @see https://github.com/Lauriichan/SpigotPluginBase
  *
- * */
+ * @see https://github.com/Lauriichan/SpigotPluginBase
+ */
 
 package de.syntaxjason.syntaxjasonapi.minecraft.tick;
 

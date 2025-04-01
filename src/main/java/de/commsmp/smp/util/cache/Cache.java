@@ -12,9 +12,9 @@ public interface Cache<K, V> {
 
     V remove(K key);
 
-    void setRemoveAction(Consumer<V> removeAction);
-
     Consumer<V> getRemoveAction();
+
+    void setRemoveAction(Consumer<V> removeAction);
 
     void clear();
 

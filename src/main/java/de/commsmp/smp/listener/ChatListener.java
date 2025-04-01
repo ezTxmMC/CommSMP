@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         Component message = event.message();
 
-        if(config.isMuted(event.getPlayer().getUniqueId())) {
+        if (config.isMuted(event.getPlayer().getUniqueId())) {
             sender.sendMessage(AdventureColor.apply("<#ff3333>Du bist gemutet!"));
             event.setCancelled(true);
             return;
@@ -94,12 +94,12 @@ public class ChatListener implements Listener {
     }
 
     private Component formatMessageForReceiver(Component message, boolean global, boolean scream, Player sender,
-            Player receiver, String mentionedName) {
+                                               Player receiver, String mentionedName) {
         Component globalComponent = global
                 ? AdventureColor.apply("&8[&eG&8] ")
                 : scream
-                        ? AdventureColor.apply("&8[&cRuft&8] ")
-                        : Component.empty();
+                ? AdventureColor.apply("&8[&cRuft&8] ")
+                : Component.empty();
         Component base = AdventureColor.apply("<yellow>" + sender.getName() + " <dark_gray>» ");
 
         if (mentionedName != null) {
@@ -144,53 +144,53 @@ public class ChatListener implements Listener {
      * return CompletableFuture.supplyAsync(() -> {
      * String cleanedMessage = message.replaceAll("@", "").replaceAll("[*+]",
      * "").toLowerCase();
-     * 
+     *
      * if (moderationCache.containsKey(cleanedMessage)) {
      * return new FilterResult(moderationCache.get(cleanedMessage),
      * EnumSet.noneOf(FilterCategory.class));
      * }
-     * 
+     *
      * EnumSet<FilterCategory> blacklist = Blacklist.checkMessage(message);
      * if (!blacklist.isEmpty()) {
      * return new FilterResult(true, blacklist);
      * }
-     * 
+     *
      * ModerationCreateParams params = ModerationCreateParams.builder()
      * .input(cleanedMessage)
      * .model(ModerationModel.TEXT_MODERATION_LATEST)
      * .build();
-     * 
+     *
      * ModerationCreateResponse response =
      * client.moderations().create(params).join();
      * Moderation result = response.results().getFirst();
-     * 
-     * 
+     *
+     *
      * if (!result.flagged()) {
-     * 
+     *
      * params = ModerationCreateParams.builder()
      * .input(message)
      * .model(ModerationModel.OMNI_MODERATION_LATEST)
      * .build();
-     * 
+     *
      * response = client.moderations().create(params).join();
      * result = response.results().getFirst();
      * }
-     * 
+     *
      * boolean flagged = result.flagged();
      * EnumSet<FilterCategory> categories = EnumSet.noneOf(FilterCategory.class);
-     * 
+     *
      * if (result.categories().sexual()) categories.add(FilterCategory.SEXUAL);
      * if (result.categories().hate()) categories.add(FilterCategory.HATE);
      * if (result.categories().harassment())
      * categories.add(FilterCategory.HARASSMENT);
      * if (result.categories().violence()) categories.add(FilterCategory.VIOLENCE);
      * if (result.categories().selfHarm()) categories.add(FilterCategory.SELF_HARM);
-     * 
+     *
      * if (cleanedMessage.contains("hitler") || cleanedMessage.contains("nazi")) {
      * flagged = true;
      * categories.add(FilterCategory.EXTREME_RIGHTWING);
      * }
-     * 
+     *
      * moderationCache.put(cleanedMessage, flagged);
      * return new FilterResult(flagged, categories);
      * }, Executors.newCachedThreadPool());

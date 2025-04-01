@@ -12,7 +12,8 @@ public class ConfigProvider {
 
     private Map<Class<?>, JsonProcessor<?>> processorMap = new HashMap<>();
 
-    public ConfigProvider() {}
+    public ConfigProvider() {
+    }
 
     public <T> void registerConfig(Class<T> clazz) {
         JsonProcessor<T> jsonProcessor = JsonProcessor.loadConfiguration(clazz);

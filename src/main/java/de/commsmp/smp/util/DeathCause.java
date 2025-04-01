@@ -54,14 +54,6 @@ public enum DeathCause {
         this.fallback = fallback;
     }
 
-    public String[] messages() {
-        return fallback;
-    }
-
-    public String message(int index) {
-        return fallback[index];
-    }
-
     public static DeathCause fromBukkitCause(DamageCause cause) {
         if (cause == null) {
             return NONE;
@@ -99,6 +91,14 @@ public enum DeathCause {
             case TRIDENT -> PROJECTILE_TRIDENT;
             default -> NONE;
         };
+    }
+
+    public String[] messages() {
+        return fallback;
+    }
+
+    public String message(int index) {
+        return fallback[index];
     }
 
 }

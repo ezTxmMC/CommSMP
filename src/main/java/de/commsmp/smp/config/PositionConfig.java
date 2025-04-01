@@ -22,6 +22,14 @@ public class PositionConfig extends JsonConfig {
 
     private static final HashMap<UUID, PositionConfig> instances = new HashMap<>();
 
+    public PositionConfig(Player player) {
+        super(SMP.getInstance().getDataFolder().getPath(), player.getUniqueId().toString(), false);
+    }
+
+    public PositionConfig(UUID uniqueId) {
+        super(SMP.getInstance().getDataFolder().getPath(), uniqueId.toString(), false);
+    }
+
     public static PositionConfig getPositionData(Player player) {
         if (instances.containsKey(player.getUniqueId())) {
             return instances.get(player.getUniqueId());
@@ -32,14 +40,6 @@ public class PositionConfig extends JsonConfig {
     public static void updatePositionData(Player player, PositionConfig config) {
         instances.remove(player.getUniqueId());
         instances.put(player.getUniqueId(), config);
-    }
-
-    public PositionConfig(Player player) {
-        super(SMP.getInstance().getDataFolder().getPath(), player.getUniqueId().toString(), false);
-    }
-
-    public PositionConfig(UUID uniqueId) {
-        super(SMP.getInstance().getDataFolder().getPath(), uniqueId.toString(), false);
     }
 
     public void setPosition(String name, Location location) {

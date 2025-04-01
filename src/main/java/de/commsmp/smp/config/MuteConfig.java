@@ -27,11 +27,11 @@ public class MuteConfig {
 
     public boolean isMuted(UUID uniqueId) {
         MutedPlayer mutedPlayer = cache.get(uniqueId);
-        if(mutedPlayer == null) {
+        if (mutedPlayer == null) {
             return false;
         }
 
-        if(mutedPlayer.getDuration() < 0 || Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration()).isBefore(Instant.now())) {
+        if (mutedPlayer.getDuration() < 0 || Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration()).isBefore(Instant.now())) {
             return true;
         }
         cache.remove(uniqueId);

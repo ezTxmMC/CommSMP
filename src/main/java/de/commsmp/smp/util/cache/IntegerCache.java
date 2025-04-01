@@ -31,13 +31,13 @@ public final class IntegerCache<V> implements Cache<Integer, V> {
     }
 
     @Override
-    public void setRemoveAction(final Consumer<V> removeAction) {
-        this.removeAction = removeAction;
+    public Consumer<V> getRemoveAction() {
+        return removeAction;
     }
 
     @Override
-    public Consumer<V> getRemoveAction() {
-        return removeAction;
+    public void setRemoveAction(final Consumer<V> removeAction) {
+        this.removeAction = removeAction;
     }
 
     @Override

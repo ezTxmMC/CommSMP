@@ -112,7 +112,7 @@ public class SitListener implements Listener {
             offsetY = 1.0;
         }
 
-        return new double[] {offsetX, offsetY, offsetZ};
+        return new double[]{offsetX, offsetY, offsetZ};
     }
 
 }

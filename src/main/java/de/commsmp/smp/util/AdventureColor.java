@@ -21,6 +21,8 @@ public class AdventureColor {
             Map.entry("k", "obfuscated"), Map.entry("l", "bold"), Map.entry("m", "strikethrough"),
             Map.entry("n", "underlined"), Map.entry("o", "italic"), Map.entry("r", "reset"));
     private static final Pattern LEGACY_PATTERN = Pattern.compile("&([0-9A-Fa-fk-orK-OR])");
+    private static final Pattern GRADIENT_PATTERN = Pattern
+            .compile("\\[([A-Fa-f0-9]{6})-([A-Fa-f0-9]{6})](.*?)(?=\\[|&|$)");
 
     public static Component deserializeMixed(String input) {
         Matcher matcher = LEGACY_PATTERN.matcher(input);
@@ -33,9 +35,6 @@ public class AdventureColor {
         matcher.appendTail(sb);
         return MiniMessage.miniMessage().deserialize(sb.toString());
     }
-
-    private static final Pattern GRADIENT_PATTERN = Pattern
-            .compile("\\[([A-Fa-f0-9]{6})-([A-Fa-f0-9]{6})](.*?)(?=\\[|&|$)");
 
     public static Component apply(String text) {
         return processAll(text);

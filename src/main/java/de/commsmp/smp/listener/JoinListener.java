@@ -28,8 +28,8 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if(!player.hasPlayedBefore()) {
-            if(!smp.getMainConfig().getSpawnLocation().isEmpty()) {
+        if (!player.hasPlayedBefore()) {
+            if (!smp.getMainConfig().getSpawnLocation().isEmpty()) {
                 String[] spawnLocation = smp.getMainConfig().getSpawnLocation().split(";");
                 Location location = new Location(Bukkit.getWorld(spawnLocation[0]), Integer.parseInt(spawnLocation[1]), Integer.parseInt(spawnLocation[2]), Integer.parseInt(spawnLocation[3]), Integer.parseInt(spawnLocation[4]), Integer.parseInt(spawnLocation[5]));
                 player.teleport(location);

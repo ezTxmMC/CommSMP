@@ -4,6 +4,7 @@ public interface TickedAnimation {
 
     /**
      * Wird in jedem Tick aufgerufen, um den Animationszustand zu aktualisieren.
+     *
      * @param delta Zeitdifferenz in Nanosekunden seit dem letzten Tick
      */
     void tick(long delta);
