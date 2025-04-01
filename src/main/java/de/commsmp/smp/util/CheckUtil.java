@@ -1,11 +1,11 @@
 package de.commsmp.smp.util;
 
-import java.util.UUID;
-
 import de.commsmp.smp.config.BanConfig;
 import de.commsmp.smp.config.MuteConfig;
 import de.commsmp.smp.config.data.BannedPlayer;
 import de.commsmp.smp.config.data.MutedPlayer;
+
+import java.util.UUID;
 
 public class CheckUtil {
 

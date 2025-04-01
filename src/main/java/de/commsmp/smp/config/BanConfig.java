@@ -1,15 +1,14 @@
 package de.commsmp.smp.config;
 
-import java.time.Instant;
-import java.util.*;
-
-import de.commsmp.smp.SMP;
 import de.commsmp.smp.config.data.BannedPlayer;
 import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.annotation.JsonClassElement;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
+import java.util.*;
 
 @Setter
 @Getter

@@ -1,15 +1,14 @@
 package de.commsmp.smp.listener;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Random;
 
 public class HarvestListener implements Listener {
 
@@ -26,21 +25,13 @@ public class HarvestListener implements Listener {
             if (ageable.getAge() != ageable.getMaximumAge()) {
                 return;
             }
+            World world = block.getWorld();
+            Location location = block.getLocation();
+            Material material = block.getType();
             event.setCancelled(true);
-            Material dropSeedMaterial = getDropSeedMaterial(block.getType());
             block.breakNaturally();
-            block.setType(dropSeedMaterial);
+            world.getBlockAt(location).setType(material);
         }
-    }
-
-    private Material getDropMaterial(Material blockType) {
-        return switch (blockType) {
-            case CARROTS -> Material.CARROT;
-            case POTATOES -> Material.POTATO;
-            case BEETROOTS -> Material.BEETROOT;
-            case WHEAT_SEEDS -> Material.WHEAT;
-            default -> blockType;
-        };
     }
 
     private Material getDropSeedMaterial(Material blockType) {

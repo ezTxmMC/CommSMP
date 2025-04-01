@@ -5,8 +5,6 @@ import de.commsmp.smp.command.*;
 import de.commsmp.smp.command.api.CommandAliases;
 import de.commsmp.smp.command.api.SimpleCommandRegistry;
 import de.commsmp.smp.config.*;
-import de.commsmp.smp.config.data.BannedPlayer;
-import de.commsmp.smp.config.data.MutedPlayer;
 import de.commsmp.smp.generation.CustomChunkGen;
 import de.commsmp.smp.listener.*;
 import de.commsmp.smp.lock.LockListener;
@@ -14,16 +12,9 @@ import de.commsmp.smp.message.Messages;
 import de.commsmp.smp.util.GraveStoneHandler;
 import de.commsmp.smp.util.PlayerManager;
 import de.commsmp.smp.util.Registry;
-import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;

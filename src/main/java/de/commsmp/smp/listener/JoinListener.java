@@ -2,21 +2,15 @@ package de.commsmp.smp.listener;
 
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.scoreboard.SpawnScoreboard;
-import de.commsmp.smp.util.AdventureColor;
-import de.commsmp.smp.util.CheckUtil;
-import de.commsmp.smp.util.GraveStoneHandler;
-import de.commsmp.smp.util.Mode;
-import de.commsmp.smp.util.PlayerManager;
-import de.commsmp.smp.util.Status;
-
+import de.commsmp.smp.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;

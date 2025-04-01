@@ -3,7 +3,6 @@ package de.commsmp.smp.listener;
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.config.MuteConfig;
 import de.commsmp.smp.util.AdventureColor;
-import de.commsmp.smp.util.CheckUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
