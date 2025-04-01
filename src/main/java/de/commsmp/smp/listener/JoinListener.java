@@ -2,6 +2,8 @@ package de.commsmp.smp.listener;
 
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.scoreboard.SpawnScoreboard;
+import de.commsmp.smp.util.AdventureColor;
+import de.commsmp.smp.util.CheckUtil;
 import de.commsmp.smp.util.GraveStoneHandler;
 import de.commsmp.smp.util.Mode;
 import de.commsmp.smp.util.PlayerManager;
@@ -11,7 +13,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
@@ -40,5 +44,13 @@ public class JoinListener implements Listener {
         playerManager.getGraveStones().put(player.getUniqueId(), new HashMap<>());
         GraveStoneHandler graveStoneHandler = smp.getGraveStoneHandler();
         graveStoneHandler.getGraveStoneInteractables().put(player.getUniqueId(), new HashMap<>());
+    }
+
+    @EventHandler
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (CheckUtil.isBanned(smp.getBanProcessor().getInstance(), event.getUniqueId())) {
+            event.disallow(Result.KICK_BANNED, AdventureColor.apply("Du wurdest von dem Server gebannt!"));
+            return;
+        }
     }
 }

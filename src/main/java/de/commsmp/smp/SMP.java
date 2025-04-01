@@ -3,6 +3,7 @@ package de.commsmp.smp;
 import de.commsmp.smp.backpack.BackpackManager;
 import de.commsmp.smp.command.BanCommand;
 import de.commsmp.smp.command.ModeCommand;
+import de.commsmp.smp.command.MuteCommand;
 import de.commsmp.smp.command.PositionCommand;
 import de.commsmp.smp.command.StatusCommand;
 import de.commsmp.smp.command.TeamchatCommand;
@@ -12,6 +13,8 @@ import de.commsmp.smp.config.BanConfig;
 import de.commsmp.smp.config.Config;
 import de.commsmp.smp.config.LockConfig;
 import de.commsmp.smp.config.MuteConfig;
+import de.commsmp.smp.config.data.BannedPlayer;
+import de.commsmp.smp.config.data.MutedPlayer;
 import de.commsmp.smp.generation.CustomChunkGen;
 import de.commsmp.smp.listener.*;
 import de.commsmp.smp.lock.LockListener;
@@ -23,6 +26,10 @@ import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -101,9 +108,50 @@ public final class SMP extends JavaPlugin {
             }
         }
 
-        checker = Bukkit.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-
-        }, 20L, 10 * 20L);
+        this.checker = Bukkit.getScheduler().runTaskTimerAsynchronously(instance, () -> {
+            BanConfig banConfig = this.banProcessor.getInstance();
+            MuteConfig muteConfig = this.muteProcessor.getInstance();
+            List<BannedPlayer> copyBannedPlayers = new ArrayList<>(banConfig.getBannedPlayers());
+            List<MutedPlayer> copyMutedPlayers = new ArrayList<>(muteConfig.getMutedPlayers());
+            for (BannedPlayer bannedPlayer : copyBannedPlayers) {
+                if (bannedPlayer.getDuration() == -1) {
+                    continue;
+                }
+                Instant instant = Instant.parse(bannedPlayer.getTimestamp()).plusSeconds(bannedPlayer.getDuration());
+                if (Instant.now().isBefore(instant)) {
+                    continue;
+                }
+                int index = 0;
+                for (BannedPlayer bannedPlayer2 : banConfig.getBannedPlayers()) {
+                    if (!bannedPlayer2.getUniqueId().equalsIgnoreCase(bannedPlayer.getUniqueId())) {
+                        index++;
+                        continue;
+                    }
+                    break;
+                }
+                banConfig.getBannedPlayers().remove(index);
+                banProcessor.saveConfiguration();
+            }
+            for (MutedPlayer mutedPlayer : copyMutedPlayers) {
+                if (mutedPlayer.getDuration() == -1) {
+                    continue;
+                }
+                Instant instant = Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration());
+                if (Instant.now().isBefore(instant)) {
+                    continue;
+                }
+                int index = 0;
+                for (MutedPlayer mutedPlayer2 : muteConfig.getMutedPlayers()) {
+                    if (!mutedPlayer2.getUniqueId().equalsIgnoreCase(mutedPlayer.getUniqueId())) {
+                        index++;
+                        continue;
+                    }
+                    break;
+                }
+                muteConfig.getMutedPlayers().remove(index);
+                muteProcessor.saveConfiguration();
+            }
+        }, 20L, 1 * 20L);
     }
 
     private void registerCommands() {
@@ -116,11 +164,14 @@ public final class SMP extends JavaPlugin {
         commandRegistry.register("mode", CommandAliases.of("none", "passive", "roleplay"),
                 new ModeCommand());
         commandRegistry.register("ban", CommandAliases.of("unban"), new BanCommand());
+        commandRegistry.register("mute", CommandAliases.of("unmute"), new MuteCommand());
     }
 
     @Override
     public void onDisable() {
         this.lockConfig.save();
+        this.checker.cancel();
+        this.checker = null;
         instance = null;
     }
 

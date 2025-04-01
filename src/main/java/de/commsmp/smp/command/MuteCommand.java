@@ -8,21 +8,21 @@ import org.bukkit.command.CommandSender;
 
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
-import de.commsmp.smp.config.BanConfig;
-import de.commsmp.smp.config.data.BannedPlayer;
+import de.commsmp.smp.config.MuteConfig;
+import de.commsmp.smp.config.data.MutedPlayer;
 import de.commsmp.smp.util.CheckUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 
-public class BanCommand implements SimpleCommand {
+public class MuteCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
-        JsonProcessor<BanConfig> processor = SMP.getInstance().getBanProcessor();
-        BanConfig config = processor.getInstance();
+        JsonProcessor<MuteConfig> processor = SMP.getInstance().getMuteProcessor();
+        MuteConfig config = processor.getInstance();
         switch (label.toLowerCase()) {
-            case "ban" -> {
+            case "mute" -> {
                 if (args.length < 2) {
-                    sender.sendMessage("/ban <player> <duration>");
+                    sender.sendMessage("/mute <player> <duration>");
                     return;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
@@ -30,8 +30,8 @@ public class BanCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (CheckUtil.isBanned(config, target.getUniqueId())) {
-                    sender.sendMessage("Target already banned");
+                if (CheckUtil.isMuted(config, target.getUniqueId())) {
+                    sender.sendMessage("Target already muted");
                     return;
                 }
                 StringBuilder builder = new StringBuilder();
@@ -42,18 +42,18 @@ public class BanCommand implements SimpleCommand {
                     }
                     builder.append(" ");
                 }
-                BannedPlayer bannedPlayer = new BannedPlayer();
-                bannedPlayer.setUniqueId(target.getUniqueId().toString());
-                bannedPlayer.setDuration(Integer.parseInt(args[1]));
-                bannedPlayer.setTimestamp(Instant.now().toString());
-                bannedPlayer.setReason(builder.toString());
-                config.getBannedPlayers().add(bannedPlayer);
+                MutedPlayer mutedPlayer = new MutedPlayer();
+                mutedPlayer.setUniqueId(target.getUniqueId().toString());
+                mutedPlayer.setDuration(Integer.parseInt(args[1]));
+                mutedPlayer.setTimestamp(Instant.now().toString());
+                mutedPlayer.setReason(builder.toString());
+                config.getMutedPlayers().add(mutedPlayer);
                 processor.saveConfiguration();
-                sender.sendMessage("Banned target");
+                sender.sendMessage("Muted target");
             }
-            case "unban" -> {
+            case "unmute" -> {
                 if (args.length < 0) {
-                    sender.sendMessage("/unban <player>");
+                    sender.sendMessage("/unmute <player>");
                     return;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
@@ -61,21 +61,21 @@ public class BanCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (!CheckUtil.isBanned(config, target.getUniqueId())) {
-                    sender.sendMessage("Target is not banned");
+                if (!CheckUtil.isMuted(config, target.getUniqueId())) {
+                    sender.sendMessage("Target is not muted");
                     return;
                 }
                 int index = 0;
-                for (BannedPlayer bannedPlayer : config.getBannedPlayers()) {
-                    if (!bannedPlayer.getUniqueId().equalsIgnoreCase(target.getUniqueId().toString())) {
+                for (MutedPlayer mutedPlayer : config.getMutedPlayers()) {
+                    if (!mutedPlayer.getUniqueId().equalsIgnoreCase(target.getUniqueId().toString())) {
                         index++;
                         continue;
                     }
                     break;
                 }
-                config.getBannedPlayers().remove(index);
+                config.getMutedPlayers().remove(index);
                 processor.saveConfiguration();
-                sender.sendMessage("Unbanned target");
+                sender.sendMessage("Unmuted target");
             }
         }
     }

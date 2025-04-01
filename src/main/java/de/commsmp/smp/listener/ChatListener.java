@@ -1,6 +1,8 @@
 package de.commsmp.smp.listener;
 
+import de.commsmp.smp.SMP;
 import de.commsmp.smp.util.AdventureColor;
+import de.commsmp.smp.util.CheckUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -23,6 +25,12 @@ public class ChatListener implements Listener {
     public void onChat(AsyncChatEvent event) {
         Player sender = event.getPlayer();
         Component message = event.message();
+
+        if (CheckUtil.isMuted(SMP.getInstance().getMuteProcessor().getInstance(), sender.getUniqueId())) {
+            sender.sendMessage(AdventureColor.apply("<#ff3333>Du bist gemutet!"));
+            event.setCancelled(true);
+            return;
+        }
 
         boolean global = false;
         boolean scream = false;
