@@ -50,8 +50,12 @@ public final class SMP extends JavaPlugin {
     public void onEnable() {
         instance = this;
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
-        this.mainConfig = JsonProcessor.loadConfiguration(Config.class).getInstance();
-        this.messages = JsonProcessor.loadConfiguration(Messages.class).getInstance();
+        JsonProcessor<Config> mainProcessor = JsonProcessor.loadConfiguration(Config.class);
+        JsonProcessor<Messages> messagesProcessor = JsonProcessor.loadConfiguration(Messages.class);
+        mainProcessor.saveConfiguration();
+        messagesProcessor.saveConfiguration();
+        this.mainConfig = mainProcessor.getInstance();
+        this.messages = messagesProcessor.getInstance();
         this.lockConfig = new LockConfig();
         this.luckPerms = LuckPermsProvider.get();
 

@@ -53,7 +53,8 @@ public class LockConfig extends JsonConfig {
     public boolean donate(final Location location) {
         String key = getLocationKey(location);
         LockInfo oldInfo = locks.get(key);
-        if (oldInfo == null) return false;
+        if (oldInfo == null)
+            return false;
         boolean newDonate = !oldInfo.isDonate();
         LockInfo newInfo = new LockInfo(oldInfo.getOwner(), oldInfo.getTrusted(), oldInfo.isViewable(), newDonate);
         locks.put(key, newInfo);
@@ -78,7 +79,8 @@ public class LockConfig extends JsonConfig {
     public void addTrusted(final Location location, final UUID playerUUID) {
         String key = getLocationKey(location);
         LockInfo oldInfo = locks.get(key);
-        if (oldInfo == null) return;
+        if (oldInfo == null)
+            return;
         List<String> newTrusted = new ArrayList<>(oldInfo.getTrusted());
         newTrusted.add(playerUUID.toString());
         LockInfo newInfo = new LockInfo(oldInfo.getOwner(), newTrusted, oldInfo.isViewable(), oldInfo.isDonate());
@@ -89,7 +91,8 @@ public class LockConfig extends JsonConfig {
     public void removeTrusted(final Location location, final UUID playerUUID) {
         String key = getLocationKey(location);
         LockInfo oldInfo = locks.get(key);
-        if (oldInfo == null) return;
+        if (oldInfo == null)
+            return;
         List<String> newTrusted = new ArrayList<>(oldInfo.getTrusted());
         newTrusted.remove(playerUUID.toString());
         LockInfo newInfo = new LockInfo(oldInfo.getOwner(), newTrusted, oldInfo.isViewable(), oldInfo.isDonate());
@@ -100,7 +103,8 @@ public class LockConfig extends JsonConfig {
     public void setTrusted(final Location location, final List<UUID> trustedPlayers) {
         String key = getLocationKey(location);
         LockInfo oldInfo = locks.get(key);
-        if (oldInfo == null) return;
+        if (oldInfo == null)
+            return;
         List<String> newTrusted = new ArrayList<>();
         for (UUID uuid : trustedPlayers) {
             newTrusted.add(uuid.toString());
@@ -123,8 +127,10 @@ public class LockConfig extends JsonConfig {
     public void toggleViewable(final Location location) {
         String key = getLocationKey(location);
         LockInfo oldInfo = locks.get(key);
-        if (oldInfo == null) return;
-        LockInfo newInfo = new LockInfo(oldInfo.getOwner(), oldInfo.getTrusted(), !oldInfo.isViewable(), oldInfo.isDonate());
+        if (oldInfo == null)
+            return;
+        LockInfo newInfo = new LockInfo(oldInfo.getOwner(), oldInfo.getTrusted(), !oldInfo.isViewable(),
+                oldInfo.isDonate());
         locks.put(key, newInfo);
         save();
     }
@@ -132,10 +138,12 @@ public class LockConfig extends JsonConfig {
     public void loadLocks() {
         locks.clear();
         JsonObject json = this.getCustomJsonObject();
-        if (json == null || json.getElements().isEmpty()) return;
+        if (json == null || json.getElements().isEmpty())
+            return;
 
         for (String key : json.getElements().keySet()) {
-            if (key == null) continue;
+            if (key == null)
+                continue;
             try {
                 LockInfo info = LockInfo.fromString(new ObjectConverter(json.get(key)).asString());
                 locks.put(key, info);
@@ -154,7 +162,7 @@ public class LockConfig extends JsonConfig {
             json.set(entry.getKey(), entry.getValue().toString());
         }
 
-        Path filePath = Paths.get(this.getConfigPath(), this.getConfigName());
+        Path filePath = Paths.get(this.getConfigFolder().toString(), this.getConfigName());
         try {
             Files.writeString(filePath, json.toJsonString(true));
         } catch (IOException ignored) {

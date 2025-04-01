@@ -73,7 +73,7 @@ public class PositionConfig extends JsonConfig {
 
     @Override
     public void save() {
-        Path filePath = Paths.get(this.getConfigPath(), this.getConfigName());
+        Path filePath = Paths.get(this.getConfigFolder().toString(), this.getConfigName());
         try {
             Files.writeString(filePath, this.getCustomJsonObject().toJsonString(true));
         } catch (IOException ignored) {
@@ -94,7 +94,7 @@ public class PositionConfig extends JsonConfig {
 
     private void load() {
         StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.getConfigPath()))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.getConfigFolder().toString()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
