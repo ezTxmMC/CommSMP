@@ -27,20 +27,9 @@ public class HarvestListener implements Listener {
                 return;
             }
             event.setCancelled(true);
-            Material dropMaterial = getDropMaterial(block.getType());
             Material dropSeedMaterial = getDropSeedMaterial(block.getType());
-            if (dropMaterial != null) {
-                block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(
-                        dropMaterial,
-                        1 + new Random().nextInt(2)));
-                if (new Random().nextInt(3) == 0) {
-                    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(
-                            dropSeedMaterial,
-                            1 + new Random().nextInt(1)));
-                }
-            }
-            ageable.setAge(0);
-            block.setBlockData(ageable);
+            block.breakNaturally();
+            block.setType(dropSeedMaterial);
         }
     }
 

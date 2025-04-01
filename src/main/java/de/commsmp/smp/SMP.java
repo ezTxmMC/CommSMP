@@ -1,18 +1,10 @@
 package de.commsmp.smp;
 
 import de.commsmp.smp.backpack.BackpackManager;
-import de.commsmp.smp.command.BanCommand;
-import de.commsmp.smp.command.ModeCommand;
-import de.commsmp.smp.command.MuteCommand;
-import de.commsmp.smp.command.PositionCommand;
-import de.commsmp.smp.command.StatusCommand;
-import de.commsmp.smp.command.TeamchatCommand;
+import de.commsmp.smp.command.*;
 import de.commsmp.smp.command.api.CommandAliases;
 import de.commsmp.smp.command.api.SimpleCommandRegistry;
-import de.commsmp.smp.config.BanConfig;
-import de.commsmp.smp.config.Config;
-import de.commsmp.smp.config.LockConfig;
-import de.commsmp.smp.config.MuteConfig;
+import de.commsmp.smp.config.*;
 import de.commsmp.smp.config.data.BannedPlayer;
 import de.commsmp.smp.config.data.MutedPlayer;
 import de.commsmp.smp.generation.CustomChunkGen;
@@ -52,14 +44,18 @@ public final class SMP extends JavaPlugin {
 
     @Getter
     private String prefix;
+
+    @Getter
+    private ConfigProvider configProvider;
+
     @Getter
     private Config mainConfig;
     @Getter
     private Messages messages;
     @Getter
-    private JsonProcessor<BanConfig> banProcessor;
+    private BanConfig banConfig;
     @Getter
-    private JsonProcessor<MuteConfig> muteProcessor;
+    private MuteConfig muteConfig;
     @Getter
     private LockConfig lockConfig;
 
@@ -69,17 +65,9 @@ public final class SMP extends JavaPlugin {
     public void onEnable() {
         instance = this;
         this.prefix = "<#005fff><bold> CommSMP <dark_gray>|</bold> <gray>";
-        JsonProcessor<Config> mainProcessor = JsonProcessor.loadConfiguration(Config.class);
-        JsonProcessor<Messages> messagesProcessor = JsonProcessor.loadConfiguration(Messages.class);
-        banProcessor = JsonProcessor.loadConfiguration(BanConfig.class);
-        muteProcessor = JsonProcessor.loadConfiguration(MuteConfig.class);
-        mainProcessor.saveConfiguration();
-        messagesProcessor.saveConfiguration();
-        banProcessor.saveConfiguration();
-        muteProcessor.saveConfiguration();
-        this.mainConfig = mainProcessor.getInstance();
-        this.messages = messagesProcessor.getInstance();
-        this.lockConfig = new LockConfig();
+
+        initConfig();
+
         this.luckPerms = LuckPermsProvider.get();
 
         registerCommands();
@@ -107,51 +95,21 @@ public final class SMP extends JavaPlugin {
                 this.getServer().removeRecipe(NamespacedKey.minecraft(recipe));
             }
         }
+    }
 
-        this.checker = Bukkit.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-            BanConfig banConfig = this.banProcessor.getInstance();
-            MuteConfig muteConfig = this.muteProcessor.getInstance();
-            List<BannedPlayer> copyBannedPlayers = new ArrayList<>(banConfig.getBannedPlayers());
-            List<MutedPlayer> copyMutedPlayers = new ArrayList<>(muteConfig.getMutedPlayers());
-            for (BannedPlayer bannedPlayer : copyBannedPlayers) {
-                if (bannedPlayer.getDuration() == -1) {
-                    continue;
-                }
-                Instant instant = Instant.parse(bannedPlayer.getTimestamp()).plusSeconds(bannedPlayer.getDuration());
-                if (Instant.now().isBefore(instant)) {
-                    continue;
-                }
-                int index = 0;
-                for (BannedPlayer bannedPlayer2 : banConfig.getBannedPlayers()) {
-                    if (!bannedPlayer2.getUniqueId().equalsIgnoreCase(bannedPlayer.getUniqueId())) {
-                        index++;
-                        continue;
-                    }
-                    break;
-                }
-                banConfig.getBannedPlayers().remove(index);
-                banProcessor.saveConfiguration();
-            }
-            for (MutedPlayer mutedPlayer : copyMutedPlayers) {
-                if (mutedPlayer.getDuration() == -1) {
-                    continue;
-                }
-                Instant instant = Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration());
-                if (Instant.now().isBefore(instant)) {
-                    continue;
-                }
-                int index = 0;
-                for (MutedPlayer mutedPlayer2 : muteConfig.getMutedPlayers()) {
-                    if (!mutedPlayer2.getUniqueId().equalsIgnoreCase(mutedPlayer.getUniqueId())) {
-                        index++;
-                        continue;
-                    }
-                    break;
-                }
-                muteConfig.getMutedPlayers().remove(index);
-                muteProcessor.saveConfiguration();
-            }
-        }, 20L, 1 * 20L);
+    private void initConfig() {
+        configProvider = new ConfigProvider();
+        configProvider.registerConfig(BanConfig.class);
+        configProvider.registerConfig(MuteConfig.class);
+        configProvider.registerConfig(Config.class);
+        configProvider.registerConfig(Messages.class);
+
+        this.banConfig = configProvider.getProcessor(BanConfig.class).getInstance();
+        this.muteConfig = configProvider.getProcessor(MuteConfig.class).getInstance();
+        this.mainConfig = configProvider.getProcessor(Config.class).getInstance();
+        this.messages = configProvider.getProcessor(Messages.class).getInstance();
+
+        this.lockConfig = new LockConfig();
     }
 
     private void registerCommands() {
@@ -165,6 +123,8 @@ public final class SMP extends JavaPlugin {
                 new ModeCommand());
         commandRegistry.register("ban", CommandAliases.of("unban"), new BanCommand());
         commandRegistry.register("mute", CommandAliases.of("unmute"), new MuteCommand());
+        commandRegistry.register("lock", CommandAliases.of("unlock", "trust", "untrust"), new LockCommand());
+        commandRegistry.register("setspawn", CommandAliases.of(), new SetSpawnCommand());
     }
 
     @Override

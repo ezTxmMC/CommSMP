@@ -1,6 +1,7 @@
 package de.commsmp.smp.listener;
 
 import de.commsmp.smp.SMP;
+import de.commsmp.smp.config.MuteConfig;
 import de.commsmp.smp.util.AdventureColor;
 import de.commsmp.smp.util.CheckUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -21,12 +22,14 @@ import java.util.regex.Pattern;
 
 public class ChatListener implements Listener {
 
+    private final MuteConfig config = SMP.getInstance().getMuteConfig();
+
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player sender = event.getPlayer();
         Component message = event.message();
 
-        if (CheckUtil.isMuted(SMP.getInstance().getMuteProcessor().getInstance(), sender.getUniqueId())) {
+        if(config.isMuted(event.getPlayer().getUniqueId())) {
             sender.sendMessage(AdventureColor.apply("<#ff3333>Du bist gemutet!"));
             event.setCancelled(true);
             return;

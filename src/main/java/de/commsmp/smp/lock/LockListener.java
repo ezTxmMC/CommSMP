@@ -38,25 +38,10 @@ public class LockListener implements Listener {
     private final SMP smp;
     private final LockConfig lockConfig;
 
-    // private final List<MinecartSpawnRecord> spawnRecords = new ArrayList<>();
-
     public LockListener(final SMP smp) {
         this.smp = smp;
         this.lockConfig = smp.getLockConfig();
     }
-
-    // private static class MinecartSpawnRecord {
-    // private final UUID playerUUID;
-    // private final Location location;
-    // private final long timestamp;
-
-    // public MinecartSpawnRecord(UUID playerUUID, Location location, long
-    // timestamp) {
-    // this.playerUUID = playerUUID;
-    // this.location = location;
-    // this.timestamp = timestamp;
-    // }
-    // }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {

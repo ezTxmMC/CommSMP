@@ -13,7 +13,11 @@ public class Config {
     @JsonClassElement
     private boolean netheriteEnabled;
 
+    @JsonClassElement
+    private String spawnLocation;
+
     public Config() {
         netheriteEnabled = false;
+        spawnLocation = "world;0;0;0;0;0";
     }
 }
