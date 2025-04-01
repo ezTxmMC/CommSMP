@@ -11,8 +11,6 @@ import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.config.BanConfig;
 import de.commsmp.smp.config.data.BannedPlayer;
-import de.eztxm.ezlib.config.object.JsonObject;
-import de.eztxm.ezlib.config.object.ObjectConverter;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 
 public class BanCommand implements SimpleCommand {
