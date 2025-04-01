@@ -17,7 +17,7 @@ public class MuteCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
-        JsonProcessor<MuteConfig> processor = SMP.getInstance().getMuteProcessor();
+        JsonProcessor<MuteConfig> processor = SMP.getInstance().getMuteConfig().getProcessor();
         MuteConfig config = processor.getInstance();
         switch (label.toLowerCase()) {
             case "mute" -> {

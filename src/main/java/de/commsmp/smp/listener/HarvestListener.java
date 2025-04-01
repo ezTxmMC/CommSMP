@@ -7,9 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Random;
 
 public class HarvestListener implements Listener {
 
@@ -27,29 +24,9 @@ public class HarvestListener implements Listener {
                 return;
             }
             event.setCancelled(true);
-            Material dropSeedMaterial = getDropSeedMaterial(block.getType());
+            Material seedMaterial = block.getType();
             block.breakNaturally();
-            block.setType(dropSeedMaterial);
+            block.setType(seedMaterial);
         }
-    }
-
-    private Material getDropMaterial(Material blockType) {
-        return switch (blockType) {
-            case CARROTS -> Material.CARROT;
-            case POTATOES -> Material.POTATO;
-            case BEETROOTS -> Material.BEETROOT;
-            case WHEAT_SEEDS -> Material.WHEAT;
-            default -> blockType;
-        };
-    }
-
-    private Material getDropSeedMaterial(Material blockType) {
-        return switch (blockType) {
-            case CARROTS -> Material.CARROT;
-            case POTATOES -> Material.POTATO;
-            case BEETROOTS -> Material.BEETROOT_SEEDS;
-            case WHEAT_SEEDS -> Material.WHEAT_SEEDS;
-            default -> blockType;
-        };
     }
 }

@@ -17,7 +17,7 @@ public class BanCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
-        JsonProcessor<BanConfig> processor = SMP.getInstance().getBanProcessor();
+        JsonProcessor<BanConfig> processor = SMP.getInstance().getBanConfig().getProcessor();
         BanConfig config = processor.getInstance();
         switch (label.toLowerCase()) {
             case "ban" -> {
