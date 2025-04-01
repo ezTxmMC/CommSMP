@@ -11,9 +11,9 @@ import lombok.Setter;
 public class Config {
 
     @JsonClassElement
-    private String openAIKey;
-
-    @JsonClassElement
     private boolean netheriteEnabled;
 
+    public Config() {
+        netheriteEnabled = false;
+    }
 }

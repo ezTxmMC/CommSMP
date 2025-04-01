@@ -1,7 +1,5 @@
 package de.commsmp.smp.listener;
 
-import de.commsmp.smp.SMP;
-import de.commsmp.smp.listener.filter.Moderation;
 import de.commsmp.smp.util.AdventureColor;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -24,10 +22,11 @@ public class ChatListener implements Listener {
     // private final ConcurrentHashMap<String, Boolean> moderationCache = new
     // ConcurrentHashMap<>();
 
-    private final Moderation moderation;
+    // private final Moderation moderation;
 
     public ChatListener() {
-        moderation = new Moderation(SMP.getInstance().getMainConfig().getOpenAIKey());
+        // moderation = new
+        // Moderation(SMP.getInstance().getMainConfig().getOpenAIKey());
     }
 
     @EventHandler
@@ -35,17 +34,20 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         Component message = event.message();
 
-        if (moderation.filter(message.insertion())) {
-            sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() + "Bitte achte auf deine Wortwahl!"));
-            event.setCancelled(true);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(SMP.getInstance(), () -> {
-                String aiOutput = moderation.answer(sender.getName(), event.message().insertion());
-                sender.sendMessage(AdventureColor
-                        .apply("<gradient:#FB0808:#EEA400><bold>Aurora</gradient> <dark_gray><bold>|</bold> <gray>"
-                                + aiOutput));
-            }, 1L);
-            return;
-        }
+        // if (moderation.filter(message.insertion())) {
+        // sender.sendMessage(AdventureColor.apply(SMP.getInstance().getPrefix() +
+        // "Bitte achte auf deine Wortwahl!"));
+        // event.setCancelled(true);
+        // Bukkit.getScheduler().runTaskLaterAsynchronously(SMP.getInstance(), () -> {
+        // String aiOutput = moderation.answer(sender.getName(),
+        // event.message().insertion());
+        // sender.sendMessage(AdventureColor
+        // .apply("<gradient:#FB0808:#EEA400><bold>Aurora</gradient>
+        // <dark_gray><bold>|</bold> <gray>"
+        // + aiOutput));
+        // }, 1L);
+        // return;
+        // }
 
         boolean global = false;
         boolean scream = false;
