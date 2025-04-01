@@ -65,6 +65,7 @@ public final class SMP extends JavaPlugin {
         this.registry.registerListener(new LockListener(this));
         this.registry.registerListener(new HarvestListener());
         this.registry.registerListener(new SitListener());
+        this.registry.registerListener(new PassiveListener());
         this.playerManager = new PlayerManager();
         this.graveStoneHandler = new GraveStoneHandler();
         this.backpackManager = new BackpackManager();
