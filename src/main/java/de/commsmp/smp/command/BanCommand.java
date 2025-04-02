@@ -4,7 +4,6 @@ import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.config.BanConfig;
 import de.commsmp.smp.config.data.BannedPlayer;
-import de.commsmp.smp.util.CheckUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,7 +28,7 @@ public class BanCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (CheckUtil.isBanned(config, target.getUniqueId())) {
+                if (config.isBanned(target.getUniqueId())) {
                     sender.sendMessage("Target already banned");
                     return;
                 }
@@ -60,7 +59,7 @@ public class BanCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (!CheckUtil.isBanned(config, target.getUniqueId())) {
+                if (!config.isBanned(target.getUniqueId())) {
                     sender.sendMessage("Target is not banned");
                     return;
                 }

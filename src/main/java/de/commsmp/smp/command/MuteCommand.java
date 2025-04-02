@@ -4,7 +4,6 @@ import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.config.MuteConfig;
 import de.commsmp.smp.config.data.MutedPlayer;
-import de.commsmp.smp.util.CheckUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,7 +28,7 @@ public class MuteCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (CheckUtil.isMuted(config, target.getUniqueId())) {
+                if (config.isMuted(target.getUniqueId())) {
                     sender.sendMessage("Target already muted");
                     return;
                 }
@@ -60,7 +59,7 @@ public class MuteCommand implements SimpleCommand {
                     sender.sendMessage("Target null");
                     return;
                 }
-                if (!CheckUtil.isMuted(config, target.getUniqueId())) {
+                if (!config.isMuted(target.getUniqueId())) {
                     sender.sendMessage("Target is not muted");
                     return;
                 }
