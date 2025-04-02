@@ -1,16 +1,15 @@
 package de.commsmp.smp.command;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.util.Mode;
 import de.commsmp.smp.util.ModeType;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ModeCommand implements SimpleCommand {
 

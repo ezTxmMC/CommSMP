@@ -1,9 +1,8 @@
 package de.commsmp.smp.util;
 
+import lombok.Getter;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-
-import lombok.Getter;
 
 public class Status {
     private final Player player;

@@ -1,14 +1,14 @@
 package de.commsmp.smp.config;
 
-import java.time.Instant;
-import java.util.*;
-
 import de.commsmp.smp.config.data.MutedPlayer;
 import de.eztxm.ezlib.config.annotation.JsonClassConfig;
 import de.eztxm.ezlib.config.annotation.JsonClassElement;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
+import java.util.*;
 
 @Setter
 @Getter
@@ -27,11 +27,11 @@ public class MuteConfig {
 
     public boolean isMuted(UUID uniqueId) {
         MutedPlayer mutedPlayer = cache.get(uniqueId);
-        if(mutedPlayer == null) {
+        if (mutedPlayer == null) {
             return false;
         }
 
-        if(mutedPlayer.getDuration() < 0 || Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration()).isBefore(Instant.now())) {
+        if (mutedPlayer.getDuration() < 0 || Instant.parse(mutedPlayer.getTimestamp()).plusSeconds(mutedPlayer.getDuration()).isBefore(Instant.now())) {
             return true;
         }
         cache.remove(uniqueId);

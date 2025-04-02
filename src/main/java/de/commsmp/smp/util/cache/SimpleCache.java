@@ -20,13 +20,13 @@ public final class SimpleCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-    public void setRemoveAction(final Consumer<V> removeAction) {
-        this.removeAction = removeAction;
+    public Consumer<V> getRemoveAction() {
+        return removeAction;
     }
 
     @Override
-    public Consumer<V> getRemoveAction() {
-        return removeAction;
+    public void setRemoveAction(final Consumer<V> removeAction) {
+        this.removeAction = removeAction;
     }
 
     @Override

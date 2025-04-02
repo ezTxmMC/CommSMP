@@ -9,6 +9,7 @@ public class ParticleSphereUtil {
 
     /**
      * Erzeugt eine Liste von Locations, die eine Kugel (oder hohle Kugel) bilden.
+     *
      * @param center Der Mittelpunkt.
      * @param radius Der Kugelradius.
      * @param hollow Ist true, wenn nur die Oberfläche (hohle Kugel) erzeugt werden soll.

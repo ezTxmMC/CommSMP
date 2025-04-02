@@ -19,32 +19,6 @@ public class LockInfo {
         this.donate = donate;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public List<String> getTrusted() {
-        return trusted;
-    }
-
-    public boolean isViewable() {
-        return viewable;
-    }
-
-    public boolean isDonate() {
-        return donate;
-    }
-
-    @Override
-    public String toString() {
-        return "LockInfo{" +
-                "owner='" + owner + '\'' +
-                ", trusted=" + trusted +
-                ", viewable=" + viewable +
-                ", donate=" + donate +
-                '}';
-    }
-
     public static LockInfo fromString(String input) {
         if (input == null || !input.startsWith("LockInfo{")) {
             throw new IllegalArgumentException("Ungültige LockInfo-String-Repräsentation");
@@ -72,6 +46,32 @@ public class LockInfo {
         } catch (Exception e) {
             throw new IllegalArgumentException("Fehler beim Parsen von LockInfo.fromString(): " + input, e);
         }
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public List<String> getTrusted() {
+        return trusted;
+    }
+
+    public boolean isViewable() {
+        return viewable;
+    }
+
+    public boolean isDonate() {
+        return donate;
+    }
+
+    @Override
+    public String toString() {
+        return "LockInfo{" +
+                "owner='" + owner + '\'' +
+                ", trusted=" + trusted +
+                ", viewable=" + viewable +
+                ", donate=" + donate +
+                '}';
     }
 
     @Override

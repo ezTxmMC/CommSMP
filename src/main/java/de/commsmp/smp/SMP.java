@@ -15,7 +15,6 @@ import de.commsmp.smp.util.Registry;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-
 import org.bukkit.NamespacedKey;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;

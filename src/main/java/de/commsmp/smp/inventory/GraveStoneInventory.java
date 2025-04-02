@@ -1,5 +1,6 @@
 package de.commsmp.smp.inventory;
 
+import de.commsmp.smp.util.AdventureColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,8 +9,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import de.commsmp.smp.util.AdventureColor;
 
 public class GraveStoneInventory implements InventoryHolder {
     private final Inventory inventory;

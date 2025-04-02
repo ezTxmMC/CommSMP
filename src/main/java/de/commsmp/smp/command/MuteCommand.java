@@ -1,23 +1,22 @@
 package de.commsmp.smp.command;
 
-import java.time.Instant;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.config.MuteConfig;
 import de.commsmp.smp.config.data.MutedPlayer;
 import de.commsmp.smp.util.CheckUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+
+import java.time.Instant;
 
 public class MuteCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
-        JsonProcessor<MuteConfig> processor = SMP.getInstance().getMuteConfig().getProcessor();
+        JsonProcessor<MuteConfig> processor = SMP.getInstance().getConfigProvider().getProcessor(MuteConfig.class);
         MuteConfig config = processor.getInstance();
         switch (label.toLowerCase()) {
             case "mute" -> {

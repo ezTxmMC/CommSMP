@@ -1,23 +1,22 @@
 package de.commsmp.smp.command;
 
-import java.time.Instant;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-
 import de.commsmp.smp.SMP;
 import de.commsmp.smp.command.api.SimpleCommand;
 import de.commsmp.smp.config.BanConfig;
 import de.commsmp.smp.config.data.BannedPlayer;
 import de.commsmp.smp.util.CheckUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+
+import java.time.Instant;
 
 public class BanCommand implements SimpleCommand {
 
     @Override
     public void execute(String label, CommandSender sender, String[] args) {
-        JsonProcessor<BanConfig> processor = SMP.getInstance().getBanConfig().getProcessor();
+        JsonProcessor<BanConfig> processor = SMP.getInstance().getConfigProvider().getProcessor(BanConfig.class);
         BanConfig config = processor.getInstance();
         switch (label.toLowerCase()) {
             case "ban" -> {

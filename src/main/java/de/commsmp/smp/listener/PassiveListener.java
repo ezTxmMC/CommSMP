@@ -1,5 +1,8 @@
 package de.commsmp.smp.listener;
 
+import de.commsmp.smp.SMP;
+import de.commsmp.smp.util.Mode;
+import de.commsmp.smp.util.ModeType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,10 +13,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerPortalEvent;
-
-import de.commsmp.smp.SMP;
-import de.commsmp.smp.util.Mode;
-import de.commsmp.smp.util.ModeType;
 
 public class PassiveListener implements Listener {
 

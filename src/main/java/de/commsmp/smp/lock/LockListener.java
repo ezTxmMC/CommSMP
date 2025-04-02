@@ -241,7 +241,7 @@ public class LockListener implements Listener {
             if ((event.getClick().isShiftClick() && event.getClickedInventory() == event.getView().getTopInventory()
                     && event.getCurrentItem() != null)
                     || (event.getClickedInventory() == event.getView().getTopInventory()
-                            && event.getCurrentItem() != null)) {
+                    && event.getCurrentItem() != null)) {
                 player.sendMessage(
                         AdventureColor.apply(smp.getPrefix() + "Du kannst nur Items hinzufügen, nicht entfernen!"));
                 event.setCancelled(true);
@@ -358,7 +358,7 @@ public class LockListener implements Listener {
     }
 
     private Block[] getAdjacentBlocks(final Block block) {
-        return new Block[] {
+        return new Block[]{
                 block.getRelative(1, 0, 0),
                 block.getRelative(-1, 0, 0),
                 block.getRelative(0, 0, 1),

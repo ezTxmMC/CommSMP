@@ -1,10 +1,9 @@
 /**
- *
  * Copied from Github
+ *
  * @see https://github.com/Lauriichan/SpigotPluginBase
  * Slightly modified to use Virtual Threads
- *
- * */
+ */
 
 package de.syntaxjason.syntaxjasonapi.minecraft.tick;
 

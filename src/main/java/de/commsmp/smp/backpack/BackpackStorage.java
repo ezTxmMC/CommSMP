@@ -34,6 +34,14 @@ public class BackpackStorage {
         Bukkit.getLogger().info("BackpackStorage init: ID = " + backpackId);
     }
 
+    public static void clearCache(UUID backpackId) {
+        CACHE.remove(backpackId);
+    }
+
+    public static void clearAll() {
+        CACHE.clear();
+    }
+
     public BackpackModel load() {
         if (CACHE.containsKey(backpackId)) {
             Bukkit.getLogger().info("Backpack " + backpackId + " loaded from cache");
@@ -87,13 +95,5 @@ public class BackpackStorage {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void clearCache(UUID backpackId) {
-        CACHE.remove(backpackId);
-    }
-
-    public static void clearAll() {
-        CACHE.clear();
     }
 }
