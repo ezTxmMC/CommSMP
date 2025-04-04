@@ -29,7 +29,6 @@
   - [ ] /message <player> <message> - alias: /msg - overwrite /tell, /w & /whisper with it
   - [ ] /reply <message> - alias: /r
   - [ ] Offline inbox
-- [ ] Spawnelytraglide
 - [x] Remove netherite stuff
 - [x] Roleplaymode (Tom)
   - [x] /roleplay - alias: /rp
