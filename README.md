@@ -21,19 +21,19 @@
   - [x] Starting with '@': Serverside
   - [x] Starting with '!': In 30 blocks radius
 - [ ] (Optional) SimpleVoiceChat activate sculk sensor & shrieker
-- [ ] Shoppingarea (Tom)
+- [ ] Shoppingarea
   - [ ] Buy plot
   - [ ] Expand plot
   - [ ] Reduce plot
-- [ ] Private messages (TntTastisch)
+- [ ] Private messages
   - [ ] /message <player> <message> - alias: /msg - overwrite /tell, /w & /whisper with it
   - [ ] /reply <message> - alias: /r
   - [ ] Offline inbox
 - [x] Remove netherite stuff
-- [x] Roleplaymode (Tom)
+- [x] Roleplaymode
   - [x] /roleplay - alias: /rp
   - [x] Suffix in tab
-- [x] Status (Tom)
+- [x] Status
   - [x] /rec -> Recording
   - [x] /live -> Streaming
   - [x] /afk -> Away from keyboard / Not there
@@ -45,8 +45,8 @@
   - [x] /teamchat disable
   - [x] Teammessagelayout: '@Team - ezTxmMC >> Hey'
 - [x] '@' before online username and in aqua
-- [ ] Backpacks (SyntaxJason & TntTastisch)
-  - [ ] Custom model (Tom)
+- [ ] Backpacks
+  - [ ] Custom model
   - [ ] Placed as barrier with direction to player
   - [ ] Rightclick -> open
   - [ ] Shift + rightclick -> place
@@ -55,7 +55,7 @@
   - [ ] Upgradable
 - [x] Messages File
 - [x] Custom death messages
-- [ ] GraveStone-System (TntTastisch)
+- [ ] GraveStone-System
   - [ ] Custom model
   - [ ] Spawn as block at death
   - [ ] Not breakable
@@ -66,7 +66,7 @@
   - [ ] Punish combat logging
   - [ ] Disable riptide trident
   - [ ] Disable elytra glide / fly
-- [ ] File based BanSystem (Tom)
+- [ ] File based BanSystem
   - [x] /ban <player> <time> <reason>
   - [x] /mute <player> <time> <reason>
   - [x] /unban <player>
