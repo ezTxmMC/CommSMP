@@ -1,4 +1,4 @@
-# Minecraft Community SMP by ezTxmMC, SyntaxJason & TntTastisch
+# Minecraft Community SMP
 
 ## Functionality
 
